@@ -1,10 +1,17 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('/css/bootstrap.min.css');
+@import url('/css/bootstrap-icons.css');
+@import url('/css/magnific-popup.css');
+@import url('/css/templatemo-first-portfolio-style.css');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 232 34% 23%;
+  --foreground: 227 70% 86%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,8 +22,8 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: rgb(var(--foreground));
+  background: rgb(var(--background));
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -25,3 +32,5 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Add any other global styles here */
