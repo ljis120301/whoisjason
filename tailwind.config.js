@@ -43,6 +43,40 @@ module.exports = {
           crust: '#232634',
         },
       },
+      animation: {
+        "loop-scroll": "loop-scroll 50s linear infinite",
+        move: "move 5s linear infinite",
+        shimmer: "shimmer 2s linear infinite",
+        spotlight: "spotlight 2s ease .75s 1 forwards",
+      },
+      keyframes: {
+        "loop-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-100%)" },
+        },
+        move: {
+          "0%": { transform: "translateX(-200px)" },
+          "100%": { transform: "translateX(200px)" },
+        },
+        shimmer: {
+          from: {
+            backgroundPosition: "0 0",
+          },
+          to: {
+            backgroundPosition: "-200% 0",
+          },
+        },
+        spotlight: {
+          "0%": {
+            opacity: 0,
+            transform: "translate(-72%, -62%) scale(0.5)",
+          },
+          "100%": {
+            opacity: 1,
+            transform: "translate(-50%,-40%) scale(1)",
+          },
+        },
+      },
     },
   },
   plugins: [
