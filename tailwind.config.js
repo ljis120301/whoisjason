@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const defaultTheme = require("tailwindcss/defaultTheme");
+const svgToDataUri = require("mini-svg-data-uri");
 const colors = require("tailwindcss/colors");
 const {
   default: flattenColorPalette,
@@ -10,7 +11,9 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{ts,tsx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -41,6 +44,34 @@ module.exports = {
           base: '#303446',
           mantle: '#292C3C',
           crust: '#232634',
+        },
+        latte: {
+          rosewater: '#DC8A78',
+          flamingo: '#DD7878',
+          pink: '#EA76CB',
+          mauve: '#8839EF',
+          red: '#D20F39',
+          maroon: '#E64553',
+          peach: '#FE640B',
+          yellow: '#DF8E1D',
+          green: '#40A02B',
+          teal: '#179299',
+          sky: '#04A5E5',
+          sapphire: '#209FB5',
+          blue: '#1E66F5',
+          lavender: '#7287FD',
+          text: '#4C4F69',
+          subtext1: '#5C5F77',
+          subtext0: '#6C6F85',
+          overlay2: '#7C7F93',
+          overlay1: '#8C8FA1',
+          overlay0: '#9CA0B0',
+          surface2: '#ACB0BE',
+          surface1: '#BCC0CC',
+          surface0: '#CCD0DA',
+          base: '#EFF1F5',
+          mantle: '#E6E9EF',
+          crust: '#DCE0E8',
         },
       },
       animation: {
@@ -81,6 +112,28 @@ module.exports = {
   },
   plugins: [
     addVariablesForColors,
+    function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          "bg-grid": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+          "bg-grid-small": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="8" height="8" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+          "bg-dot": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`
+            )}")`,
+          }),
+        },
+        { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
+      );
+    },
   ],
 };
 
