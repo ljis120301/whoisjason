@@ -3,7 +3,7 @@
 import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
 import React, { useState } from "react";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
-import { cn } from "@/lib/utils";
+import { cnMerge } from "@/lib/utils";
 
 export const CardSpotlight = ({
   children,
@@ -14,39 +14,30 @@ export const CardSpotlight = ({
 }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  
   function handleMouseMove({
     currentTarget,
     clientX,
     clientY
   }) {
     let { left, top } = currentTarget.getBoundingClientRect();
+
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
-    console.log(`Mouse moved: X=${clientX - left}, Y=${clientY - top}`); // Log mouse position
   }
 
   const [isHovering, setIsHovering] = useState(false);
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-    console.log("Mouse entered the CardSpotlight"); // Log mouse enter
-  };
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    console.log("Mouse left the CardSpotlight"); // Log mouse leave
-  };
-
+  const handleMouseEnter = () => setIsHovering(true);
+  const handleMouseLeave = () => setIsHovering(false);
   return (
-    <div
-      className={cn(
+    (<div
+      className={cnMerge(
         "group/spotlight p-10 rounded-md relative border border-neutral-800 bg-black dark:border-neutral-800",
         className
       )}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      {...props}
-    >
+      {...props}>
       <motion.div
         className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
         style={{
@@ -67,11 +58,10 @@ export const CardSpotlight = ({
               [59, 130, 246],
               [139, 92, 246],
             ]}
-            dotSize={3}
-          />
+            dotSize={3} />
         )}
       </motion.div>
       {children}
-    </div>
+    </div>)
   );
 };

@@ -1,13 +1,7 @@
-@import 'bootstrap/dist/css/bootstrap.min.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('/css/bootstrap.min.css');
-@import url('/css/bootstrap-icons.css');
-@import url('/css/magnific-popup.css');
-@import url('/css/templatemo-first-portfolio-style.css');
 
 :root {
   --background: 232 34% 23%;
