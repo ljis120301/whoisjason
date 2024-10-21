@@ -7,6 +7,8 @@ import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ClientWrapper from "@/components/ClientWrapper";
+import CardDemo from "./blocks/cards-demo-2";
+
 
 export default function HomeContent() {
   return (
@@ -18,6 +20,7 @@ export default function HomeContent() {
         <Hero />
       </div>
       <main>
+
         <div id="section_2"><Featured /></div>
         <div id="section_3"><About /></div>
         <div id="section_4"><Projects /></div>
