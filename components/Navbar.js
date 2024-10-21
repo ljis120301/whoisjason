@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Menu, MenuItem } from './ui/navbar-menu';
 import { cn } from "@/lib/utils";
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const [active, setActive] = useState(null);
@@ -13,11 +14,11 @@ export default function Navbar() {
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
-    setActive(null); // Close the menu after clicking
+    setActive(null);
   };
 
   return (
-    <div className={cn("fixed top-6 inset-x-0 max-w-3xl mx-auto z-50")}>
+    <div className={cn("fixed top-6 inset-x-0 max-w-3xl mx-auto z-50 flex justify-between items-center")}>
       <Menu setActive={setActive}>
         <MenuItem 
           setActive={setActive} 
@@ -56,6 +57,7 @@ export default function Navbar() {
           onClick={(e) => handleClick(e, "#section_6")}
         />
       </Menu>
+      <ThemeToggle />
     </div>
   );
 }
