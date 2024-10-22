@@ -7,26 +7,42 @@ import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ClientWrapper from "@/components/ClientWrapper";
-import CardDemo from "./blocks/cards-demo-2";
-
+import StickyScrollDemo from "@/components/sticky-scroll-demo";
 
 export default function HomeContent() {
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
+    <div className="overflow-x-hidden">
       <ClientWrapper>
         <Navbar />
       </ClientWrapper>
-      <div id="section_1" className="h-screen">
-        <Hero />
-      </div>
-      <main>
-
-        <div id="section_2"><Featured /></div>
-        <div id="section_3"><About /></div>
-        <div id="section_4"><Projects /></div>
-        <div id="section_5"><Blog /></div>
-        <div id="section_6"><Contact /></div>
+      
+      <main className="w-full">
+        <section id="hero" className="h-screen w-full flex items-center justify-center">
+          <Hero />
+        </section>
+        
+        <section id="featured" className="relative z-10 bg-white ">
+          <div className="">
+            <Featured />
+          </div>
+        </section>
+        <section id="about" className=" bg-gray-50">
+          <About />
+        </section>
+        
+        <section id="projects" className="py-16 px-4 sm:px-6 lg:px-8">
+          <Projects />
+        </section>
+        
+        <section id="blog" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+          <Blog />
+        </section>
+        
+        <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8">
+          <Contact />
+        </section>
       </main>
+      
       <Footer />
     </div>
   );
