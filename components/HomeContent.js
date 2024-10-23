@@ -26,11 +26,11 @@ export default function HomeContent() {
             <Featured />
           </div>
         </section>
-        <section id="about" className=" bg-gray-50">
+        <section id="about" className=" bg-frappe-surface0">
           <About />
         </section>
         
-        <section id="projects" className="py-16 px-4 sm:px-6 lg:px-8">
+        <section id="projects" className="size-full">
           <Projects />
         </section>
         

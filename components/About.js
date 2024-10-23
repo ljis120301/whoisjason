@@ -11,7 +11,7 @@ const content = [
     content: (
       <div
         className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
-        Collaborative Editing
+        Collaborative cock
       </div>
     ),
   },
@@ -22,7 +22,7 @@ const content = [
     content: (
       <div className="h-full w-full  flex items-center justify-center text-white">
         <Image
-          src="/linear.webp"
+          src="/pi.png"
           width={300}
           height={300}
           className="h-full w-full object-cover"
@@ -55,7 +55,7 @@ const content = [
 ];
 export default function StickyScrollRevealDemo() {
   return (
-    (<div className="p-10">
+    (<div className="mx-auto p-4 rounded-lg h-full w-full ">
       <StickyScroll content={content} />
     </div>)
   );
