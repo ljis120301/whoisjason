@@ -9,7 +9,7 @@ export default function Projects() {
         <div className="row">
           <div className="col-lg-10 col-12 mx-auto">
             <div className="section-title-wrap d-flex justify-content-center align-items-center mb-5">
-              <Image src="/images/pi-server.jpeg" className="avatar-image img-fluid" alt="" width={100} height={100} />
+              <Image src="/pi-server.jpeg" className="avatar-image img-fluid" alt="" width={100} height={100} />
               <h2 className="text-white ms-4 mb-0">Projects</h2>
             </div>
             <div className="row pt-lg-5">

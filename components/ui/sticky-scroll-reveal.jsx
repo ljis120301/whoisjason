@@ -19,15 +19,15 @@ export const StickyScroll = ({
   const cardLength = content.length;
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const cardsBreakpoints = content.map((_, index) => index / cardLength);
-    const closestBreakpointIndex = cardsBreakpoints.reduce((acc, breakpoint, index) => {
-      const distance = Math.abs(latest - breakpoint);
-      if (distance < Math.abs(latest - cardsBreakpoints[acc])) {
-        return index;
-      }
-      return acc;
-    }, 0);
-    setActiveCard(closestBreakpointIndex);
+    //  const cardsBreakpoints = content.map((_, index) => index / cardLength);
+  //  const closestBreakpointIndex = cardsBreakpoints.reduce((acc, breakpoint, index) => {
+  //    const distance = Math.abs(latest - breakpoint);
+  //    if (distance < Math.abs(latest - cardsBreakpoints[acc])) {
+  //      return index;
+  //    }
+  //    return acc;
+  //  }, 0);
+  //  setActiveCard(closestBreakpointIndex);
   });
 
   const backgroundColors = [
