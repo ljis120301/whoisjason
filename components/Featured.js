@@ -4,7 +4,7 @@ import CardDemo from "@/components/blocks/cards-demo-3";
 
 export default function Featured() {
   return (
-    <section className="featured py-16 sm:py-24 relative">
+    <section className="featured py-16 sm:py-24 relative " id="section_2">  
       {/* Grid background */}
       <div className="absolute inset-0 dark:bg-black bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
         {/* Radial gradient overlay */}
@@ -16,14 +16,14 @@ export default function Featured() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <CardSpotlightDemo 
-              radius={240}
+              radius={120}
               color="rgba(100, 100, 238, 0.3)"
               className="col-span-1 sm:col-span-2 aspect-[16/9]"
             />
             <CardSpotlightDemo 
               radius={120}
               color="rgba(100, 238, 100, 0.3)"
-              className="aspect-square"
+              className=""
             />
             <CardSpotlightDemo 
               radius={120}
@@ -37,14 +37,21 @@ export default function Featured() {
             />
           </div>
           
-          <div className="space-y-6">
+          <div className="grid-rows-2 grid grid-cols-2 gap-8 " >
             <CardDemo
-              title="Card 1"
-              description="Description for Card 1"
+              
             />
             <CardDemo
               title="Card 2"
               description="Description for Card 2"
+            />
+            <CardDemo
+              title="Card 3"
+              description="Description for Card 3"
+            />
+            <CardDemo
+              title="Card 4"
+              description="Description for Card 4"
             />
           </div>
         </div>

@@ -6,16 +6,22 @@ import { GoCopilot } from "react-icons/go";
 
 export default function CardDemo() {
   return (
-    (<Card>
-      <CardSkeletonContainer>
-        <Skeleton />
-      </CardSkeletonContainer>
-      <CardTitle>Damn good card</CardTitle>
-      <CardDescription>
-        A card that showcases a set of tools that you use to create your
-        product.
-      </CardDescription>
-    </Card>)
+    <div className="h-full"> {/* Keep full height */}
+      <Card className="flex flex-col h-full overflow-hidden"> {/* Use full height and flex column */}
+        <div className="flex-grow flex items-end pb-8"> {/* Push skeleton to bottom, add padding */}
+          <CardSkeletonContainer className="w-full">
+            <Skeleton />
+          </CardSkeletonContainer>
+        </div>
+        <div className="p-4"> {/* Fixed size content area */}
+          <CardTitle>Damn good card</CardTitle>
+          <CardDescription>
+            A card that showcases a set of tools that you use to create your
+            product.
+          </CardDescription>
+        </div>
+      </Card>
+    </div>
   );
 }
 
@@ -73,8 +79,7 @@ const Skeleton = () => {
     });
   }, []);
   return (
-    (<div
-      className="p-8 overflow-hidden h-full relative flex items-center justify-center">
+    <div className="h-40 overflow-hidden relative flex items-center justify-center"> {/* Increased height */}
       <div className="flex flex-row flex-shrink-0 justify-center items-center gap-2">
         <Container className="h-8 w-8 circle-1">
           <ClaudeLogo className="h-4 w-4 " />
@@ -98,7 +103,7 @@ const Skeleton = () => {
           <Sparkles />
         </div>
       </div>
-    </div>)
+    </div>
   );
 };
 const Sparkles = () => {
@@ -143,7 +148,7 @@ export const Card = ({
   return (
     (<div
       className={cn(
-        "max-w-sm w-full mx-auto p-8 rounded-xl border border-[rgba(255,255,255,0.10)] dark:bg-[rgba(40,40,40,0.70)] bg-gray-100 shadow-[2px_4px_16px_0px_rgba(248,248,248,0.06)_inset] group",
+        "w-full rounded-xl border border-[rgba(255,255,255,0.10)] dark:bg-[rgba(40,40,40,0.70)] bg-gray-100 shadow-[2px_4px_16px_0px_rgba(248,248,248,0.06)_inset] group",
         className
       )}>
       {children}
@@ -185,7 +190,7 @@ export const CardSkeletonContainer = ({
 }) => {
   return (
     (<div
-      className={cn("h-[15rem] md:h-[20rem] rounded-xl z-40", className, showGradient &&
+      className={cn("rounded-xl z-40", className, showGradient &&
         "bg-neutral-300 dark:bg-[rgba(40,40,40,0.70)] [mask-image:radial-gradient(50%_50%_at_50%_50%,white_0%,transparent_100%)]")}>
       {children}
     </div>)
@@ -324,3 +329,4 @@ export const MetaIconOutline = ({
     </svg>)
   );
 };
+

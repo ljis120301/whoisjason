@@ -5,8 +5,8 @@ import { cnFilter } from "@/lib/utils";
 import { useTheme } from 'next-themes';
 
 const BoxesCore = ({ className, ...rest }) => {
-  const rows = useMemo(() => new Array(75).fill(1), []);
-  const cols = useMemo(() => new Array(75).fill(1), []);
+  const rows = useMemo(() => new Array(100).fill(1), []);
+  const cols = useMemo(() => new Array(100).fill(1), []);
   const { theme } = useTheme();
 
   const frappeColors = [
