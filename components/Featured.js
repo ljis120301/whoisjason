@@ -14,11 +14,11 @@ export default function Featured() {
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <h2 className="text-3xl sm:text-4xl font-bold text-frappe-text mb-8 sm:mb-12 text-center">Featured</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
-          <div className="lg:col-span-2 grid grid-cols-2 gap-6">
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <CardSpotlightDemo 
               radius={240}
               color="rgba(100, 100, 238, 0.3)"
-              className="col-span-2 aspect-[16/9]"
+              className="col-span-1 sm:col-span-2 aspect-[16/9]"
             />
             <CardSpotlightDemo 
               radius={120}
