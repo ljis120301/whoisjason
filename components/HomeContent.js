@@ -33,7 +33,7 @@ export default function HomeContent() {
           <Projects />
         </section>
         
-        <section id="blog" className="py-16 px-4 sm:px-6 lg:px-8 ">
+        <section id="blog" className=" px-4 sm:px-6 lg:px-8 ">
           <Blog />
         </section>
         
