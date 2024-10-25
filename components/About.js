@@ -5,58 +5,75 @@ import Image from "next/image";
 
 const content = [
   {
-    title: "Collaborative Editing",
+    title: "Who I Am",
     description:
-      "Work together in real time with your team, clients, and stakeholders. Collaborate on documents, share ideas, and make decisions quickly. With our platform, you can streamline your workflow and increase productivity.",
+      "I'm a passionate full-stack developer with a keen interest in creating intuitive and efficient web applications. My journey in tech has been driven by curiosity and a desire to solve complex problems.",
     content: (
-      <div
-        className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
-        Collaborative cock
-      </div>
-    ),
-  },
-  {
-    title: "Real time changes",
-    description:
-      "See changes as they happen. With our platform, you can track every modification in real time. No more confusion about the latest version of your project. Say goodbye to the chaos of version control and embrace the simplicity of real-time updates.",
-    content: (
-      <div className="h-full w-full  flex items-center justify-center text-white">
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
           src="/pi.png"
           width={300}
           height={300}
-          className="h-full w-full object-cover"
-          alt="linear board demo" />
+          className="rounded-full"
+          alt="Profile picture"
+        />
       </div>
     ),
   },
   {
-    title: "Version control",
+    title: "My Expertise",
     description:
-      "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
+      "With years of experience in both front-end and back-end development, I specialize in creating responsive, user-friendly interfaces and robust server-side applications. My tech stack includes React, Node.js, and various cloud technologies.",
     content: (
-      <div
-        className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
-        Version control
+      <div className="h-full w-full flex items-center justify-center text-white">
+        <Image
+          src="/tech-stack.png"
+          width={400}
+          height={300}
+          className="object-contain"
+          alt="Tech stack visualization"
+        />
       </div>
     ),
   },
   {
-    title: "Running out of content",
+    title: "My Approach",
     description:
-      "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
+      "I believe in clean, maintainable code and user-centered design. Every project I undertake is an opportunity to learn and innovate. I'm always exploring new technologies and methodologies to stay at the forefront of web development.",
     content: (
-      <div
-        className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
-        Running out of content
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
+        <Image
+          src="/coding-process.png"
+          width={400}
+          height={300}
+          className="object-contain"
+          alt="Coding process visualization"
+        />
+      </div>
+    ),
+  },
+  {
+    title: "My Goals",
+    description:
+      "My aim is to contribute to projects that make a positive impact. Whether it's improving user experiences, optimizing performance, or solving real-world problems, I'm committed to creating software that matters.",
+    content: (
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
+        <Image
+          src="/future-goals.png"
+          width={400}
+          height={300}
+          className="object-contain"
+          alt="Future goals visualization"
+        />
       </div>
     ),
   },
 ];
-export default function StickyScrollRevealDemo() {
+
+export default function About() {
   return (
-    (<div className="mx-auto p-4 rounded-lg h-full w-full ">
+    <div className="" id="About">
       <StickyScroll content={content} />
-    </div>)
+    </div>
   );
 }

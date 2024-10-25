@@ -1,25 +1,27 @@
 import { CardSpotlight } from "@/components/ui/card-spotlight";
 
-export function CardSpotlightDemo() {
+export function CardSpotlightDemo({ className }) {
   return (
-    (<CardSpotlight className="h-96 w-96">
-      <p className="text-xl font-bold relative z-20 mt-2 text-white">
-        Authentication steps
-      </p>
-      <div className="text-neutral-200 mt-4 relative z-20">
-        Follow these steps to secure your account:
-        <ul className="list-none  mt-2">
-          <Step title="Enter your email address" />
-          <Step title="Create a strong password" />
-          <Step title="Set up two-factor authentication" />
-          <Step title="Verify your identity" />
-        </ul>
+    <CardSpotlight className={`h-full w-full ${className}`}>
+      <div className="p-4 flex flex-col justify-between h-full">
+        <p className="text-lg font-bold relative z-20 text-white">
+          Authentication steps
+        </p>
+        <div className="text-neutral-200 mt-2 relative z-20 flex-grow">
+          <p>Follow these steps to secure your account:</p>
+          <ul className="list-none mt-2 text-sm">
+            <Step title="Enter your email address" />
+            <Step title="Create a strong password" />
+            <Step title="Set up two-factor authentication" />
+            <Step title="Verify your identity" />
+          </ul>
+        </div>
+        <p className="text-neutral-300 mt-2 relative z-20 text-xs">
+          Ensuring your account is properly secured helps protect your personal
+          information and data.
+        </p>
       </div>
-      <p className="text-neutral-300 mt-4 relative z-20 text-sm">
-        Ensuring your account is properly secured helps protect your personal
-        information and data.
-      </p>
-    </CardSpotlight>)
+    </CardSpotlight>
   );
 }
 

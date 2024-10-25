@@ -21,7 +21,7 @@ export default function Hero() {
         </h2>
         <a 
           className="px-8 py-4 text-lg rounded-full bg-frappe-blue text-white hover:bg-frappe-sapphire transition-colors duration-300"
-          href="#section_2"
+          href="#Featured"
         >
           Let's begin
         </a>

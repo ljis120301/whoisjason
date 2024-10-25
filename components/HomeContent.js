@@ -7,7 +7,6 @@ import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ClientWrapper from "@/components/ClientWrapper";
-import StickyScrollDemo from "@/components/sticky-scroll-demo";
 
 export default function HomeContent() {
   return (
@@ -16,25 +15,25 @@ export default function HomeContent() {
         <Navbar />
       </ClientWrapper>
       
-      <main className="w-full">
+      <main className="w-full ">
         <section id="hero" className="h-screen w-full flex items-center justify-center">
           <Hero />
         </section>
+        <section id="about" className="relative z-10 bg-white">
+          <About />
+        </section>
         
-        <section id="featured" className="relative z-10 bg-white ">
+        <section id="featured" className="">
           <div className="">
             <Featured />
           </div>
         </section>
-        <section id="about" className=" bg-frappe-surface0">
-          <About />
-        </section>
-        
-        <section id="projects" className="size-full">
+
+        <section id="projects" className="">
           <Projects />
         </section>
         
-        <section id="blog" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <section id="blog" className="py-16 px-4 sm:px-6 lg:px-8 ">
           <Blog />
         </section>
         
