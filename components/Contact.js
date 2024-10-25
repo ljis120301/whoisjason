@@ -1,12 +1,58 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { FaTwitter, FaInstagram, FaPinterest, FaYoutube, FaDiscord, FaEnvelope } from 'react-icons/fa';
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target);
+    const services = ['website', 'branding', 'ecommerce', 'seo']
+      .filter(service => formData.get(service))
+      .join(', ');
+
+    const message = {
+      content: "New Contact Form Submission",
+      embeds: [{
+        title: "New Contact Request",
+        color: 0x58B9FF, // Light blue color
+        fields: [
+          { name: "Name", value: formData.get('name') || "Not provided", inline: true },
+          { name: "Email", value: formData.get('email') || "Not provided", inline: true },
+          { name: "Services", value: services || "None selected", inline: false },
+          { name: "Message", value: formData.get('message') || "No message provided" }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message)
+      });
+
+      if (!response.ok) throw new Error('Failed to send message');
+      alert('Message sent successfully!');
+      e.target.reset();
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="py-16 bg-background" id="section_6">
       <div className="container mx-auto px-4">
@@ -72,7 +118,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <input type="text" name="name" id="name" className="w-full bg-input text-foreground rounded-md px-3 py-2 border border-input" placeholder="Name" required />
                 </div>
@@ -101,7 +147,9 @@ export default function Contact() {
                   <textarea id="message" name="message" rows="4" className="w-full bg-input text-foreground rounded-md px-3 py-2 border border-input" placeholder="Tell me about the project"></textarea>
                 </div>
                 <div>
-                  <Button type="submit" className="w-full">Send</Button>
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending...' : 'Send'}
+                  </Button>
                 </div>
               </form>
             </div>

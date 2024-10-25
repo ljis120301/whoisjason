@@ -4,19 +4,70 @@
 
 @layer base {
   :root {
-    --background: 239 241 245;
-    --foreground: 76 79 105;
+    --background: 239 241 245; /* Latte base in RGB */
+    --foreground: 76 79 105;   /* Latte text in RGB */
+    
+    --card: 204 208 218;
+    --card-foreground: 76 79 105;
+    
+    --popover: 204 208 218;
+    --popover-foreground: 76 79 105;
+    
+    --primary: 30 102 245;
+    --primary-foreground: 239 241 245;
+    
+    --secondary: 204 208 218;
+    --secondary-foreground: 76 79 105;
+    
+    --muted: 188 192 204;
+    --muted-foreground: 92 95 119;
+    
+    --accent: 188 192 204;
+    --accent-foreground: 76 79 105;
+    
+    --destructive: 210 15 57;
+    --destructive-foreground: 239 241 245;
+    
+    --border: 188 192 204;
+    --input: 188 192 204;
+    --ring: 30 102 245;
   }
 
   .dark {
-    --background: 48 52 70;
-    --foreground: 198 208 245;
+    --background: 48 52 70;    /* Frappe base in RGB */
+    --foreground: 198 208 245; /* Frappe text in RGB */
+    
+    --card: 65 69 89;
+    --card-foreground: 198 208 245;
+    
+    --popover: 65 69 89;
+    --popover-foreground: 198 208 245;
+    
+    --primary: 140 170 238;
+    --primary-foreground: 48 52 70;
+    
+    --secondary: 65 69 89;
+    --secondary-foreground: 198 208 245;
+    
+    --muted: 81 87 109;
+    --muted-foreground: 165 173 206;
+    
+    --accent: 81 87 109;
+    --accent-foreground: 198 208 245;
+    
+    --destructive: 231 130 132;
+    --destructive-foreground: 48 52 70;
+    
+    --border: 81 87 109;
+    --input: 81 87 109;
+    --ring: 140 170 238;
   }
 }
 
-body {
-  color: rgb(var(--foreground));
-  background: rgb(var(--background));
+@layer base {
+  body {
+    @apply bg-white dark:bg-frappe-base text-latte-text dark:text-frappe-text;
+  }
 }
 
 /* Add any other global styles here */

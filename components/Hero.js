@@ -4,8 +4,8 @@ import HeroAnimation from "./HeroAnimation";
 
 export default function Hero() {
   return (
-    <div className="relative w-full h-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center">
-      <div className="absolute inset-0 w-full h-full bg-slate-900 z-10 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+    <div className="relative w-full h-full overflow-hidden bg-frappe-crust flex flex-col items-center justify-center">
+      <div className="absolute inset-0 w-full h-full bg-frappe-crust z-10 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
       <HeroAnimation />
       <div className="text-center max-w-4xl px-4 relative z-20">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight lg:leading-tight mb-4">

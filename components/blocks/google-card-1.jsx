@@ -8,20 +8,20 @@ import Link from "next/link";
 
 export default function GoogleCard1({ className }) {
   return (
-    <Card className={cn("flex flex-col overflow-hidden h-full", className)}>
-      <div className="flex-shrink-0 h-24">
+    <Card className={cn("flex flex-col overflow-hidden", className)}>
+      <div className="flex-shrink-0 h-20">
         <CardSkeletonContainer className="w-full h-full">
           <Skeleton />
         </CardSkeletonContainer>
       </div>
-      <div className="p-6 flex-grow flex flex-col gap-6">
-        <div className="space-y-2.5">
+      <div className="p-4 flex flex-col gap-4">
+        <div className="space-y-2">
           <CardTitle>Google IT Fundamentals Certified</CardTitle>
           <CardDescription>
             Successfully completed the Google IT Fundamentals course, gaining essential skills in IT support and operations.
           </CardDescription>
         </div>
-        <Button asChild variant="outline" className="w-fit mt-auto">
+        <Button asChild variant="link" className="w-fit">
           <Link 
             href="https://coursera.org/share/c380b4498d7755a80e315fa078c06e92"
             target="_blank"
@@ -54,7 +54,7 @@ const Skeleton = () => {
   }, []);
 
   return (
-    <div className="h-full overflow-hidden relative flex items-center justify-center">
+    <div className="h-20 overflow-hidden relative flex items-center justify-center">
       <div className="flex flex-row flex-shrink-0 justify-center items-center gap-3">
         <Container className="h-8 w-8 icon-2">
           <FaLaptopCode className="h-4 w-4 text-frappe-green dark:text-frappe-green" />
