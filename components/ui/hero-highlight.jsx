@@ -1,6 +1,8 @@
+'use client';
+
 import { cn } from "@/lib/utils";
-import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
-import React from "react";
+import { useMotionValue, motion, useMotionTemplate, useInView } from "framer-motion";
+import React, { useRef } from "react";
 
 export const HeroHighlight = ({
   children,
@@ -24,7 +26,7 @@ export const HeroHighlight = ({
   return (
     <div
       className={cn(
-        "relative flex items-center bg-frappe-base justify-center w-full h-full group",
+        "relative flex items-center bg-transparent justify-center w-full h-full group",
         containerClassName
       )}
       onMouseMove={handleMouseMove}>
@@ -57,18 +59,21 @@ export const Highlight = ({
   children,
   className
 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.5 });
+
   return (
     <motion.span
+      ref={ref}
       initial={{
         backgroundSize: "0% 100%",
       }}
       animate={{
-        backgroundSize: "100% 100%",
+        backgroundSize: isInView ? "100% 100%" : "0% 100%",
       }}
       transition={{
         duration: 2,
         ease: "linear",
-        delay: 0.5,
       }}
       style={{
         backgroundRepeat: "no-repeat",

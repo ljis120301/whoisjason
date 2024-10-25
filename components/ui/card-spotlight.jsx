@@ -8,7 +8,6 @@ import { cnMerge } from "@/lib/utils";
 export const CardSpotlight = ({
   children,
   radius = 350,
-  color = "#262626",
   className,
   ...props
 }) => {
@@ -31,7 +30,7 @@ export const CardSpotlight = ({
   return (
     (<div
       className={cnMerge(
-        "group/spotlight p-10 rounded-md relative border border-neutral-800 bg-black dark:border-neutral-800",
+        "group/spotlight p-10 rounded-md relative border border-latte-surface0 dark:border-frappe-surface0 bg-latte-overlay2 dark:bg-frappe-base",
         className
       )}
       onMouseMove={handleMouseMove}
@@ -41,7 +40,7 @@ export const CardSpotlight = ({
       <motion.div
         className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
         style={{
-          backgroundColor: color,
+          backgroundColor: 'var(--latte-blue)',
           maskImage: useMotionTemplate`
             radial-gradient(
               ${radius}px circle at ${mouseX}px ${mouseY}px,
@@ -55,8 +54,8 @@ export const CardSpotlight = ({
             animationSpeed={5}
             containerClassName="bg-transparent absolute inset-0 pointer-events-none"
             colors={[
-              [59, 130, 246],
-              [139, 92, 246],
+              [30, 102, 245], // latte-blue
+              [136, 57, 239], // latte-mauve
             ]}
             dotSize={3} />
         )}

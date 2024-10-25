@@ -1,8 +1,8 @@
-"use client";
+
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export default function CardDemo() {
+export function Card2() {
   return (
     (<div className="max-w-xs w-full group/card">
       <div

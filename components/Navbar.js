@@ -29,15 +29,16 @@ export default function Navbar() {
         <MenuItem 
           setActive={setActive} 
           active={active} 
-          item="Featured"
-          onClick={(e) => handleClick(e, "#section_2")}
+          item="About"
+          onClick={(e) => handleClick(e, "#About")}
         />
         <MenuItem 
           setActive={setActive} 
           active={active} 
-          item="About"
-          onClick={(e) => handleClick(e, "#section_3")}
+          item="Featured"
+          onClick={(e) => handleClick(e, "#Featured")}
         />
+
         <MenuItem 
           setActive={setActive} 
           active={active} 
