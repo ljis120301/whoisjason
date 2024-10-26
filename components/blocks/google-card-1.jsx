@@ -82,37 +82,48 @@ const Skeleton = () => {
 };
 
 const Sparkles = () => {
-  const randomMove = () => Math.random() * 2 - 1;
-  const randomOpacity = () => Math.random();
-  const random = () => Math.random();
+  const sparklePositions = [
+    { top: '20%', left: '10%' },
+    { top: '40%', left: '30%' },
+    { top: '60%', left: '50%' },
+    { top: '80%', left: '70%' },
+    { top: '30%', left: '90%' },
+    { top: '70%', left: '20%' },
+    { top: '50%', left: '80%' },
+    { top: '10%', left: '60%' },
+    { top: '90%', left: '40%' },
+    { top: '25%', left: '75%' },
+    { top: '75%', left: '25%' },
+    { top: '45%', left: '55%' },
+  ];
+
   return (
-    (<div className="absolute inset-0">
-      {[...Array(12)].map((_, i) => (
+    <div className="absolute inset-0">
+      {sparklePositions.map((position, i) => (
         <motion.span
           key={`star-${i}`}
           animate={{
-            top: `calc(${random() * 100}% + ${randomMove()}px)`,
-            left: `calc(${random() * 100}% + ${randomMove()}px)`,
-            opacity: randomOpacity(),
+            opacity: [0, 1, 0],
             scale: [1, 1.2, 0],
           }}
           transition={{
-            duration: random() * 2 + 4,
+            duration: 2 + i * 0.2,
             repeat: Infinity,
             ease: "linear",
           }}
           style={{
-            position: "absolute",
-            top: `${random() * 100}%`,
-            left: `${random() * 100}%`,
-            width: `2px`,
-            height: `2px`,
-            borderRadius: "50%",
+            position: 'absolute',
+            top: position.top,
+            left: position.left,
+            width: '2px',
+            height: '2px',
+            borderRadius: '50%',
             zIndex: 1,
           }}
-          className="inline-block bg-black dark:bg-white"></motion.span>
+          className="inline-block bg-black dark:bg-white"
+        ></motion.span>
       ))}
-    </div>)
+    </div>
   );
 };
 

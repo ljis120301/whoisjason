@@ -7,13 +7,17 @@ import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ClientWrapper from "@/components/ClientWrapper";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function HomeContent() {
   return (
     <div className="overflow-x-hidden">
-      <ClientWrapper>
-        <Navbar />
-      </ClientWrapper>
+      <div className="fixed top-6 inset-x-0 max-w-3xl mx-auto z-50 flex justify-between items-center">
+        <ClientWrapper>
+          <Navbar />
+        </ClientWrapper>
+        <ThemeToggle />
+      </div>
       
       <main className="w-full ">
         <section id="hero" className="h-screen w-full flex items-center justify-center">

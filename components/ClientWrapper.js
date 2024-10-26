@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Preloader from "@/components/Preloader";
 
-export default function ClientWrapper({ children }) {
+const ClientWrapper = React.memo(({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,5 +15,8 @@ export default function ClientWrapper({ children }) {
   }
 
   return <>{children}</>;
-}
+});
 
+ClientWrapper.displayName = 'ClientWrapper';
+
+export default ClientWrapper;

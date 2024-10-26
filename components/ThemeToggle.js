@@ -1,12 +1,18 @@
-import { useState, useEffect } from 'react';
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from 'next-themes';
 import { FiSun, FiMoon } from 'react-icons/fi';
 
-export default function ThemeToggle() {
+const ThemeToggle = React.memo(() => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
   useEffect(() => setMounted(true), []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  }, [theme, setTheme]);
 
   if (!mounted) return null;
 
@@ -15,7 +21,7 @@ export default function ThemeToggle() {
       aria-label="Toggle Dark Mode"
       type="button"
       className="flex items-center justify-center transition-colors duration-300 rounded-lg w-12 h-12 bg-latte-base dark:bg-frappe-base hover:bg-latte-mantle dark:hover:bg-frappe-mantle"
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      onClick={toggleTheme}
     >
       {theme === 'dark' ? (
         <FiSun className="w-5 h-5 text-frappe-text" />
@@ -24,4 +30,8 @@ export default function ThemeToggle() {
       )}
     </button>
   );
-}
+});
+
+ThemeToggle.displayName = 'ThemeToggle';
+
+export default ThemeToggle;

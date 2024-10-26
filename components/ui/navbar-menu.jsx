@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useCallback } from "react";
 import { motion } from "framer-motion";
 
 const transition = {
@@ -11,16 +11,20 @@ const transition = {
   restSpeed: 0.001,
 };
 
-export const MenuItem = ({
+export const MenuItem = React.memo(({
   setActive,
   active,
   item,
   onClick
 }) => {
+  const handleMouseEnter = useCallback(() => {
+    setActive(item);
+  }, [setActive, item]);
+
   return (
     <motion.button
       onClick={onClick}
-      onMouseEnter={() => setActive(item)}
+      onMouseEnter={handleMouseEnter}
       className="relative px-4 py-2 text-base font-medium text-frappe-text dark:text-frappe-text hover:text-frappe-blue dark:hover:text-frappe-blue transition-colors"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -43,18 +47,22 @@ export const MenuItem = ({
       )}
     </motion.button>
   );
-};
+});
 
-export const Menu = ({
+MenuItem.displayName = 'MenuItem';
+
+export const Menu = React.memo(({
   setActive,
   children
 }) => {
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className="relative rounded-full  bg-frappe-base dark:bg-frappe-crust shadow-frappe-overlay1 flex justify-center space-x-4 px-8 py-6"
+      className="relative rounded-full bg-frappe-base dark:bg-frappe-crust shadow-frappe-overlay1 flex justify-center space-x-4 px-8 py-6"
     >
       {children}
     </nav>
   );
-};
+});
+
+Menu.displayName = 'Menu';
