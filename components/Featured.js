@@ -37,7 +37,7 @@ export default function Featured() {
           >
             <HeroHighlight>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-frappe-text">
-                all about <Highlight>Jason</Highlight>
+                Who is <Highlight>Jason</Highlight>
               </h2>
             </HeroHighlight>
           </motion.div>
