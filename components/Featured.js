@@ -44,8 +44,8 @@ export default function Featured() {
 
           {/* Main Content Area */}
           <div className="flex gap-8 lg:gap-12">
-            {/* Left Side Cards - Added max-w-[300px] to constrain width */}
-            <div className="hidden 2xl:block w-[300px] space-y-10"> 
+            {/* Left Side Cards - Updated visibility breakpoint from 2xl to md */}
+            <div className="hidden md:block w-[300px] space-y-10"> 
               <GoogleCard1 />
               <GoogleCard1 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
@@ -72,8 +72,8 @@ export default function Featured() {
               <CardSpotlightJason className="h-auto" />
             </div>
 
-            {/* Right Side Cards - Added max-w-[300px] to constrain width */}
-            <div className="hidden 2xl:block w-[300px] space-y-10"> 
+            {/* Right Side Cards - Updated visibility breakpoint from 2xl to md */}
+            <div className="hidden md:block w-[300px] space-y-10"> 
               <GoogleCard1 />
               <GoogleCard1 />
               <Accordion type="single" collapsible className="absolute w-[300px]">

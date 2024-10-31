@@ -1,5 +1,4 @@
-"use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 
 const transition = {
@@ -21,14 +20,18 @@ export const MenuItem = React.memo(({
     setActive(item);
   }, [setActive, item]);
 
+  const motionProps = useMemo(() => ({
+    whileHover: { scale: 1.05 },
+    whileTap: { scale: 0.95 },
+    transition: { ...transition, duration: 0.1 }
+  }), []);
+
   return (
     <motion.button
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       className="relative px-4 py-2 text-base font-medium text-frappe-text dark:text-frappe-text hover:text-frappe-blue dark:hover:text-frappe-blue transition-colors"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ ...transition, duration: 0.1 }}
+      {...motionProps}
     >
       <motion.span
         className="relative z-10"
@@ -47,6 +50,9 @@ export const MenuItem = React.memo(({
       )}
     </motion.button>
   );
+}, (prevProps, nextProps) => {
+  return prevProps.active === nextProps.active && 
+         prevProps.item === nextProps.item;
 });
 
 MenuItem.displayName = 'MenuItem';

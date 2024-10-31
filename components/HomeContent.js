@@ -13,9 +13,9 @@ export default function HomeContent() {
   return (
     <div className="overflow-x-hidden">
       <div className="fixed top-6 inset-x-0 max-w-3xl mx-auto z-50 flex justify-between items-center">
-        <ClientWrapper>
+       
           <Navbar />
-        </ClientWrapper>
+        
         <ThemeToggle />
       </div>
       
