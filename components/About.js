@@ -21,16 +21,16 @@ const content = [
     ),
   },
   {
-    title: "My Expertise",
+    title: "What I Do",
     description:
-      "With years of experience in both front-end and back-end development, I specialize in creating responsive, user-friendly interfaces and robust server-side applications. My tech stack includes React, Node.js, and various cloud technologies.",
+      "With years of experience in both front-end and back-end development, I specialize in creating responsive, user-friendly interfaces and robust server-side applications. My tech stack includes React, Node.js, and Tailwind CSS. I have a passion for building scalable and efficient web applications.",
     content: (
       <div className="h-full w-full flex items-center justify-center text-white">
         <Image
-          src="/tech-stack.png"
+          src="/nextjs.png"
           width={400}
-          height={300}
-          className="object-contain"
+          height={400}
+          className="rounded-lg object-contain "
           alt="Tech stack visualization"
         />
       </div>
@@ -43,10 +43,10 @@ const content = [
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
         <Image
-          src="/coding-process.png"
+          src="/pi-server.jpeg"
           width={400}
-          height={300}
-          className="object-contain"
+          height={200}
+          className="object-contain rounded-lg"
           alt="Coding process visualization"
         />
       </div>
@@ -59,7 +59,7 @@ const content = [
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
-          src="/future-goals.png"
+          src="/portrait-happy-excited-man-holding-laptop-computer.png"
           width={400}
           height={300}
           className="object-contain"

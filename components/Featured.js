@@ -12,6 +12,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import GoogleCard2  from "@/components/blocks/google-ai-card"
+import { CardSpotlightNetworking } from "@/components/ui/card-spotlight-networking";
+import { CardSpotlightLinux } from "@/components/ui/card-spotlight-linux";
 
 export default function Featured() {
   const sectionRef = useRef(null);
@@ -47,7 +50,7 @@ export default function Featured() {
             {/* Left Side Cards - Updated visibility breakpoint from 2xl to md */}
             <div className="hidden md:block w-[300px] space-y-10"> 
               <GoogleCard1 />
-              <GoogleCard1 />
+              <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Is it accessible?</AccordionTrigger>
@@ -67,15 +70,15 @@ export default function Featured() {
             {/* Center Content */}
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               <CardSpotlightJason className="h-auto" />
-              <CardSpotlightJason className="h-auto" />
-              <CardSpotlightJason className="h-auto" />
+              <CardSpotlightNetworking className="h-auto" />
+              <CardSpotlightLinux className="h-auto" />
               <CardSpotlightJason className="h-auto" />
             </div>
 
             {/* Right Side Cards - Updated visibility breakpoint from 2xl to md */}
             <div className="hidden md:block w-[300px] space-y-10"> 
               <GoogleCard1 />
-              <GoogleCard1 />
+              <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Is it accessible?</AccordionTrigger>
