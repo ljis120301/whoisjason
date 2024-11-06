@@ -1,13 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { FaTwitter, FaInstagram, FaPinterest, FaYoutube, FaDiscord, FaEnvelope } from 'react-icons/fa';
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { useToast } from "@/components/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,11 +56,23 @@ export default function Contact() {
       });
 
       if (!response.ok) throw new Error('Failed to send message');
-      alert('Message sent successfully!');
+      
+      toast({
+        title: "Message sent successfully!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+        variant: "default",
+        duration: 5000,
+      });
+      
       e.target.reset();
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to send message. Please try again.');
+      toast({
+        title: "Error sending message",
+        description: "Please try again later.",
+        variant: "destructive",
+        duration: 5000,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -55,6 +80,7 @@ export default function Contact() {
 
   return (
     <section className="py-16 bg-background" id="section_6">
+      <Toaster />
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center items-center mb-12">
@@ -148,7 +174,14 @@ export default function Contact() {
                 </div>
                 <div>
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? 'Sending...' : 'Send'}
+                    {isSubmitting ? (
+                      <>
+                        <LoadingSpinner className="mr-2 h-4 w-4" />
+                        Sending...
+                      </>
+                    ) : (
+                      'Send'
+                    )}
                   </Button>
                 </div>
               </form>

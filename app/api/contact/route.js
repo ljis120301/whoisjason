@@ -1,28 +1,30 @@
-export async function POST(request) {
-    const body = await request.json();
-    
-    // Replace this with your Discord webhook URL
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    
-    if (!webhookUrl) {
-      return new Response('Discord webhook URL not configured', { status: 500 });
+import { NextResponse } from 'next/server';
+
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
+
+export async function POST(req) {
+  try {
+    const body = await req.json();
+
+    const response = await fetch(DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send to Discord webhook');
     }
-  
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body)
-      });
-  
-      if (!response.ok) throw new Error('Failed to send to Discord');
-      
-      return new Response('Message sent successfully', { status: 200 });
-    } catch (error) {
-      console.error('Error:', error);
-      return new Response('Error sending message', { status: 500 });
-    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Discord webhook error:', error);
+    return NextResponse.json(
+      { error: 'Failed to send message' },
+      { status: 500 }
+    );
   }
+}
   
