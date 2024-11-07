@@ -145,7 +145,19 @@ export default function Projects() {
               </CardDemo>
 
               {/* Testing Card 2 */}
-              <Card2 />
+              <CardDemo>
+                <CardDemo.Header>
+                  <CardDemo.Title>Testing</CardDemo.Title>
+                  <CardDemo.Description>Testing</CardDemo.Description>
+                </CardDemo.Header>
+                <CardDemo.Content>
+                  <p>Testing</p>
+                </CardDemo.Content>
+                <CardDemo.Footer className="flex justify-between items-center">
+                  <Button variant="link">Discover More</Button>
+                  <SiTestinglibrary className="text-4xl text-frappe-blue" />
+                </CardDemo.Footer>
+              </CardDemo>
             </div>
 
             {/* Right Linux Card - increased width */}
