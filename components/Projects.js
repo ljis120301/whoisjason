@@ -88,7 +88,7 @@ export default function Projects() {
               <CardDemo>
                 <CardDemo.Header>
                   <CardDemo.Title>Python</CardDemo.Title>
-                  <CardDemo.Description>$1,200</CardDemo.Description>
+                  <CardDemo.Description>4+ Years</CardDemo.Description>
                 </CardDemo.Header>
                 <CardDemo.Content>
                   <p>I started my journey with Python 3 years ago when I attempted to re-do my employer's POS system. From there I grew to design websites and backend applications.</p>
