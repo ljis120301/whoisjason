@@ -53,15 +53,21 @@ export default function Featured() {
               <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                    <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
-                    </AccordionContent>
+                  <AccordionTrigger>Why I Love Tech</AccordionTrigger>
+                  <AccordionContent>
+                    Share your personal story and passion for technology here. What excites you about the field? What drives you to keep learning?
+                  </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
-                  <AccordionTrigger>Is it cool?</AccordionTrigger>
+                  <AccordionTrigger>My Learning Journey</AccordionTrigger>
                   <AccordionContent>
-                    stupid dumb monkey
+                    Describe your approach to learning, favorite resources, and how you stay current with technology trends.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-3">
+                  <AccordionTrigger>Fun Facts</AccordionTrigger>
+                  <AccordionContent>
+                    Share interesting personal details that make you unique and memorable to potential employers or clients.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -81,9 +87,22 @@ export default function Featured() {
               <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Is it accessible?</AccordionTrigger>
+                  <AccordionTrigger>My other hobbies</AccordionTrigger>
                     <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                    <ul className="list-disc list-inside">
+                      <li className="text-sm">
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">My casa</a>
+                      </li>
+                      <li className="text-sm">
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">I love to play the bass guitar</a>
+                      </li>
+                      <li className="text-sm">
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">I love to play the drums</a>
+                      </li>
+                      <li className="text-sm">
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">I love to play the piano</a>
+                      </li>
+                    </ul>
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
