@@ -3,19 +3,19 @@ import { CardSpotlight } from "@/components/ui/card-spotlight";
 export function CardSpotlightNetworking({ className }) {
   return (
     <CardSpotlight className={`w-full ${className}`}>
-      <div className="p-3 sm:p-4 flex flex-col justify-between h-full">
-        <h3 className="text-lg sm:text-xl font-bold relative z-20 text-latte-text dark:text-frappe-text mb-3">
+      <div className="p-2 sm:p-3 md:p-4 flex flex-col justify-between h-full">
+        <h3 className="text-sm sm:text-base md:text-lg font-bold relative z-20 text-latte-text dark:text-frappe-text mb-2 sm:mb-3 line-clamp-2">
           Network Fundamentals
         </h3>
         <div className="text-latte-subtext0 dark:text-frappe-subtext0 relative z-20 flex-grow">
-          <ul className="list-none space-y-2 sm:space-y-3">
+          <ul className="list-none space-y-1.5 sm:space-y-2 md:space-y-3">
             <Skill icon={<NetworkingIcon />} title="Network Protocols" />
             <Skill icon={<SecurityIcon />} title="Network Security" />
             <Skill icon={<TopologyIcon />} title="Network Architecture" />
             <Skill icon={<TroubleshootIcon />} title="Troubleshooting" />
           </ul>
         </div>
-        <p className="text-latte-subtext1 dark:text-frappe-subtext1 mt-3 relative z-20 text-sm">
+        <p className="text-latte-subtext1 dark:text-frappe-subtext1 mt-2 sm:mt-3 relative z-20 text-xs sm:text-sm truncate">
           Building secure network infrastructure
         </p>
       </div>
@@ -24,15 +24,19 @@ export function CardSpotlightNetworking({ className }) {
 }
 
 const Skill = ({ icon, title }) => (
-  <li className="flex items-center gap-3">
-    <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 text-latte-blue dark:text-frappe-blue">{icon}</div>
-    <p className="text-latte-text dark:text-frappe-text text-sm sm:text-base">{title}</p>
+  <li className="flex items-center gap-2 sm:gap-3">
+    <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-latte-blue dark:text-frappe-blue">
+      {icon}
+    </div>
+    <p className="text-latte-text dark:text-frappe-text text-xs sm:text-sm md:text-base truncate">
+      {title}
+    </p>
   </li>
 );
 
 const NetworkingIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-    <path d="M15 20c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1M10 20c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1M7 18h10v-1c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1m11-8c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1M6 10c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1m1-2h10V7c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1" />
+    <path d="M15 20c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1M10 20c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1m1-2h10V7c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1" />
   </svg>
 );
 

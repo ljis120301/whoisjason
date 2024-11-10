@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { CardSpotlightDemo } from "@/components/ui/card-spotlight-demo";
 import GoogleCard1 from "@/components/blocks/google-card-1";
 import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight';
-import { CardSpotlightJason } from "@/components/ui/card-spotlight-web-dev";
+import { CardSpotlightWebDev } from "@/components/ui/card-spotlight-web-dev";
 import {
   Accordion,
   AccordionContent,
@@ -46,9 +46,9 @@ export default function Featured() {
           </motion.div>
 
           {/* Main Content Area */}
-          <div className="flex gap-8 lg:gap-12">
-            {/* Left Side Cards - Updated visibility breakpoint from 2xl to md */}
-            <div className="hidden md:block w-[300px] space-y-10"> 
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+            {/* Left Side Cards - Hide on smaller screens */}
+            <div className="hidden lg:block w-[300px] space-y-10"> 
               <GoogleCard1 />
               <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
@@ -73,16 +73,16 @@ export default function Featured() {
               </Accordion>
             </div>
 
-            {/* Center Content */}
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-              <CardSpotlightJason className="h-auto" />
+            {/* Center Content - Full width on mobile */}
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+              <CardSpotlightWebDev className="h-auto" />
               <CardSpotlightNetworking className="h-auto" />
               <CardSpotlightLinux className="h-auto" />
-              <CardSpotlightJason className="h-auto" />
+              <CardSpotlightWebDev className="h-auto" />
             </div>
 
-            {/* Right Side Cards - Updated visibility breakpoint from 2xl to md */}
-            <div className="hidden md:block w-[300px] space-y-10"> 
+            {/* Right Side Cards - Hide on smaller screens */}
+            <div className="hidden lg:block w-[300px] space-y-10"> 
               <GoogleCard1 />
               <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
