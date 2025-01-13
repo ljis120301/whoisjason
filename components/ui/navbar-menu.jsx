@@ -33,19 +33,20 @@ export const MenuItem = React.memo(({
       className="relative px-4 py-2 text-base font-medium text-frappe-text dark:text-frappe-text hover:text-frappe-blue dark:hover:text-frappe-blue transition-colors"
       {...motionProps}
     >
-      <motion.span
+      <span
         className="relative z-10"
-        initial={{ opacity: 0, y: 5 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.15 }}
       >
         {item}
-      </motion.span>
+      </span>
       {active === item && (
         <motion.div
           className="absolute inset-0 bg-frappe-surface0 dark:bg-frappe-surface0 rounded-md -z-10"
           layoutId="active-pill"
-          transition={transition}
+          transition={{
+            type: "spring",
+            bounce: 0.15,
+            duration: 0.3
+          }}
         />
       )}
     </motion.button>
