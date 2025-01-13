@@ -15,12 +15,6 @@ const menuItems = [
 
 function NavbarContent() {
   const [active, setActive] = useState(null);
-  const [mounted, setMounted] = useState(false);
-
-  // Only run after hydration
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Debounced scroll handler
   const handleScroll = useDebouncedCallback(() => {
@@ -40,12 +34,10 @@ function NavbarContent() {
   }, 100);
 
   useEffect(() => {
-    if (mounted) {
-      window.addEventListener('scroll', handleScroll);
-      handleScroll();
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
-  }, [mounted, handleScroll]);
+    handleScroll(); // Initial check
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const handleClick = useCallback((e, href) => {
     e.preventDefault();
@@ -67,11 +59,9 @@ function NavbarContent() {
         active={active}
         item={label}
         onClick={(e) => handleClick(e, href)}
+        initial={false}
       />
     )), [active, handleClick]);
-
-  // Don't render until after hydration to prevent mismatch
-  if (!mounted) return null;
 
   return (
     <Menu setActive={setActive}>
