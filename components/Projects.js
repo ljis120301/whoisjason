@@ -147,11 +147,11 @@ export default function Projects() {
               {/* Testing Card 2 */}
               <CardDemo>
                 <CardDemo.Header>
-                  <CardDemo.Title>Testing</CardDemo.Title>
-                  <CardDemo.Description>Testing</CardDemo.Description>
+                  <CardDemo.Title>PC Building</CardDemo.Title>
+                  <CardDemo.Description>10+ Years</CardDemo.Description>
                 </CardDemo.Header>
                 <CardDemo.Content>
-                  <p>Testing</p>
+                  <p>I have been building PCs for over 10 years. It was my first deep dive into discovering technology and the fundamentals that make up a computer. I have since gone on to build PCs for commision as well as for personal use. I have experience with water cooling and custom builds. I have also assembled quite a few servers that have been deployed in a production environment.</p>
                 </CardDemo.Content>
                 <CardDemo.Footer className="flex justify-between items-center">
                   <Button variant="link">Discover More</Button>
