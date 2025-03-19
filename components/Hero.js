@@ -25,7 +25,7 @@ export default function Hero() {
           className="px-8 py-4 text-lg rounded-full bg-frappe-blue text-white hover:bg-frappe-sapphire transition-colors duration-300"
           href="#Featured"
         >
-          Let's begin
+          Let&apos;s begin
         </a>
       </div>
     </div>

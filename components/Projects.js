@@ -91,7 +91,7 @@ export default function Projects() {
                   <CardDemo.Description>4+ Years</CardDemo.Description>
                 </CardDemo.Header>
                 <CardDemo.Content>
-                  <p>I started my journey with Python 3 years ago when I attempted to re-do my employer's POS system. From there I grew to design websites and backend applications.</p>
+                  <p>I started my journey with Python 3 years ago when I attempted to re-do my employer&apos;s POS system. From there I grew to design websites and backend applications.</p>
                 </CardDemo.Content>
                 <CardDemo.Footer className="flex justify-between items-center">
                   <Button variant="link">Discover More</Button>

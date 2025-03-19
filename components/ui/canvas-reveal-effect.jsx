@@ -223,6 +223,7 @@ const ShaderMaterial = ({
   // Shader material
   const material = useMemo(() => {
     const materialObject = new THREE.ShaderMaterial({
+      fragmentShader: source,
       vertexShader: `
       precision mediump float;
       in vec2 coordinates;
@@ -236,7 +237,6 @@ const ShaderMaterial = ({
         fragCoord.y = u_resolution.y - fragCoord.y;
       }
       `,
-      fragmentShader: source,
       uniforms: getUniforms(),
       glslVersion: THREE.GLSL3,
       blending: THREE.CustomBlending,
@@ -245,7 +245,7 @@ const ShaderMaterial = ({
     });
 
     return materialObject;
-  }, [size.width, size.height, source]);
+  }, [source, getUniforms]);
 
   return (
     (<mesh ref={ref}>

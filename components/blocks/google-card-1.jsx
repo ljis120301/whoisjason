@@ -38,17 +38,18 @@ export default function GoogleCard1({ className }) {
 }
 
 const Skeleton = () => {
-  const scale = [1, 1.1, 1];
-  const transform = ["translateY(0px)", "translateY(-4px)", "translateY(0px)"];
-  const sequence = [
-    [".icon-1", { scale: [1, 1.2, 1], transform }, { duration: 1 }], // Google icon with larger scale
-    [".icon-2", { scale, transform }, { duration: 0.8 }],
-    [".icon-3", { scale, transform }, { duration: 0.8 }],
-    [".icon-4", { scale, transform }, { duration: 0.8 }],
-    [".icon-5", { scale, transform }, { duration: 0.8 }],
-  ];
-
   useEffect(() => {
+    const scale = [1, 1.1, 1];
+    const transform = ["translateY(0px)", "translateY(-4px)", "translateY(0px)"];
+    
+    const sequence = [
+      [".icon-1", { scale, transform }, { duration: 0.8 }],
+      [".icon-2", { scale, transform }, { duration: 0.8 }],
+      [".icon-3", { scale, transform }, { duration: 0.8 }],
+      [".icon-4", { scale, transform }, { duration: 0.8 }],
+      [".icon-5", { scale, transform }, { duration: 0.8 }],
+    ];
+    
     animate(sequence, {
       repeat: Infinity,
       repeatDelay: 1,

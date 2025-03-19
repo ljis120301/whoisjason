@@ -112,14 +112,14 @@ export default function Contact() {
               <Separator className="my-6" />
               <div>
                 <h3 className="text-xl font-semibold mb-3">Start a project</h3>
-                <p className="text-muted-foreground">I'm available for freelance projects</p>
+                <p className="text-muted-foreground">I&apos;m available for freelance projects</p>
               </div>
             </div>
 
             <div className="space-y-6">
               <div>
                 <h3 className="text-xl font-semibold mb-3">About</h3>
-                <p className="text-muted-foreground">I'm free most days of the week feel free to contact me</p>
+                <p className="text-muted-foreground">I&apos;m free most days of the week feel free to contact me</p>
               </div>
               <Separator className="my-6" />
               <div>

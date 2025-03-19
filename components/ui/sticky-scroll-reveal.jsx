@@ -27,12 +27,15 @@ export const StickyScroll = ({
       }
     );
 
-    sectionRefs.current.forEach((ref) => {
+    // Save current refs in a local variable to use in cleanup
+    const currentRefs = sectionRefs.current;
+    
+    currentRefs.forEach((ref) => {
       if (ref) observer.observe(ref);
     });
 
     return () => {
-      sectionRefs.current.forEach((ref) => {
+      currentRefs.forEach((ref) => {
         if (ref) observer.unobserve(ref);
       });
     };
