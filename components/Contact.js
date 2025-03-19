@@ -84,7 +84,7 @@ export default function Contact() {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center items-center mb-12">
-            <Image src="/aerial-view-man-using-computer-laptop-wooden-table.jpg" className="rounded-full" alt="" width={100} height={100} />
+            <Image src="/aerial-view-man-using-computer-laptop-wooden-table.jpg" className="rounded-full" alt="Jason at his desk with a laptop" width={100} height={100} />
             <h2 className="text-foreground text-3xl font-bold ml-4">Say Hi</h2>
           </div>
 
