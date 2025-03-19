@@ -7,10 +7,12 @@ import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
+import DynamicSEO from "@/components/dynamicSEO";
 
 export default function HomeContent() {
   return (
     <div className="overflow-x-hidden">
+      <DynamicSEO />
       <div className="fixed top-6 inset-x-0 max-w-3xl mx-auto z-50 flex justify-between items-center">
         <Navbar />
         <ThemeToggle />
