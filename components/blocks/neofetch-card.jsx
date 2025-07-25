@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useEntertainmentStats } from '../hooks/use-entertainment-stats.js';
 // import { useGitHubStats } from '../hooks/use-github-stats.js';
 
 // Move hook directly into this file to test
@@ -91,20 +92,27 @@ const GentooAscii = () => (
 );
 
 const PowerLevel10K = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(null); // Start with null
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
+    setMounted(true);
+    setCurrentTime(new Date()); // Set initial time after mount
+    
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const timeString = currentTime.toLocaleTimeString('en-US', { 
-    hour12: false, 
-    hour: '2-digit', 
-    minute: '2-digit' 
-  });
+  // Always return static content during SSR or if not mounted
+  const timeString = mounted && currentTime
+    ? currentTime.toLocaleTimeString('en-US', { 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      })
+    : '00:00';
 
   return (
     <div className="mt-6 space-y-2 font-mono text-sm">
@@ -134,7 +142,7 @@ const PowerLevel10K = () => {
           <div className="flex items-center -ml-1">
             <span className="bg-frappe-green text-frappe-base px-2 py-0.5 rounded-l-sm rounded-r-full flex items-center h-5">
               <span className="mr-1"></span>
-              <span>main</span>
+              <span>on   main</span>
             </span>
           </div>
         </div>
@@ -263,17 +271,164 @@ const DeveloperStats = ({ stats }) => {
   );
 };
 
+const EntertainmentStats = ({ stats }) => {
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'online': return 'text-frappe-green';
+      case 'idle': return 'text-frappe-yellow';
+      case 'dnd': return 'text-frappe-red';
+      case 'offline': return 'text-frappe-red'; // Changed to red to match Steam
+      default: return 'text-frappe-red'; // Changed to red to match Steam
+    }
+  };
+
+  const getSteamStatus = (personaState) => {
+    switch (personaState) {
+      case 0: return 'Offline';
+      case 1: return 'Online';
+      case 2: return 'Busy';
+      case 3: return 'Away';
+      case 4: return 'Snooze';
+      case 5: return 'Looking to trade';
+      case 6: return 'Looking to play';
+      default: return 'Unknown';
+    }
+  };
+
+  const getSteamStatusColor = (personaState) => {
+    switch (personaState) {
+      case 1: return 'text-frappe-green'; // Online
+      case 2: return 'text-frappe-red';   // Busy
+      case 3: return 'text-frappe-yellow'; // Away
+      case 4: return 'text-frappe-yellow'; // Snooze
+      case 5: return 'text-frappe-blue';   // Looking to trade
+      case 6: return 'text-frappe-blue';   // Looking to play
+      case 0: return 'text-frappe-red'; // Offline - changed to red
+      default: return 'text-frappe-red'; // Unknown - changed to red
+    }
+  };
+
+  if (stats.spotify.loading || stats.steam.loading || stats.discord.loading) {
+    return (
+      <div className="space-y-0.5 px-[135px]">
+        <div className="text-frappe-subtext0">Loading entertainment stats...</div>
+        <div className="text-frappe-subtext0">Fetching Spotify data...</div>
+        <div className="text-frappe-subtext0">Getting Steam info...</div>
+        <div className="text-frappe-subtext0">Checking Discord status...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-0.5 px-[135px]">
+      {/* Spotify */}
+      {stats.spotify.error ? (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">♪</span>
+          <span className="ml-1">Music: Spotify unavailable</span>
+        </div>
+      ) : stats.spotify.currentTrack?.is_playing ? (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">♪</span>
+          <span className="ml-1">Now: {stats.spotify.currentTrack.name} - {stats.spotify.currentTrack.artist}</span>
+        </div>
+      ) : stats.spotify.recentTracks?.[0] ? (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">♪</span>
+          <span className="ml-1">Recent: {stats.spotify.recentTracks[0].name} - {stats.spotify.recentTracks[0].artist}</span>
+        </div>
+      ) : (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">♪</span>
+          <span className="ml-1">Music: No recent activity</span>
+        </div>
+      )}
+
+      {/* Discord */}
+      {stats.discord.error ? (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">💬</span>
+          <span className="ml-1">Discord: Status unavailable</span>
+        </div>
+      ) : (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">💬</span>
+          <span className="ml-1">
+            Discord: {stats.discord.user?.username || 'User'} • 
+            <span className={getStatusColor(stats.discord.presence?.status)}>
+              {' '}{stats.discord.presence?.status || 'offline'}
+            </span>
+            {stats.discord.sharedGuilds > 0 && ` • ${stats.discord.sharedGuilds} servers`}
+          </span>
+        </div>
+      )}
+
+      {/* Steam Status */}
+      {stats.steam.error ? (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">🎮</span>
+          <span className="ml-1">Steam: Library unavailable</span>
+        </div>
+      ) : !stats.steam.error && stats.steam.playerInfo?.personastate !== undefined ? (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">🎮</span>
+          <span className="ml-1">
+            Steam: {stats.steam.playerInfo?.personaname || 'Jason'} • 
+            <span className={getSteamStatusColor(stats.steam.playerInfo.personastate)}>
+              {' '}{getSteamStatus(stats.steam.playerInfo.personastate).toLowerCase()}
+            </span>
+          </span>
+        </div>
+      ) : (
+        <div className="flex items-center text-frappe-text whitespace-nowrap">
+          <span className="w-4 text-center">🎮</span>
+          <span className="ml-1">Steam: Jason • <span className="text-frappe-red">unknown</span></span>
+        </div>
+      )}
+
+      {/* Steam Game */}
+      {!stats.steam.error && (
+        stats.steam.playerInfo?.gameextrainfo ? (
+          <div className="flex items-center text-frappe-text whitespace-nowrap">
+            <span className="w-4 text-center">🎮</span>
+            <span className="ml-1">Playing: {stats.steam.playerInfo.gameextrainfo}</span>
+          </div>
+        ) : stats.steam.recentGames?.[0] ? (
+          <div className="flex items-center text-frappe-text whitespace-nowrap">
+            <span className="w-4 text-center">🎮</span>
+            <span className="ml-1">Recent: {stats.steam.recentGames[0].name} ({stats.steam.recentGames[0].playtime_2weeks}h)</span>
+          </div>
+        ) : stats.steam.totalGames ? (
+          <div className="flex items-center text-frappe-text whitespace-nowrap">
+            <span className="w-4 text-center">🎮</span>
+            <span className="ml-1">Games: {stats.steam.totalGames} owned</span>
+          </div>
+        ) : null
+      )}
+    </div>
+  );
+};
+
 export function NeofetchCard({ githubUsername }) {
   // Use environment variable as fallback if no username is passed
   const username = githubUsername || process.env.NEXT_PUBLIC_GITHUB_USERNAME || "ljis120301";
   const githubStats = useGitHubStats(username);
+  const entertainmentStats = useEntertainmentStats();
 
-  // Add state for real-time tracking
-  const [startTime] = useState(() => new Date());
-  const [currentTime, setCurrentTime] = useState(new Date());
+  // Add state for real-time tracking - initialize as null to prevent hydration errors
+  const [startTime, setStartTime] = useState(null);
+  const [currentTime, setCurrentTime] = useState(null);
+  // Add mounted state to prevent hydration errors
+  const [mounted, setMounted] = useState(false);
 
   // Update current time every second
   useEffect(() => {
+    // Set mounted to true after hydration and initialize times
+    setMounted(true);
+    const now = new Date();
+    setStartTime(now);
+    setCurrentTime(now);
+    
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -284,6 +439,8 @@ export function NeofetchCard({ githubUsername }) {
 
   // Calculate uptime (time spent on site)
   const getUptime = () => {
+    if (!mounted || !startTime || !currentTime) return "0s"; // Return static content during SSR
+    
     const timeDiff = currentTime - startTime;
     const hours = Math.floor(timeDiff / (1000 * 60 * 60));
     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
@@ -296,6 +453,12 @@ export function NeofetchCard({ githubUsername }) {
     } else {
       return `${seconds}s`;
     }
+  };
+
+  // Get formatted datetime
+  const getDateTime = () => {
+    if (!mounted || !currentTime) return 'Loading...';
+    return currentTime.toLocaleString();
   };
 
   return (
@@ -334,20 +497,14 @@ export function NeofetchCard({ githubUsername }) {
             </div>
           </div>
 
-          {/* Software Section */}
+          {/* Entertainment/Social Section */}
           <div>
             <div className="text-center text-frappe-blue mb-1">
-              ┌──────────────────────Software──────────────────────┐
+              ┌─────────────────Entertainment/Social─────────────────┐
             </div>
-            <div className="space-y-0.5 px-[135px]">
-              <div className="text-frappe-text">OS: Gentoo Linux x86_64</div>
-              <div className="text-frappe-text">Kernel: Linux 6.12.34-gentoo-dist</div>
-              <div className="text-frappe-text">BIOS: 83ET57WW (1.27 ) (1.27)</div>
-              <div className="text-frappe-text">Packages: 995 (emerge), 36 (flatpak)</div>
-              <div className="text-frappe-text">Shell: zsh 5.9</div>
-            </div>
+            <EntertainmentStats stats={entertainmentStats} />
             <div className="text-center text-frappe-blue mt-1">
-              └────────────────────────────────────────────────────┘
+              └─────────────────────────────────────────────────────┘
             </div>
           </div>
 
@@ -370,7 +527,7 @@ export function NeofetchCard({ githubUsername }) {
             <div className="space-y-0.5 px-4 text-center">
               <div className="text-frappe-text">Age: 23 Years</div>
               <div className="text-frappe-text">Uptime: {getUptime()}</div>
-              <div className="text-frappe-text">DateTime: {currentTime.toLocaleString()}</div>
+              <div className="text-frappe-text">DateTime: {getDateTime()}</div>
             </div>
             <div className="text-center text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────┘
