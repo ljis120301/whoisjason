@@ -7,7 +7,7 @@ const content = [
   {
     title: "Who I Am",
     description:
-      "I'm a passionate full-stack developer with a keen interest in creating intuitive and efficient web applications. My journey in tech has been driven by curiosity and a desire to solve complex problems.",
+      "I'm a technology enthusiast with a deep passion for Linux and open-source. From compiling Gentoo from source to running FreeBSD on a Raspberry Pi, I have a passion for the UNIX philosophy, I also hate having free time.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
@@ -23,11 +23,11 @@ const content = [
   {
     title: "What I Do",
     description:
-      "With years of experience in both front-end and back-end development, I specialize in creating responsive, user-friendly interfaces and robust server-side applications. My tech stack includes React, Node.js, and Tailwind CSS. I have a passion for building scalable and efficient web applications.",
+      "I currently work for Sun Valley Broadband, a small ISP which allows me various opportunities to work with a wide range of technologies. I have experience with DNS, DHCP, BGP, STP, TCP/IP and various other networking technologies. I have been able to flex my skills by writing custom python script and docker containers to help us manage our customer database easily.",
     content: (
       <div className="h-full w-full flex items-center justify-center text-white">
         <Image
-          src="/nextjs.png"
+          src="/SVB.png"
           width={400}
           height={400}
           className="rounded-lg object-contain "
@@ -37,9 +37,9 @@ const content = [
     ),
   },
   {
-    title: "My Approach",
+    title: "Personal Life",
     description:
-      "I believe in clean, maintainable code and user-centered design. Every project I undertake is an opportunity to learn and innovate. I'm always exploring new technologies and methodologies to stay at the forefront of web development.",
+      "I am a 23 year old loser who loves spending a whole weekend seting up a new OS. I have a cat named Tom. I love to cook new and interesting meals. I morally allign myself with the FOSS foundation. I care deeply for open source and what that mentality represents in the tech community.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
         <Image
@@ -55,14 +55,14 @@ const content = [
   {
     title: "My Goals",
     description:
-      "My aim is to contribute to projects that make a positive impact. Whether it's improving user experiences, optimizing performance, or solving real-world problems, I'm committed to creating software that matters.",
+      "My current goal in life is to become a Network Engineer, I would love to work for Sun Valley Broadband as long as I can. I am passionate about networking and love that I am allowed the opportunity to help out within my community to provide IT services. It brings me joy to know that I allow the world to remain connected to each over. I feel power and a sense of pride over providing Internet to the people.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
-          src="/portrait-happy-excited-man-holding-laptop-computer.png"
+          src="/fiber.jpg"
           width={400}
           height={300}
-          className="object-contain"
+          className="object-contain rounded-lg"
           alt="Future goals visualization"
         />
       </div>

@@ -15,6 +15,7 @@ import {
 import GoogleCard2  from "@/components/blocks/google-ai-card"
 import { CardSpotlightNetworking } from "@/components/ui/card-spotlight-networking";
 import { CardSpotlightLinux } from "@/components/ui/card-spotlight-linux";
+import { CardSpotlightComputers } from "@/components/ui/card-spotlight-computers";
 
 export default function Featured() {
   const sectionRef = useRef(null);
@@ -78,7 +79,7 @@ export default function Featured() {
               <CardSpotlightWebDev className="h-auto" />
               <CardSpotlightNetworking className="h-auto" />
               <CardSpotlightLinux className="h-auto" />
-              <CardSpotlightWebDev className="h-auto" />
+              <CardSpotlightComputers className="h-auto" />
             </div>
 
             {/* Right Side Cards - Hide on smaller screens */}
