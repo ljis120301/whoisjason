@@ -11,14 +11,11 @@ export default function Hero() {
       <Boxes />
       <div className="text-center max-w-4xl px-4 relative z-20">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight lg:leading-tight mb-4">
-          Welcome!
+          whoami
         </h1>
         <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-10 flex flex-col items-center">
           <span className="text-white bg-frappe-surface0 inline-block mb-2 px-4 py-2 rounded-lg">
-            Providing IT Services
-          </span>
-          <span className="text-white bg-frappe-surface0 inline-block px-4 py-2 rounded-lg">
-            For You!
+          /home/jason
           </span>
         </h2>
         <a 

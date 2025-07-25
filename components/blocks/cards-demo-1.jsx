@@ -1,32 +1,42 @@
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-export function CardDemo({ children, title, description }) {
-  return (
-    <div className="w-full h-full">
-      <div
-        className={cn(
-          "group cursor-pointer overflow-hidden relative card h-full rounded-md shadow-xl flex flex-col justify-between",
-          "bg-frappe-mantle",
-          "hover:after:content-[''] hover:after:absolute hover:after:inset-0 hover:after:bg-frappe-overlay0 hover:after:opacity-50",
-          "transition-all duration-500"
-        )}>
-        <div className="relative z-10 flex flex-col h-full">
-          {children || (
-            <>
-              <div className="p-6">
-                <h2 className="font-bold text-xl text-frappe-text mb-3">
-                  {title}
-                </h2>
-                <div className="font-normal text-sm text-frappe-subtext1">
-                  {description}
-                </div>
+export function CardDemo({ children, title, description, href }) {
+  const content = (
+    <div
+      className={cn(
+        "group cursor-pointer overflow-hidden relative card h-full rounded-md shadow-xl flex flex-col justify-between",
+        "bg-frappe-mantle",
+        "hover:after:content-[''] hover:after:absolute hover:after:inset-0 hover:after:bg-frappe-overlay0 hover:after:opacity-50",
+        "transition-all duration-500"
+      )}
+    >
+      <div className="relative z-10 flex flex-col h-full">
+        {children || (
+          <>
+            <div className="p-6">
+              <h2 className="font-bold text-xl text-frappe-text mb-3">
+                {title}
+              </h2>
+              <div className="font-normal text-sm text-frappe-subtext1">
+                {description}
               </div>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
+
+  if (href) {
+    return (
+      <Link href={href} passHref legacyBehavior>
+        <a className="w-full h-full block" target="_blank" rel="noopener noreferrer">{content}</a>
+      </Link>
+    );
+  }
+
+  return <div className="w-full h-full">{content}</div>;
 }
 
 // Add subcomponents to match Card's API
