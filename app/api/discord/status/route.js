@@ -140,7 +140,7 @@ export async function GET(request) {
     return NextResponse.json(sanitizedResponse, {
       headers: {
         'X-RateLimit-Remaining': rateLimitResult.remaining,
-        'Cache-Control': 'public, max-age=60' // Cache for 1 minute
+        'Cache-Control': 'public, max-age=30' // Cache for 30 seconds for real-time updates
       }
     });
 
