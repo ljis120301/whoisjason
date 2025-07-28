@@ -71,3 +71,23 @@
 }
 
 /* Add any other global styles here */
+
+/* Horizontal scrolling text animation for long titles */
+@keyframes scroll-text {
+  0%, 15% {
+    transform: translateX(0);
+  }
+  85%, 100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-text {
+  animation: scroll-text 35s ease-in-out infinite;
+  animation-delay: 2s; /* Wait 2 seconds before starting */
+}
+
+/* Pause animation on hover */
+.animate-scroll-text:hover {
+  animation-play-state: paused;
+}

@@ -1,15 +1,283 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { isAuthenticated } from '../../../lib/auth.js';
+'use client';
 
-// Server component that handles authentication and renders dashboard
-export default async function AdminDashboard() {
-  // Get cookies on server side
-  const cookieStore = cookies();
-  const sessionToken = cookieStore.get('admin_session');
-  
-  // Check authentication server-side
-  if (!sessionToken) {
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+// Client component for service status to prevent hydration issues
+function ServiceStatus() {
+  const [services, setServices] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchStatus() {
+      try {
+        const response = await fetch('/api/system/status', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+          setServices(data.services);
+          setError(null);
+        } else {
+          setError(data.error || 'Unknown error');
+        }
+      } catch (err) {
+        setError('Connection error: ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStatus();
+    
+    // Auto-refresh every 2 seconds for real-time updates
+    const interval = setInterval(fetchStatus, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) {
+    return <div className="text-yellow-400">⏳ Loading service status...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-400">❌ Failed to load status: {error}</div>;
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between">
+        <span>🚀 Startup Manager:</span>
+        <span className={services?.startup?.initialized ? 'text-green-400' : 'text-red-400'}>
+          {services?.startup?.initialized ? '✅ Ready' : '❌ Not Ready'}
+        </span>
+      </div>
+      <div className="flex justify-between">
+        <span>🎵 Spotify:</span>
+        <span className={services?.spotify?.hasValidToken && services?.spotify?.realtime?.isPolling ? 'text-green-400' : 'text-red-400'}>
+          {services?.spotify?.hasValidToken && services?.spotify?.realtime?.isPolling ? '✅ Active' : '❌ Inactive'}
+        </span>
+      </div>
+      <div className="flex justify-between">
+        <span>💬 Discord:</span>
+        <span className={services?.discord?.isConnected ? 'text-green-400' : 'text-red-400'}>
+          {services?.discord?.isConnected ? '✅ Connected' : '❌ Disconnected'}
+        </span>
+      </div>
+      <div className="flex justify-between">
+        <span>🎮 Steam:</span>
+        <span className={services?.steam?.hasValidCredentials ? 'text-green-400' : 'text-red-400'}>
+          {services?.steam?.hasValidCredentials ? '✅ Valid' : '❌ Invalid'}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Client component for environment status
+function EnvironmentStatus() {
+  const [environment, setEnvironment] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStatus() {
+      try {
+        const response = await fetch('/api/system/status', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+          setEnvironment(data.environment);
+        }
+      } catch (err) {
+        console.error('Failed to fetch environment status:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStatus();
+    
+    // Refresh every 30 seconds (environment variables don't change often)
+    const interval = setInterval(fetchStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) {
+    return <div className="text-yellow-400">⏳ Loading environment status...</div>;
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="p-3 bg-gray-700 rounded">
+        <div className="text-sm text-gray-300">Discord Bot Token</div>
+        <div className={environment?.discord?.botToken ? 'text-green-400' : 'text-red-400'}>
+          {environment?.discord?.botToken ? '✅ Set' : '❌ Missing'}
+        </div>
+      </div>
+      <div className="p-3 bg-gray-700 rounded">
+        <div className="text-sm text-gray-300">Discord User ID</div>
+        <div className={environment?.discord?.userId ? 'text-green-400' : 'text-red-400'}>
+          {environment?.discord?.userId ? '✅ Set' : '❌ Missing'}
+        </div>
+      </div>
+      <div className="p-3 bg-gray-700 rounded">
+        <div className="text-sm text-gray-300">Spotify Client ID</div>
+        <div className={environment?.spotify?.clientId ? 'text-green-400' : 'text-red-400'}>
+          {environment?.spotify?.clientId ? '✅ Set' : '❌ Missing'}
+        </div>
+      </div>
+      <div className="p-3 bg-gray-700 rounded">
+        <div className="text-sm text-gray-300">Steam API Key</div>
+        <div className={environment?.steam?.apiKey ? 'text-green-400' : 'text-red-400'}>
+          {environment?.steam?.apiKey ? '✅ Set' : '❌ Missing'}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Client component for current activity
+function CurrentActivity() {
+  const [activity, setActivity] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchActivity() {
+      try {
+        const response = await fetch('/api/system/status', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+          setActivity(data.services);
+        }
+      } catch (err) {
+        console.error('Failed to fetch activity:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchActivity();
+    
+    // Auto-refresh every 2 seconds for real-time updates
+    const interval = setInterval(fetchActivity, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) {
+    return <div className="text-yellow-400">⏳ Loading current activity...</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="p-4 bg-gray-700 rounded">
+        <h3 className="text-lg font-semibold mb-2">🎵 Current Music</h3>
+        <div className="text-sm">
+          {activity?.spotify?.realtime?.isPolling ? (
+            <div>
+              <div className="text-green-400">✅ Spotify service is actively polling for new tracks</div>
+              {activity?.spotify?.realtime?.currentTrack ? (
+                <div className="mt-2 text-gray-300">
+                  <div className="font-semibold">{activity.spotify.realtime.currentTrack.name}</div>
+                  <div>by {activity.spotify.realtime.currentTrack.artist}</div>
+                  <div className="text-xs mt-1">
+                    {activity.spotify.realtime.currentTrack.is_playing ? '▶️ Playing' : '⏸️ Paused'}
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-2 text-gray-400">No current track</div>
+              )}
+            </div>
+          ) : (
+            <div className="text-red-400">❌ Spotify service is not active</div>
+          )}
+        </div>
+      </div>
+      <div className="p-4 bg-gray-700 rounded">
+        <h3 className="text-lg font-semibold mb-2">💬 Discord Status</h3>
+        <div className="text-sm">
+          {activity?.discord?.isConnected ? (
+            <div>
+              <div className="text-green-400">✅ Connected to Discord Gateway</div>
+              <div className="mt-2 text-gray-300">
+                Status: {activity.discord.currentStatus || 'offline'}
+              </div>
+              {activity.discord.lastPresenceUpdate && (
+                <div className="text-xs text-gray-400 mt-1">
+                  Last update: {new Date(activity.discord.lastPresenceUpdate).toLocaleString()}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-red-400">❌ Not connected to Discord</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main dashboard component
+export default function AdminDashboard() {
+  const [mounted, setMounted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Check authentication client-side
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/system/status', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        if (response.status === 401) {
+          router.push('/api/admin/auth');
+          return;
+        }
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        router.push('/api/admin/auth');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    checkAuth();
+  }, [router]);
+
+  // Prevent hydration mismatches
+  if (!mounted || loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-green-400 font-mono">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-yellow-400">⏳ Loading dashboard...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-900 text-green-400 font-mono">
         <div className="flex items-center justify-center min-h-screen">
@@ -60,9 +328,7 @@ export default async function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div className="bg-gray-800 border-2 border-green-400 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">🚀 SERVICE STATUS</h2>
-            <div id="service-status" className="space-y-2">
-              <div className="text-yellow-400">⏳ Loading service status...</div>
-            </div>
+            <ServiceStatus />
           </div>
 
           <div className="bg-gray-800 border-2 border-green-400 p-6 rounded-lg">
@@ -93,124 +359,15 @@ export default async function AdminDashboard() {
         {/* Environment Status */}
         <div className="bg-gray-800 border-2 border-green-400 p-6 rounded-lg mb-6">
           <h2 className="text-xl font-bold mb-4">⚙️ ENVIRONMENT CONFIG</h2>
-          <div id="env-status" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="text-yellow-400">⏳ Loading environment status...</div>
-          </div>
+          <EnvironmentStatus />
         </div>
 
         {/* Current Activity */}
         <div className="bg-gray-800 border-2 border-green-400 p-6 rounded-lg">
           <h2 className="text-xl font-bold mb-4">🎯 CURRENT ACTIVITY</h2>
-          <div id="current-activity" className="space-y-4">
-            <div className="text-yellow-400">⏳ Loading current activity...</div>
-          </div>
+          <CurrentActivity />
         </div>
       </div>
-
-      {/* Auto-refresh script */}
-      <script dangerouslySetInnerHTML={{
-        __html: `
-          async function updateDashboard() {
-            try {
-              const response = await fetch('/api/system/status');
-              const data = await response.json();
-              
-              if (response.ok) {
-                updateServiceStatus(data.services);
-                updateEnvironmentStatus(data.environment);
-                updateCurrentActivity(data.services);
-              } else {
-                document.getElementById('service-status').innerHTML = 
-                  '<div class="text-red-400">❌ Failed to load status: ' + (data.error || 'Unknown error') + '</div>';
-              }
-            } catch (error) {
-              document.getElementById('service-status').innerHTML = 
-                '<div class="text-red-400">❌ Connection error: ' + error.message + '</div>';
-            }
-          }
-          
-          function updateServiceStatus(services) {
-            const statusEl = document.getElementById('service-status');
-            let html = '';
-            
-            // Startup status
-            html += '<div class="flex justify-between"><span>🚀 Startup Manager:</span><span class="' + 
-              (services.startup?.initialized ? 'text-green-400">✅ Ready' : 'text-red-400">❌ Not Ready') + '</span></div>';
-            
-            // Spotify status
-            html += '<div class="flex justify-between"><span>🎵 Spotify:</span><span class="' + 
-              (services.spotify?.hasValidToken && services.spotify?.realtime?.isPolling ? 'text-green-400">✅ Active' : 'text-red-400">❌ Inactive') + '</span></div>';
-            
-            // Discord status
-            html += '<div class="flex justify-between"><span>💬 Discord:</span><span class="' + 
-              (services.discord?.isConnected ? 'text-green-400">✅ Connected' : 'text-red-400">❌ Disconnected') + '</span></div>';
-            
-            // Steam status
-            html += '<div class="flex justify-between"><span>🎮 Steam:</span><span class="' + 
-              (services.steam?.hasValidCredentials ? 'text-green-400">✅ Valid' : 'text-red-400">❌ Invalid') + '</span></div>';
-            
-            // GitHub status
-            html += '<div class="flex justify-between"><span>📦 GitHub:</span><span class="' + 
-              (services.github?.hasValidToken ? 'text-green-400">✅ Valid' : 'text-red-400">❌ Invalid') + '</span></div>';
-            
-            statusEl.innerHTML = html;
-          }
-          
-          function updateEnvironmentStatus(env) {
-            const envEl = document.getElementById('env-status');
-            let html = '';
-            
-            const services = ['spotify', 'discord', 'github', 'steam'];
-            services.forEach(service => {
-              html += '<div class="bg-gray-700 p-3 rounded"><h3 class="font-bold text-' + service + '-400 mb-2">' + 
-                service.toUpperCase() + '</h3>';
-              
-              Object.entries(env[service] || {}).forEach(([key, value]) => {
-                html += '<div class="text-sm flex justify-between"><span>' + key + ':</span><span class="' + 
-                  (value ? 'text-green-400">✅' : 'text-red-400">❌') + '</span></div>';
-              });
-              
-              html += '</div>';
-            });
-            
-            envEl.innerHTML = html;
-          }
-          
-          function updateCurrentActivity(services) {
-            const activityEl = document.getElementById('current-activity');
-            let html = '';
-            
-            // Current Spotify track
-            if (services.spotify?.realtime?.currentTrack) {
-              const track = services.spotify.realtime.currentTrack;
-              html += '<div class="bg-gray-700 p-4 rounded">';
-              html += '<h3 class="text-green-400 font-bold mb-2">🎵 Now Playing</h3>';
-              html += '<div><strong>' + track.name + '</strong></div>';
-              html += '<div class="text-green-300">by ' + track.artist + '</div>';
-              html += '<div class="text-sm text-gray-400 mt-2">' + (track.is_playing ? '▶️ Playing' : '⏸️ Paused') + '</div>';
-              html += '</div>';
-            }
-            
-            // Discord status
-            if (services.discord?.currentStatus) {
-              html += '<div class="bg-gray-700 p-4 rounded">';
-              html += '<h3 class="text-blue-400 font-bold mb-2">💬 Discord Status</h3>';
-              html += '<div>' + services.discord.currentStatus + '</div>';
-              html += '</div>';
-            }
-            
-            if (!html) {
-              html = '<div class="text-gray-400">No current activity detected</div>';
-            }
-            
-            activityEl.innerHTML = html;
-          }
-          
-          // Initial load and set up auto-refresh
-          updateDashboard();
-          setInterval(updateDashboard, 30000); // Refresh every 30 seconds
-        `
-      }} />
     </div>
   );
 } 
