@@ -1,7 +1,22 @@
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from '../../../../../lib/auth.js';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
   try {
+    // Check authentication
+    if (!isAuthenticated(request)) {
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized: Session expired or invalid',
+          message: 'Please authenticate at /api/admin/auth to access this endpoint',
+          loginUrl: '/api/admin/auth'
+        },
+        { status: 401 }
+      );
+    }
+
     const { username } = params;
     const token = process.env.GITHUB_TOKEN;
 

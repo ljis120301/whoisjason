@@ -1,7 +1,22 @@
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from '../../../../lib/auth.js';
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
   try {
+    // Check authentication
+    if (!isAuthenticated(request)) {
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized: Session expired or invalid',
+          message: 'Please authenticate at /api/admin/auth to access this endpoint',
+          loginUrl: '/api/admin/auth'
+        },
+        { status: 401 }
+      );
+    }
+
     const botToken = process.env.DISCORD_BOT_TOKEN;
     const userId = process.env.DISCORD_USER_ID;
     const guildId = process.env.DISCORD_GUILD_ID; // Optional: for guild-specific presence

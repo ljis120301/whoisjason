@@ -1,10 +1,25 @@
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from '../../../lib/auth.js';
 
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 
-export async function POST(req) {
+export const dynamic = 'force-dynamic';
+
+export async function POST(request) {
   try {
-    const body = await req.json();
+    // Check authentication
+    if (!isAuthenticated(request)) {
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized: Session expired or invalid',
+          message: 'Please authenticate at /api/admin/auth to access this endpoint',
+          loginUrl: '/api/admin/auth'
+        },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
 
     const response = await fetch(DISCORD_WEBHOOK_URL, {
       method: 'POST',

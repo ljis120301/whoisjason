@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from '../../../../lib/auth.js';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -6,12 +9,70 @@ export async function GET(request) {
   
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const adminPasscode = process.env.ADMIN_PASSCODE;
   
   if (!clientId || !clientSecret) {
     return NextResponse.json(
       { error: 'Missing SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET in environment variables' },
       { status: 400 }
     );
+  }
+
+  if (!adminPasscode) {
+    return NextResponse.json(
+      { error: 'Missing ADMIN_PASSCODE in environment variables' },
+      { status: 500 }
+    );
+  }
+
+  // Skip authentication check for OAuth callback - Spotify calls this directly
+  if (action !== 'callback' && !isAuthenticated(request)) {
+    return new NextResponse(`
+      <html>
+        <head>
+          <title>Authentication Required</title>
+          <meta charset="UTF-8">
+          <style>
+            body {
+              font-family: monospace;
+              max-width: 500px;
+              margin: 100px auto;
+              padding: 20px;
+              background: #1a1a1a;
+              color: #00ff00;
+              text-align: center;
+            }
+            .auth-box {
+              background: #2a2a2a;
+              border: 2px solid #ff0000;
+              padding: 30px;
+              border-radius: 10px;
+            }
+            a {
+              background: #00ff00;
+              color: #1a1a1a;
+              padding: 10px 20px;
+              text-decoration: none;
+              border-radius: 5px;
+              font-weight: bold;
+              margin: 10px;
+              display: inline-block;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="auth-box">
+            <h2>🔒 AUTHENTICATION REQUIRED</h2>
+            <p>Your session has expired or you are not authenticated.</p>
+            <p>Please log in to access Spotify authentication.</p>
+            <a href="/api/admin/auth">Login as Admin</a>
+          </div>
+        </body>
+      </html>
+    `, {
+      headers: { 'Content-Type': 'text/html' },
+      status: 401
+    });
   }
 
   // Get the base URL from the request
