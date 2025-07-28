@@ -58,6 +58,20 @@ refresh_spotify_token() {
 }" > /app/data/tokens.json
         
         echo "💾 Tokens saved to persistent storage"
+        
+        # Update .env file with new refresh token if we got one
+        if [ -n "$new_refresh_token" ]; then
+            echo "🔄 Updating .env file with new refresh token..."
+            
+            # Create new .env content with updated refresh token
+            if [ -f .env ]; then
+                # Replace the SPOTIFY_REFRESH_TOKEN line in .env
+                sed -i "s/^SPOTIFY_REFRESH_TOKEN=.*/SPOTIFY_REFRESH_TOKEN=$new_refresh_token/" .env
+                echo "✅ .env file updated with new Spotify refresh token"
+            else
+                echo "⚠️  .env file not found, refresh token not updated"
+            fi
+        fi
         return 0
     else
         echo "❌ Spotify token refresh failed: $response"
