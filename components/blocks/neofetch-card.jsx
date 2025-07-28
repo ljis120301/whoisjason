@@ -67,7 +67,7 @@ function useGitHubStats(username) {
         });
 
       } catch (error) {
-        console.error('Error fetching GitHub stats:', error);
+        console.error('GitHub stats fetch error:', error);
         setStats(prev => ({
           ...prev,
           loading: false,

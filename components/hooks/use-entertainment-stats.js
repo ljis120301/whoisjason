@@ -149,10 +149,9 @@ export function useEntertainmentStats() {
     // Initial fetch
     fetchAllStats();
     
-    // Set up polling every 2 seconds for real-time updates
-    const interval = setInterval(fetchAllStats, 2000);
+    // Set up auto-refresh every 10 seconds for more frequent updates
+    const interval = setInterval(fetchAllStats, 10000);
     
-    // Cleanup interval on unmount
     return () => clearInterval(interval);
   }, [fetchAllStats]);
 

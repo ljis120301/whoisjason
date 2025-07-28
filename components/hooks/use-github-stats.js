@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-console.log('GitHub stats hook loaded successfully');
-
 export function useGitHubStats(username) {
   console.log('useGitHubStats called with username:', username);
   const [stats, setStats] = useState({
@@ -67,7 +65,7 @@ export function useGitHubStats(username) {
         });
 
       } catch (error) {
-        console.error('Error fetching GitHub stats:', error);
+        console.error('GitHub stats fetch error:', error);
         setStats(prev => ({
           ...prev,
           loading: false,
