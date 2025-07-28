@@ -10,102 +10,47 @@ export function useRealtimeData() {
     github: null,
     lastUpdated: null
   });
-  const [connectionStatus, setConnectionStatus] = useState('disconnected');
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [ws, setWs] = useState(null);
 
-  const connect = useCallback(() => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      return; // Already connected
-    }
-
+  const fetchData = useCallback(async () => {
     try {
-      // Determine WebSocket URL
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${protocol}//${window.location.host}/api/realtime`;
-      
-      const websocket = new WebSocket(wsUrl);
-      
-      websocket.onopen = () => {
-        console.log('WebSocket connected');
-        setConnectionStatus('connected');
+      const response = await fetch('/api/realtime', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+
+      if (response.ok) {
+        const newData = await response.json();
+        setData(newData);
         setError(null);
-      };
-
-      websocket.onmessage = (event) => {
-        try {
-          const message = JSON.parse(event.data);
-          if (message.type === 'data') {
-            setData(message.data);
-          }
-        } catch (error) {
-          console.error('Error parsing WebSocket message:', error);
-        }
-      };
-
-      websocket.onclose = (event) => {
-        console.log('WebSocket disconnected:', event.code, event.reason);
-        setConnectionStatus('disconnected');
-        
-        // Attempt to reconnect after a delay
-        setTimeout(() => {
-          if (connectionStatus !== 'connecting') {
-            connect();
-          }
-        }, 5000);
-      };
-
-      websocket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        setConnectionStatus('error');
-        setError('WebSocket connection failed');
-      };
-
-      setWs(websocket);
-      setConnectionStatus('connecting');
-
+      } else {
+        throw new Error(`HTTP ${response.status}: Failed to fetch real-time data`);
+      }
     } catch (error) {
-      console.error('Failed to create WebSocket connection:', error);
-      setConnectionStatus('error');
-      setError('Failed to create WebSocket connection');
+      console.error('Real-time data fetch error:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
-  }, [ws, connectionStatus]);
-
-  const disconnect = useCallback(() => {
-    if (ws) {
-      ws.close();
-      setWs(null);
-      setConnectionStatus('disconnected');
-    }
-  }, [ws]);
+  }, []);
 
   useEffect(() => {
-    connect();
+    // Initial fetch
+    fetchData();
 
-    // Cleanup on unmount
-    return () => {
-      disconnect();
-    };
-  }, [connect, disconnect]);
+    // Set up polling every 30 seconds
+    const interval = setInterval(fetchData, 30000);
 
-  // Keep connection alive with ping
-  useEffect(() => {
-    if (connectionStatus === 'connected' && ws) {
-      const pingInterval = setInterval(() => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'ping' }));
-        }
-      }, 30000); // Ping every 30 seconds
-
-      return () => clearInterval(pingInterval);
-    }
-  }, [connectionStatus, ws]);
+    return () => clearInterval(interval);
+  }, [fetchData]);
 
   return {
     data,
-    connectionStatus,
+    loading,
     error,
-    reconnect: connect,
-    disconnect
+    refetch: fetchData
   };
 }
