@@ -1,7 +1,22 @@
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from "../../../../lib/auth.js";
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
   try {
+    // Check authentication
+    if (!isAuthenticated(request)) {
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized: Session expired or invalid',
+          message: 'Please authenticate at /api/admin/auth to access this endpoint',
+          loginUrl: '/api/admin/auth'
+        },
+        { status: 401 }
+      );
+    }
+
     const steamApiKey = process.env.STEAM_API_KEY;
     const steamId = process.env.STEAM_ID;
 

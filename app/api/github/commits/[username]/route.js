@@ -1,7 +1,22 @@
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from '../../../../../lib/auth.js';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
   try {
+    // Check authentication
+    if (!isAuthenticated(request)) {
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized: Session expired or invalid',
+          message: 'Please authenticate at /api/admin/auth to access this endpoint',
+          loginUrl: '/api/admin/auth'
+        },
+        { status: 401 }
+      );
+    }
+
     const { username } = params;
     const token = process.env.GITHUB_TOKEN;
 
@@ -49,37 +64,17 @@ export async function GET(request, { params }) {
       }
     }
 
-    // Get contribution streak data (alternative approach)
-    const contributionResponse = await fetch(`https://api.github.com/users/${username}`, {
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : '',
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'whoisjason-portfolio'
-      },
-      next: { revalidate: 3600 }
-    });
-
-    let accountAge = null;
-    if (contributionResponse.ok) {
-      const userData = await contributionResponse.json();
-      const createdDate = new Date(userData.created_at);
-      const now = new Date();
-      const diffTime = Math.abs(now - createdDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      accountAge = Math.floor(diffDays / 365);
-    }
-
     return NextResponse.json({
       commitsThisYear,
       lastCommitDate,
-      accountAge,
+      username,
       year: currentYear
     });
 
   } catch (error) {
     console.error('GitHub commits API error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch GitHub commit data' },
+      { error: 'Failed to fetch GitHub commits data' },
       { status: 500 }
     );
   }

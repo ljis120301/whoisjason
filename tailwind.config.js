@@ -16,6 +16,9 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        mono: ["var(--font-oxproto)", ...defaultTheme.fontFamily.mono],
+      },
       colors: {
         frappe: {
           rosewater: '#F2D5CF',
