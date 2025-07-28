@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getSpotifyRealtime } from '../../../lib/spotify-realtime.js';
-import { getDiscordGateway } from '../../../lib/discord-gateway.js';
-import { getTokenManager } from '../../../lib/token-manager.js';
+import { getSpotifyRealtime } from '../../../../lib/spotify-realtime.js';
+import { getDiscordGateway } from '../../../../lib/discord-gateway.js';
+import { getTokenManager } from '../../../../lib/token-manager.js';
 
 export const dynamic = 'force-dynamic';
 
