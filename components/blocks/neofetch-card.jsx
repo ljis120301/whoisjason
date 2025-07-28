@@ -1,86 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useEntertainmentStats } from '../hooks/use-entertainment-stats.js';
-// import { useGitHubStats } from '../hooks/use-github-stats.js';
+import { useRealtimeData } from '../hooks/use-realtime-data.js';
 
-// Move hook directly into this file to test
-function useGitHubStats(username) {
-  const [stats, setStats] = useState({
-    commitsThisYear: 0,
-    topRepos: [],
-    totalRepos: 0,
-    followers: 0,
-    following: 0,
-    totalStars: 0,
-    languages: [],
-    lastCommitDate: null,
-    loading: true,
-    error: null
-  });
-
-  useEffect(() => {
-    if (!username) return;
-
-    const fetchGitHubStats = async () => {
-      try {
-        setStats(prev => ({ ...prev, loading: true, error: null }));
-
-        const userResponse = await fetch(`/api/github/user/${username}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache'
-          }
-        });
-        if (!userResponse.ok) throw new Error('Failed to fetch user data');
-        const userData = await userResponse.json();
-
-        const reposResponse = await fetch(`/api/github/repos/${username}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache'
-          }
-        });
-        if (!reposResponse.ok) throw new Error('Failed to fetch repos data');
-        const reposData = await reposResponse.json();
-
-        const commitsResponse = await fetch(`/api/github/commits/${username}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache'
-          }
-        });
-        if (!commitsResponse.ok) throw new Error('Failed to fetch commits data');
-        const commitsData = await commitsResponse.json();
-
-        setStats({
-          commitsThisYear: commitsData.commitsThisYear,
-          topRepos: reposData.topRepos,
-          totalRepos: userData.public_repos,
-          followers: userData.followers,
-          following: userData.following,
-          totalStars: reposData.totalStars,
-          languages: reposData.languages,
-          lastCommitDate: commitsData.lastCommitDate,
-          loading: false,
-          error: null
-        });
-
-      } catch (error) {
-        console.error('GitHub stats fetch error:', error);
-        setStats(prev => ({
-          ...prev,
-          loading: false,
-          error: error.message
-        }));
-      }
-    };
-
-    fetchGitHubStats();
-  }, [username]);
-
-  return stats;
-}
+// Remove the old GitHub stats hook since data comes from server now
 
 const GentooAscii = () => (
   <pre className="text-sm font-mono text-frappe-mauve leading-tight whitespace-pre">
@@ -213,29 +136,19 @@ const ColorBlocks = () => (
 );
 
 const TopRepos = ({ stats }) => {
-  if (stats.loading) {
+  // Use GitHub data from the real-time broadcaster
+  const githubData = stats.github;
+
+  if (!githubData) {
     return (
       <div className="space-y-0.5 px-[135px]">
-        <div className="text-frappe-subtext0">Loading top repositories...</div>
-        <div className="text-frappe-subtext0">Fetching commit data...</div>
-        <div className="text-frappe-subtext0">Analyzing projects...</div>
+        <div className="text-frappe-subtext0">Connecting to GitHub data...</div>
+        <div className="text-frappe-subtext0">Waiting for server updates...</div>
       </div>
     );
   }
 
-  if (stats.error) {
-    return (
-      <div className="space-y-0.5 px-[135px]">
-        <div className="text-frappe-text whitespace-nowrap">whoisjason - Portfolio website</div>
-        <div className="text-frappe-text whitespace-nowrap">MOTD - Creepy MOTD generator</div>
-        <div className="text-frappe-text whitespace-nowrap">SVB-Wiki - Knowledge base</div>
-        <div className="text-frappe-text whitespace-nowrap">bee-blog - Blog platform</div>
-        <div className="text-frappe-text whitespace-nowrap">old-portfolio - Previous site</div>
-      </div>
-    );
-  }
-
-  const topRepos = stats.topRepos?.slice(0, 5) || [];
+  const topRepos = githubData.repos?.topRepos?.slice(0, 5) || [];
 
   return (
     <div className="space-y-0.5 px-[135px]">
@@ -252,34 +165,24 @@ const TopRepos = ({ stats }) => {
 };
 
 const DeveloperStats = ({ stats }) => {
+  // Use GitHub data from the real-time broadcaster
+  const githubData = stats.github;
 
-  if (stats.loading) {
+  if (!githubData) {
     return (
       <div className="space-y-0.5 px-[135px]">
-        <div className="text-frappe-subtext0">Loading GitHub stats...</div>
-        <div className="text-frappe-subtext0">Fetching live data</div>
-        <div className="text-frappe-subtext0">Calculating metrics</div>
-        <div className="text-frappe-subtext0">Almost there...</div>
-      </div>
-    );
-  }
-
-  if (stats.error) {
-    return (
-      <div className="space-y-0.5 px-[135px]">
-        <div className="text-frappe-text">Commits {new Date().getFullYear()}: 500+ contributions</div>
-        <div className="text-frappe-text">Languages: JavaScript, TypeScript, HTML, CSS, Python</div>
-        <div className="text-frappe-subtext0 text-xs">Live stats unavailable</div>
+        <div className="text-frappe-subtext0">Connecting to GitHub data...</div>
+        <div className="text-frappe-subtext0">Waiting for server updates...</div>
       </div>
     );
   }
 
   // Get all language names (not truncated)
-  const allLanguages = stats.languages?.map(lang => lang.language).join(', ') || 'Loading languages...';
+  const allLanguages = githubData.repos?.languages?.map(lang => lang.language).join(', ') || 'Loading languages...';
 
   return (
     <div className="space-y-0.5 px-[135px]">
-      <div className="text-frappe-text">Commits this year ({new Date().getFullYear()}): {stats.commitsThisYear.toLocaleString()} contributions</div>
+      <div className="text-frappe-text">Commits this year ({new Date().getFullYear()}): {githubData.repos?.commitsThisYear?.toLocaleString() || 'Loading...'} contributions</div>
       <div className="text-frappe-text">Languages: {allLanguages}</div>
     </div>
   );
@@ -314,22 +217,19 @@ const EntertainmentStats = ({ stats }) => {
   };
 
   useEffect(() => {
-    if (stats.spotify.currentTrack?.is_playing) {
+    if (stats.spotify?.currentTrack?.is_playing) {
       const text = `Now: ${stats.spotify.currentTrack.name} - ${stats.spotify.currentTrack.artist}`;
       checkOverflow(text, 'currentTrack');
-    } else if (stats.spotify.recentTracks?.[0]) {
-      const text = `Recent: ${stats.spotify.recentTracks[0].name} - ${stats.spotify.recentTracks[0].artist}`;
-      checkOverflow(text, 'recentTrack');
     }
-  }, [stats.spotify.currentTrack, stats.spotify.recentTracks]);
+  }, [stats.spotify?.currentTrack]);
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'online': return 'text-frappe-green';
       case 'idle': return 'text-frappe-yellow';
       case 'dnd': return 'text-frappe-red';
-      case 'offline': return 'text-frappe-red'; // Changed to red to match Steam
-      default: return 'text-frappe-red'; // Changed to red to match Steam
+      case 'offline': return 'text-frappe-red';
+      default: return 'text-frappe-red';
     }
   };
 
@@ -354,18 +254,19 @@ const EntertainmentStats = ({ stats }) => {
       case 4: return 'text-frappe-yellow'; // Snooze
       case 5: return 'text-frappe-blue';   // Looking to trade
       case 6: return 'text-frappe-blue';   // Looking to play
-      case 0: return 'text-frappe-red'; // Offline - changed to red
-      default: return 'text-frappe-red'; // Unknown - changed to red
+      case 0: return 'text-frappe-red'; // Offline
+      default: return 'text-frappe-red'; // Unknown
     }
   };
 
-  if (stats.spotify.loading || stats.steam.loading || stats.discord.loading) {
+  // Check if we have any data
+  const hasData = stats.spotify || stats.steam || stats.discord;
+  
+  if (!hasData) {
     return (
       <div className="space-y-0.5 px-[135px]">
-        <div className="text-frappe-subtext0">Loading entertainment stats...</div>
-        <div className="text-frappe-subtext0">Fetching Spotify data...</div>
-        <div className="text-frappe-subtext0">Getting Steam info...</div>
-        <div className="text-frappe-subtext0">Checking Discord status...</div>
+        <div className="text-frappe-subtext0">Connecting to real-time data...</div>
+        <div className="text-frappe-subtext0">Waiting for server updates...</div>
       </div>
     );
   }
@@ -373,7 +274,7 @@ const EntertainmentStats = ({ stats }) => {
   return (
     <div className="space-y-0.5 px-[135px]">
       {/* Spotify */}
-      {stats.spotify.error ? (
+      {!stats.spotify ? (
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">♪</span>
           <span className="ml-1">Music: Spotify unavailable</span>
@@ -387,81 +288,44 @@ const EntertainmentStats = ({ stats }) => {
             </span>
           </div>
         </div>
-      ) : stats.spotify.recentTracks?.[0] ? (
-        <div className="flex items-center text-frappe-text">
-          <span className="w-4 text-center flex-shrink-0">♪</span>
-          <div className="ml-1 overflow-hidden">
-            <span className={`inline-block whitespace-nowrap ${shouldScroll.recentTrack ? 'animate-scroll-text' : ''}`}>
-              Recent: {stats.spotify.recentTracks[0].name} - {stats.spotify.recentTracks[0].artist}
-            </span>
-          </div>
-        </div>
       ) : (
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">♪</span>
-          <span className="ml-1">Music: No recent activity</span>
+          <span className="ml-1">Music: Not playing</span>
         </div>
       )}
 
       {/* Discord */}
-      {stats.discord.error ? (
-        <div className="flex items-start text-frappe-text">
+      {!stats.discord ? (
+        <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">💬</span>
-          <span className="ml-1 break-words">Discord: Status unavailable</span>
+          <span className="ml-1">Discord: Unavailable</span>
         </div>
       ) : (
-        <div className="flex items-start text-frappe-text">
+        <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">💬</span>
-          <span className="ml-1 break-words">
-            Discord: {stats.discord.user?.username || 'User'} • 
-            <span className={getStatusColor(stats.discord.presence?.status)}>
-              {' '}{stats.discord.presence?.status || 'offline'}
-            </span>
+          <span className={`ml-1 ${getStatusColor(stats.discord.presence?.status)}`}>
+            Discord: {stats.discord.presence?.status || 'offline'}
           </span>
         </div>
       )}
 
-      {/* Steam Status */}
-      {stats.steam.error ? (
-        <div className="flex items-start text-frappe-text">
+      {/* Steam */}
+      {!stats.steam ? (
+        <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">🎮</span>
-          <span className="ml-1 break-words">Steam: Library unavailable</span>
-        </div>
-      ) : !stats.steam.error && stats.steam.playerInfo?.personastate !== undefined ? (
-        <div className="flex items-start text-frappe-text">
-          <span className="w-4 text-center flex-shrink-0">🎮</span>
-          <span className="ml-1 break-words">
-            Steam: {stats.steam.playerInfo?.personaname || 'Jason'} • 
-            <span className={getSteamStatusColor(stats.steam.playerInfo.personastate)}>
-              {' '}{getSteamStatus(stats.steam.playerInfo.personastate).toLowerCase()}
-            </span>
-          </span>
+          <span className="ml-1">Steam: Unavailable</span>
         </div>
       ) : (
-        <div className="flex items-start text-frappe-text">
+        <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">🎮</span>
-          <span className="ml-1 break-words">Steam: Jason • <span className="text-frappe-red">unknown</span></span>
+          <span className={`ml-1 ${getSteamStatusColor(stats.steam.playerInfo?.personastate)}`}>
+            Steam: {getSteamStatus(stats.steam.playerInfo?.personastate)}
+            {stats.steam.playerInfo?.gameextrainfo && (
+              <span className="text-frappe-subtext0"> - {stats.steam.playerInfo.gameextrainfo}</span>
+            )}
+          </span>
         </div>
-      )}
-
-      {/* Steam Game */}
-      {!stats.steam.error && (
-        stats.steam.playerInfo?.gameextrainfo ? (
-          <div className="flex items-start text-frappe-text">
-            <span className="w-4 text-center flex-shrink-0">🎮</span>
-            <span className="ml-1 break-words">Playing: {stats.steam.playerInfo.gameextrainfo}</span>
-          </div>
-        ) : stats.steam.recentGames?.[0] ? (
-          <div className="flex items-start text-frappe-text">
-            <span className="w-4 text-center flex-shrink-0">🎮</span>
-            <span className="ml-1 break-words">Recent: {stats.steam.recentGames[0].name} ({stats.steam.recentGames[0].playtime_2weeks}h)</span>
-          </div>
-        ) : stats.steam.totalGames ? (
-          <div className="flex items-start text-frappe-text">
-            <span className="w-4 text-center flex-shrink-0">🎮</span>
-            <span className="ml-1 break-words">Games: {stats.steam.totalGames} owned</span>
-          </div>
-        ) : null
       )}
     </div>
   );
@@ -470,8 +334,7 @@ const EntertainmentStats = ({ stats }) => {
 export function NeofetchCard({ githubUsername }) {
   // Use environment variable as fallback if no username is passed
   const username = githubUsername || process.env.NEXT_PUBLIC_GITHUB_USERNAME || "ljis120301";
-  const githubStats = useGitHubStats(username);
-  const entertainmentStats = useEntertainmentStats();
+  const realtimeData = useRealtimeData();
 
   // Add state for real-time tracking - initialize as null to prevent hydration errors
   const [startTime, setStartTime] = useState(null);
@@ -549,7 +412,7 @@ export function NeofetchCard({ githubUsername }) {
             <div className="text-center text-frappe-blue mb-1">
               ┌─────────────────────Developer Stats─────────────────────┐
             </div>
-            <DeveloperStats stats={githubStats} />
+            <DeveloperStats stats={realtimeData} />
             <div className="text-center text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────────┘
             </div>
@@ -560,7 +423,7 @@ export function NeofetchCard({ githubUsername }) {
             <div className="text-center text-frappe-blue mb-1">
               ┌─────────────────Entertainment/Social─────────────────┐
             </div>
-            <EntertainmentStats stats={entertainmentStats} />
+            <EntertainmentStats stats={realtimeData} />
             <div className="text-center text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────┘
             </div>
@@ -571,7 +434,7 @@ export function NeofetchCard({ githubUsername }) {
             <div className="text-center text-frappe-blue mb-1">
               ┌─────────────────────Top Repos─────────────────────┐
             </div>
-            <TopRepos stats={githubStats} />
+            <TopRepos stats={realtimeData} />
             <div className="text-center text-frappe-blue mt-1">
               └────────────────────────────────────────────────────┘
             </div>

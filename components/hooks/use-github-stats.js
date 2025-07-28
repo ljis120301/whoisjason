@@ -25,27 +25,27 @@ export function useGitHubStats(username) {
         setStats(prev => ({ ...prev, loading: true, error: null }));
 
         const userResponse = await fetch(`/api/github/user/${username}`, {
-          cache: 'no-store',
+          cache: 'default',
           headers: {
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'max-age=3600' // Cache for 1 hour
           }
         });
         if (!userResponse.ok) throw new Error('Failed to fetch user data');
         const userData = await userResponse.json();
 
         const reposResponse = await fetch(`/api/github/repos/${username}`, {
-          cache: 'no-store',
+          cache: 'default',
           headers: {
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'max-age=3600' // Cache for 1 hour
           }
         });
         if (!reposResponse.ok) throw new Error('Failed to fetch repos data');
         const reposData = await reposResponse.json();
 
         const commitsResponse = await fetch(`/api/github/commits/${username}`, {
-          cache: 'no-store',
+          cache: 'default',
           headers: {
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'max-age=3600' // Cache for 1 hour
           }
         });
         if (!commitsResponse.ok) throw new Error('Failed to fetch commits data');
