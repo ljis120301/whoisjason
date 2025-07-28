@@ -40,9 +40,11 @@ export async function GET(request) {
       }, { status: 503 }); // Service Unavailable
     }
     
+    // Get current track directly from service
+    const currentTrack = spotifyRealtime.currentTrack;
     const trackInfo = spotifyRealtime.getDetailedTrackInfo();
 
-    if (!trackInfo) {
+    if (!currentTrack && !trackInfo) {
       return NextResponse.json({
         currentTrack: null,
         recentTracks: [],
@@ -55,15 +57,15 @@ export async function GET(request) {
       });
     }
 
-    // Format response based on track type
+    // Format response based on available data
     const rawResponse = {
-      currentTrack: trackInfo.type === 'currently_playing' ? trackInfo : null,
-      recentTracks: trackInfo.type === 'recently_played' ? [trackInfo] : [],
-      lastUpdated: trackInfo.last_updated || new Date().toISOString(),
+      currentTrack: currentTrack || (trackInfo?.type === 'currently_playing' ? trackInfo : null),
+      recentTracks: trackInfo?.type === 'recently_played' ? [trackInfo] : [],
+      lastUpdated: spotifyRealtime.lastUpdated || new Date().toISOString(),
       realtime_service: {
-        active: trackInfo.polling_active,
-        poll_frequency_seconds: trackInfo.poll_frequency_seconds,
-        last_poll: trackInfo.last_updated
+        active: spotifyRealtime.isPolling,
+        poll_frequency_seconds: spotifyRealtime.pollFrequency / 1000,
+        last_poll: spotifyRealtime.lastUpdated
       }
     };
 

@@ -39,18 +39,23 @@ export async function GET(request) {
     const { apiKey: steamApiKey, steamId } = steamCreds;
 
     // Get recently played games
-    const recentGamesResponse = await fetch(
-      `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${steamApiKey}&steamid=${steamId}&format=json&count=5`,
-      {
-        next: { revalidate: 1800 } // Cache for 30 minutes
+    let recentGamesData = { response: { games: [] } };
+    try {
+      const recentGamesResponse = await fetch(
+        `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${steamApiKey}&steamid=${steamId}&format=json&count=5`,
+        {
+          next: { revalidate: 1800 } // Cache for 30 minutes
+        }
+      );
+
+      if (recentGamesResponse.ok) {
+        recentGamesData = await recentGamesResponse.json();
+      } else {
+        console.warn('Failed to fetch recent games from Steam, using empty data');
       }
-    );
-
-    if (!recentGamesResponse.ok) {
-      throw new Error('Failed to fetch recent games from Steam');
+    } catch (error) {
+      console.warn('Steam recent games API request failed:', error.message);
     }
-
-    const recentGamesData = await recentGamesResponse.json();
     const recentGames = recentGamesData.response?.games?.map(game => ({
       name: game.name,
       appid: game.appid,
@@ -60,39 +65,51 @@ export async function GET(request) {
     })) || [];
 
     // Get owned games count
-    const ownedGamesResponse = await fetch(
-      `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${steamApiKey}&steamid=${steamId}&format=json&include_appinfo=false`,
-      {
-        next: { revalidate: 3600 } // Cache for 1 hour
-      }
-    );
-
     let totalGames = 0;
-    if (ownedGamesResponse.ok) {
-      const ownedGamesData = await ownedGamesResponse.json();
-      totalGames = ownedGamesData.response?.game_count || 0;
+    try {
+      const ownedGamesResponse = await fetch(
+        `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${steamApiKey}&steamid=${steamId}&format=json&include_appinfo=false`,
+        {
+          next: { revalidate: 3600 } // Cache for 1 hour
+        }
+      );
+
+      if (ownedGamesResponse.ok) {
+        const ownedGamesData = await ownedGamesResponse.json();
+        totalGames = ownedGamesData.response?.game_count || 0;
+      } else {
+        console.warn('Failed to fetch owned games from Steam');
+      }
+    } catch (error) {
+      console.warn('Steam owned games API request failed:', error.message);
     }
 
     // Get player summary for Steam level and status
-    const playerSummaryResponse = await fetch(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamId}`,
-      {
-        next: { revalidate: 600 } // Cache for 10 minutes
-      }
-    );
-
     let playerInfo = {};
-    if (playerSummaryResponse.ok) {
-      const playerData = await playerSummaryResponse.json();
-      const player = playerData.response?.players?.[0];
-      if (player) {
-        playerInfo = {
-          personaname: player.personaname,
-          personastate: player.personastate, // 0=Offline, 1=Online, 2=Busy, 3=Away, 4=Snooze, 5=Looking to trade, 6=Looking to play
-          gameextrainfo: player.gameextrainfo, // Currently playing game
-          gameid: player.gameid
-        };
+    try {
+      const playerSummaryResponse = await fetch(
+        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamId}`,
+        {
+          next: { revalidate: 600 } // Cache for 10 minutes
+        }
+      );
+
+      if (playerSummaryResponse.ok) {
+        const playerData = await playerSummaryResponse.json();
+        const player = playerData.response?.players?.[0];
+        if (player) {
+          playerInfo = {
+            personaname: player.personaname,
+            personastate: player.personastate, // 0=Offline, 1=Online, 2=Busy, 3=Away, 4=Snooze, 5=Looking to trade, 6=Looking to play
+            gameextrainfo: player.gameextrainfo, // Currently playing game
+            gameid: player.gameid
+          };
+        }
+      } else {
+        console.warn('Failed to fetch player summary from Steam');
       }
+    } catch (error) {
+      console.warn('Steam player summary API request failed:', error.message);
     }
 
     const rawResponse = {
