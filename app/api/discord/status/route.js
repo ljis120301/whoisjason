@@ -1,20 +1,24 @@
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from '../../../../lib/auth.js';
 import { getDiscordGateway } from '../../../../lib/discord-gateway.js';
+import { rateLimit } from '../../../../lib/rate-limiter.js';
+import { sanitizeDiscordData } from '../../../../lib/data-sanitizer.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
-    // Check authentication
-    if (!isAuthenticated(request)) {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(request);
+    if (rateLimitResult.blocked) {
       return NextResponse.json(
+        { error: rateLimitResult.message },
         { 
-          error: 'Unauthorized: Session expired or invalid',
-          message: 'Please authenticate at /api/admin/auth to access this endpoint',
-          loginUrl: '/api/admin/auth'
-        },
-        { status: 401 }
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': rateLimitResult.remaining,
+            'Retry-After': '900' // 15 minutes
+          }
+        }
       );
     }
 
@@ -65,87 +69,59 @@ export async function GET(request) {
     const gateway = getDiscordGateway();
     const gatewayPresence = gateway.getPresence();
     const connectionHealth = gateway.getConnectionHealth();
-    
-    // Use gateway presence if available and connection is stable
-    if (gatewayPresence && connectionHealth.isConnected && connectionHealth.connectionStable) {
-      presence = gatewayPresence;
-    } else if (gatewayPresence && gatewayPresence.status !== 'offline') {
-      // Use cached presence even if connection is unstable
-      presence = gatewayPresence;
-    } else {
-      // Fallback to offline status
+
+    // Handle the presence data structure correctly
+    if (gatewayPresence) {
       presence = {
-        status: 'offline',
-        lastUpdated: new Date().toISOString(),
-        activities: []
+        status: gatewayPresence.status || 'offline',
+        activities: gatewayPresence.activities || [],
+        client_status: gatewayPresence.client_status || {}
       };
     }
 
-    // If guild ID is provided, get guild member info
+    // Get guild member info if guildId is provided
     if (guildId) {
       try {
-        const memberResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members/${userId}`, {
+        const guildMemberResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members/${userId}`, {
           headers: {
             'Authorization': `Bot ${botToken}`,
             'Content-Type': 'application/json'
           },
-          next: { revalidate: 300 }
+          next: { revalidate: 300 } // Cache for 5 minutes
         });
 
-        if (memberResponse.ok) {
-          guildMember = await memberResponse.json();
+        if (guildMemberResponse.ok) {
+          guildMember = await guildMemberResponse.json();
         }
-
       } catch (error) {
-        console.warn('Could not fetch guild member data:', error);
+        // Guild member fetch is optional, don't fail the whole request
+        console.warn('Failed to fetch guild member data:', error);
       }
     }
 
-    // Get mutual guilds (servers the bot and user share)
-    const guildsResponse = await fetch('https://discord.com/api/v10/users/@me/guilds', {
-      headers: {
-        'Authorization': `Bot ${botToken}`,
-        'Content-Type': 'application/json'
+    const rawResponse = {
+      user: userData,
+      presence: presence,
+      guildMember: guildMember,
+      connection: {
+        isConnected: gateway.isConnected,
+        lastHeartbeat: connectionHealth.lastHeartbeat,
+        latency: connectionHealth.latency,
+        sessionId: connectionHealth.sessionId
       },
-      next: { revalidate: 1800 }
-    });
-
-    let sharedGuilds = 0;
-    let guildsList = [];
-    if (guildsResponse.ok) {
-      const guilds = await guildsResponse.json();
-      sharedGuilds = guilds.length;
-      guildsList = guilds.map(g => ({ id: g.id, name: g.name }));
-    }
-
-    const responseData = {
-      user: {
-        id: userData.id,
-        username: userData.username,
-        globalName: userData.global_name,
-        discriminator: userData.discriminator,
-        avatar: userData.avatar,
-        bot: userData.bot,
-        createdAt: userData.id ? new Date((parseInt(userData.id) / 4194304) + 1420070400000) : null
-      },
-      guildMember,
-      presence,
-      sharedGuilds,
-      connectionHealth: connectionHealth,
-      lastUpdated: new Date().toISOString(),
-      ...(debug && {
-        debug: {
-          ...debugInfo,
-          guildsList,
-          gatewayConnected: gateway.isConnected,
-          sessionId: gateway.sessionId,
-          connectionStability: await gateway.testConnectionStability(),
-          presenceSource: connectionHealth.isConnected && connectionHealth.connectionStable ? 'gateway' : 'cached'
-        }
-      })
+      debug: debug ? debugInfo : undefined,
+      lastUpdated: new Date().toISOString()
     };
 
-    return NextResponse.json(responseData);
+    // Sanitize data before sending
+    const sanitizedResponse = sanitizeDiscordData(rawResponse);
+
+    return NextResponse.json(sanitizedResponse, {
+      headers: {
+        'X-RateLimit-Remaining': rateLimitResult.remaining,
+        'Cache-Control': 'public, max-age=60' // Cache for 1 minute
+      }
+    });
 
   } catch (error) {
     console.error('Discord API error:', error);

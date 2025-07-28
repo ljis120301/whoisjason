@@ -1,20 +1,24 @@
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from "../../../../lib/auth.js";
 import { getTokenManager } from '../../../../lib/token-manager.js';
+import { rateLimit } from '../../../../lib/rate-limiter.js';
+import { sanitizeSteamData } from '../../../../lib/data-sanitizer.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
-    // Check authentication
-    if (!isAuthenticated(request)) {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(request);
+    if (rateLimitResult.blocked) {
       return NextResponse.json(
+        { error: rateLimitResult.message },
         { 
-          error: 'Unauthorized: Session expired or invalid',
-          message: 'Please authenticate at /api/admin/auth to access this endpoint',
-          loginUrl: '/api/admin/auth'
-        },
-        { status: 401 }
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': rateLimitResult.remaining,
+            'Retry-After': '900' // 15 minutes
+          }
+        }
       );
     }
 
@@ -88,11 +92,21 @@ export async function GET(request) {
       }
     }
 
-    return NextResponse.json({
+    const rawResponse = {
       recentGames,
       totalGames,
       playerInfo,
       lastUpdated: new Date().toISOString()
+    };
+
+    // Sanitize data before sending
+    const sanitizedResponse = sanitizeSteamData(rawResponse);
+
+    return NextResponse.json(sanitizedResponse, {
+      headers: {
+        'X-RateLimit-Remaining': rateLimitResult.remaining,
+        'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
+      }
     });
 
   } catch (error) {

@@ -1,20 +1,24 @@
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from '../../../../../lib/auth.js';
 import { getTokenManager } from '../../../../../lib/token-manager.js';
+import { rateLimit } from '../../../../../lib/rate-limiter.js';
+import { sanitizeGitHubData } from '../../../../../lib/data-sanitizer.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
   try {
-    // Check authentication
-    if (!isAuthenticated(request)) {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(request);
+    if (rateLimitResult.blocked) {
       return NextResponse.json(
+        { error: rateLimitResult.message },
         { 
-          error: 'Unauthorized: Session expired or invalid',
-          message: 'Please authenticate at /api/admin/auth to access this endpoint',
-          loginUrl: '/api/admin/auth'
-        },
-        { status: 401 }
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': rateLimitResult.remaining,
+            'Retry-After': '900' // 15 minutes
+          }
+        }
       );
     }
 
@@ -37,7 +41,7 @@ export async function GET(request, { params }) {
 
     const userData = await response.json();
 
-    return NextResponse.json({
+    const rawResponse = {
       public_repos: userData.public_repos,
       followers: userData.followers,
       following: userData.following,
@@ -46,6 +50,16 @@ export async function GET(request, { params }) {
       bio: userData.bio,
       location: userData.location,
       company: userData.company
+    };
+
+    // Sanitize data before sending
+    const sanitizedResponse = sanitizeGitHubData(rawResponse);
+
+    return NextResponse.json(sanitizedResponse, {
+      headers: {
+        'X-RateLimit-Remaining': rateLimitResult.remaining,
+        'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+      }
     });
 
   } catch (error) {

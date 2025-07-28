@@ -1,20 +1,24 @@
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from '../../../../../lib/auth.js';
 import { getTokenManager } from '../../../../../lib/token-manager.js';
+import { rateLimit } from '../../../../../lib/rate-limiter.js';
+import { sanitizeGitHubReposData } from '../../../../../lib/data-sanitizer.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
   try {
-    // Check authentication
-    if (!isAuthenticated(request)) {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(request);
+    if (rateLimitResult.blocked) {
       return NextResponse.json(
+        { error: rateLimitResult.message },
         { 
-          error: 'Unauthorized: Session expired or invalid',
-          message: 'Please authenticate at /api/admin/auth to access this endpoint',
-          loginUrl: '/api/admin/auth'
-        },
-        { status: 401 }
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': rateLimitResult.remaining,
+            'Retry-After': '900' // 15 minutes
+          }
+        }
       );
     }
 
@@ -66,23 +70,33 @@ export async function GET(request, { params }) {
       }
     });
 
-    // Sort languages by frequency and get top 5
+    // Convert to sorted array
     const languages = Object.entries(languageCounts)
       .sort(([,a], [,b]) => b - a)
-      .slice(0, 5)
+      .slice(0, 10)
       .map(([language, count]) => ({ language, count }));
 
-    return NextResponse.json({
+    const rawResponse = {
       topRepos,
       totalStars,
       languages,
-      totalPublicRepos: publicRepos.length
+      totalRepos: publicRepos.length
+    };
+
+    // Sanitize data before sending
+    const sanitizedResponse = sanitizeGitHubReposData(rawResponse);
+
+    return NextResponse.json(sanitizedResponse, {
+      headers: {
+        'X-RateLimit-Remaining': rateLimitResult.remaining,
+        'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+      }
     });
 
   } catch (error) {
     console.error('GitHub repos API error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch GitHub repository data' },
+      { error: 'Failed to fetch GitHub repos data' },
       { status: 500 }
     );
   }

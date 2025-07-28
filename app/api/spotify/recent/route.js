@@ -1,29 +1,24 @@
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from "../../../../lib/auth.js";
 import { getSpotifyRealtime } from '../../../../lib/spotify-realtime.js';
+import { rateLimit } from '../../../../lib/rate-limiter.js';
+import { sanitizeSpotifyData } from '../../../../lib/data-sanitizer.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
-    const adminPasscode = process.env.ADMIN_PASSCODE;
-
-    if (!adminPasscode) {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(request);
+    if (rateLimitResult.blocked) {
       return NextResponse.json(
-        { error: 'Missing ADMIN_PASSCODE in environment variables' },
-        { status: 500 }
-      );
-    }
-
-    // Check authentication
-    if (!isAuthenticated(request)) {
-      return NextResponse.json(
+        { error: rateLimitResult.message },
         { 
-          error: 'Unauthorized: Session expired or invalid',
-          message: 'Please authenticate at /api/admin/auth to access this endpoint',
-          loginUrl: '/api/admin/auth'
-        },
-        { status: 401 }
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': rateLimitResult.remaining,
+            'Retry-After': '900' // 15 minutes
+          }
+        }
       );
     }
 
@@ -45,7 +40,7 @@ export async function GET(request) {
     }
 
     // Format response based on track type
-    const response = {
+    const rawResponse = {
       currentTrack: trackInfo.type === 'currently_playing' ? trackInfo : null,
       recentTracks: trackInfo.type === 'recently_played' ? [trackInfo] : [],
       lastUpdated: trackInfo.last_updated || new Date().toISOString(),
@@ -56,7 +51,15 @@ export async function GET(request) {
       }
     };
 
-    return NextResponse.json(response);
+    // Sanitize data before sending
+    const sanitizedResponse = sanitizeSpotifyData(rawResponse);
+
+    return NextResponse.json(sanitizedResponse, {
+      headers: {
+        'X-RateLimit-Remaining': rateLimitResult.remaining,
+        'Cache-Control': 'public, max-age=30' // Cache for 30 seconds
+      }
+    });
 
   } catch (error) {
     console.error('Spotify API error:', error);
