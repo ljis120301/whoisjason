@@ -125,7 +125,7 @@ export async function GET(request) {
     return NextResponse.json(sanitizedResponse, {
       headers: {
         'X-RateLimit-Remaining': rateLimitResult.remaining,
-        'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
+        'Cache-Control': 'public, max-age=600' // Cache for 10 minutes to reduce rate limiting
       }
     });
 
