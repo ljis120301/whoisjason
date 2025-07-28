@@ -27,6 +27,29 @@ export function useEntertainmentStats() {
   });
 
   const fetchAllStats = useCallback(async () => {
+    // Check health first to see if services are ready
+    try {
+      const healthResponse = await fetch('/api/health', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      if (healthResponse.status === 503) {
+        // Services are still initializing, keep loading state
+        setStats(prev => ({
+          ...prev,
+          spotify: { ...prev.spotify, loading: true, error: 'Service initializing...' },
+          steam: { ...prev.steam, loading: true, error: 'Service initializing...' },
+          discord: { ...prev.discord, loading: true, error: 'Service initializing...' }
+        }));
+        return;
+      }
+    } catch (error) {
+      console.error('Health check failed:', error);
+    }
+
     // Fetch Spotify data
     const fetchSpotify = async () => {
       try {
@@ -44,6 +67,17 @@ export function useEntertainmentStats() {
               ...data,
               loading: false,
               error: null
+            }
+          }));
+        } else if (response.status === 503) {
+          // Service is initializing, keep loading state and retry
+          setStats(prev => ({
+            ...prev,
+            spotify: {
+              currentTrack: null,
+              recentTracks: [],
+              loading: true,
+              error: 'Service initializing...'
             }
           }));
         } else {
@@ -82,6 +116,18 @@ export function useEntertainmentStats() {
               error: null
             }
           }));
+        } else if (response.status === 503) {
+          // Service is initializing, keep loading state and retry
+          setStats(prev => ({
+            ...prev,
+            steam: {
+              recentGames: [],
+              totalGames: 0,
+              playerInfo: {},
+              loading: true,
+              error: 'Service initializing...'
+            }
+          }));
         } else {
           throw new Error('Failed to fetch Steam data');
         }
@@ -117,6 +163,18 @@ export function useEntertainmentStats() {
               ...data,
               loading: false,
               error: null
+            }
+          }));
+        } else if (response.status === 503) {
+          // Service is initializing, keep loading state and retry
+          setStats(prev => ({
+            ...prev,
+            discord: {
+              user: {},
+              presence: null,
+              sharedGuilds: 0,
+              loading: true,
+              error: 'Service initializing...'
             }
           }));
         } else {
