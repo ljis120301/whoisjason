@@ -35,8 +35,8 @@ function ServiceStatus() {
 
     fetchStatus();
     
-    // Auto-refresh every 2 seconds for real-time updates
-    const interval = setInterval(fetchStatus, 2000);
+    // Auto-refresh every 10 seconds instead of 2 seconds for real-time updates
+    const interval = setInterval(fetchStatus, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -173,8 +173,8 @@ function CurrentActivity() {
 
     fetchActivity();
     
-    // Auto-refresh every 2 seconds for real-time updates
-    const interval = setInterval(fetchActivity, 2000);
+    // Auto-refresh every 10 seconds instead of 2 seconds for real-time updates
+    const interval = setInterval(fetchActivity, 10000);
     return () => clearInterval(interval);
   }, []);
 
