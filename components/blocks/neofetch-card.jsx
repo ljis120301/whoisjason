@@ -6,7 +6,6 @@ import { useEntertainmentStats } from '../hooks/use-entertainment-stats.js';
 
 // Move hook directly into this file to test
 function useGitHubStats(username) {
-  console.log('Inline useGitHubStats called with username:', username);
   const [stats, setStats] = useState({
     commitsThisYear: 0,
     topRepos: [],
@@ -27,15 +26,30 @@ function useGitHubStats(username) {
       try {
         setStats(prev => ({ ...prev, loading: true, error: null }));
 
-        const userResponse = await fetch(`/api/github/user/${username}`);
+        const userResponse = await fetch(`/api/github/user/${username}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!userResponse.ok) throw new Error('Failed to fetch user data');
         const userData = await userResponse.json();
 
-        const reposResponse = await fetch(`/api/github/repos/${username}`);
+        const reposResponse = await fetch(`/api/github/repos/${username}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!reposResponse.ok) throw new Error('Failed to fetch repos data');
         const reposData = await reposResponse.json();
 
-        const commitsResponse = await fetch(`/api/github/commits/${username}`);
+        const commitsResponse = await fetch(`/api/github/commits/${username}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!commitsResponse.ok) throw new Error('Failed to fetch commits data');
         const commitsData = await commitsResponse.json();
 
@@ -272,6 +286,43 @@ const DeveloperStats = ({ stats }) => {
 };
 
 const EntertainmentStats = ({ stats }) => {
+  const [shouldScroll, setShouldScroll] = useState({});
+
+  // Check if text should scroll based on overflow
+  const checkOverflow = (text, key) => {
+    if (!text) return;
+    
+    // Create a temporary element to measure text width
+    const temp = document.createElement('span');
+    temp.style.visibility = 'hidden';
+    temp.style.position = 'absolute';
+    temp.style.whiteSpace = 'nowrap';
+    temp.style.fontSize = '0.75rem'; // text-xs
+    temp.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace';
+    temp.textContent = text;
+    document.body.appendChild(temp);
+    
+    const textWidth = temp.offsetWidth;
+    const containerWidth = 200; // Approximate container width
+    
+    document.body.removeChild(temp);
+    
+    setShouldScroll(prev => ({
+      ...prev,
+      [key]: textWidth > containerWidth
+    }));
+  };
+
+  useEffect(() => {
+    if (stats.spotify.currentTrack?.is_playing) {
+      const text = `Now: ${stats.spotify.currentTrack.name} - ${stats.spotify.currentTrack.artist}`;
+      checkOverflow(text, 'currentTrack');
+    } else if (stats.spotify.recentTracks?.[0]) {
+      const text = `Recent: ${stats.spotify.recentTracks[0].name} - ${stats.spotify.recentTracks[0].artist}`;
+      checkOverflow(text, 'recentTrack');
+    }
+  }, [stats.spotify.currentTrack, stats.spotify.recentTracks]);
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'online': return 'text-frappe-green';
@@ -323,56 +374,63 @@ const EntertainmentStats = ({ stats }) => {
     <div className="space-y-0.5 px-[135px]">
       {/* Spotify */}
       {stats.spotify.error ? (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">♪</span>
+        <div className="flex items-center text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">♪</span>
           <span className="ml-1">Music: Spotify unavailable</span>
         </div>
       ) : stats.spotify.currentTrack?.is_playing ? (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">♪</span>
-          <span className="ml-1">Now: {stats.spotify.currentTrack.name} - {stats.spotify.currentTrack.artist}</span>
+        <div className="flex items-center text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">♪</span>
+          <div className="ml-1 overflow-hidden">
+            <span className={`inline-block whitespace-nowrap ${shouldScroll.currentTrack ? 'animate-scroll-text' : ''}`}>
+              Now: {stats.spotify.currentTrack.name} - {stats.spotify.currentTrack.artist}
+            </span>
+          </div>
         </div>
       ) : stats.spotify.recentTracks?.[0] ? (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">♪</span>
-          <span className="ml-1">Recent: {stats.spotify.recentTracks[0].name} - {stats.spotify.recentTracks[0].artist}</span>
+        <div className="flex items-center text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">♪</span>
+          <div className="ml-1 overflow-hidden">
+            <span className={`inline-block whitespace-nowrap ${shouldScroll.recentTrack ? 'animate-scroll-text' : ''}`}>
+              Recent: {stats.spotify.recentTracks[0].name} - {stats.spotify.recentTracks[0].artist}
+            </span>
+          </div>
         </div>
       ) : (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">♪</span>
+        <div className="flex items-center text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">♪</span>
           <span className="ml-1">Music: No recent activity</span>
         </div>
       )}
 
       {/* Discord */}
       {stats.discord.error ? (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">💬</span>
-          <span className="ml-1">Discord: Status unavailable</span>
+        <div className="flex items-start text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">💬</span>
+          <span className="ml-1 break-words">Discord: Status unavailable</span>
         </div>
       ) : (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">💬</span>
-          <span className="ml-1">
+        <div className="flex items-start text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">💬</span>
+          <span className="ml-1 break-words">
             Discord: {stats.discord.user?.username || 'User'} • 
             <span className={getStatusColor(stats.discord.presence?.status)}>
               {' '}{stats.discord.presence?.status || 'offline'}
             </span>
-            {stats.discord.sharedGuilds > 0 && ` • ${stats.discord.sharedGuilds} servers`}
           </span>
         </div>
       )}
 
       {/* Steam Status */}
       {stats.steam.error ? (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">🎮</span>
-          <span className="ml-1">Steam: Library unavailable</span>
+        <div className="flex items-start text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">🎮</span>
+          <span className="ml-1 break-words">Steam: Library unavailable</span>
         </div>
       ) : !stats.steam.error && stats.steam.playerInfo?.personastate !== undefined ? (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">🎮</span>
-          <span className="ml-1">
+        <div className="flex items-start text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">🎮</span>
+          <span className="ml-1 break-words">
             Steam: {stats.steam.playerInfo?.personaname || 'Jason'} • 
             <span className={getSteamStatusColor(stats.steam.playerInfo.personastate)}>
               {' '}{getSteamStatus(stats.steam.playerInfo.personastate).toLowerCase()}
@@ -380,28 +438,28 @@ const EntertainmentStats = ({ stats }) => {
           </span>
         </div>
       ) : (
-        <div className="flex items-center text-frappe-text whitespace-nowrap">
-          <span className="w-4 text-center">🎮</span>
-          <span className="ml-1">Steam: Jason • <span className="text-frappe-red">unknown</span></span>
+        <div className="flex items-start text-frappe-text">
+          <span className="w-4 text-center flex-shrink-0">🎮</span>
+          <span className="ml-1 break-words">Steam: Jason • <span className="text-frappe-red">unknown</span></span>
         </div>
       )}
 
       {/* Steam Game */}
       {!stats.steam.error && (
         stats.steam.playerInfo?.gameextrainfo ? (
-          <div className="flex items-center text-frappe-text whitespace-nowrap">
-            <span className="w-4 text-center">🎮</span>
-            <span className="ml-1">Playing: {stats.steam.playerInfo.gameextrainfo}</span>
+          <div className="flex items-start text-frappe-text">
+            <span className="w-4 text-center flex-shrink-0">🎮</span>
+            <span className="ml-1 break-words">Playing: {stats.steam.playerInfo.gameextrainfo}</span>
           </div>
         ) : stats.steam.recentGames?.[0] ? (
-          <div className="flex items-center text-frappe-text whitespace-nowrap">
-            <span className="w-4 text-center">🎮</span>
-            <span className="ml-1">Recent: {stats.steam.recentGames[0].name} ({stats.steam.recentGames[0].playtime_2weeks}h)</span>
+          <div className="flex items-start text-frappe-text">
+            <span className="w-4 text-center flex-shrink-0">🎮</span>
+            <span className="ml-1 break-words">Recent: {stats.steam.recentGames[0].name} ({stats.steam.recentGames[0].playtime_2weeks}h)</span>
           </div>
         ) : stats.steam.totalGames ? (
-          <div className="flex items-center text-frappe-text whitespace-nowrap">
-            <span className="w-4 text-center">🎮</span>
-            <span className="ml-1">Games: {stats.steam.totalGames} owned</span>
+          <div className="flex items-start text-frappe-text">
+            <span className="w-4 text-center flex-shrink-0">🎮</span>
+            <span className="ml-1 break-words">Games: {stats.steam.totalGames} owned</span>
           </div>
         ) : null
       )}

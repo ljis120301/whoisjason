@@ -26,15 +26,30 @@ export function useGitHubStats(username) {
       try {
         setStats(prev => ({ ...prev, loading: true, error: null }));
 
-        const userResponse = await fetch(`/api/github/user/${username}`);
+        const userResponse = await fetch(`/api/github/user/${username}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!userResponse.ok) throw new Error('Failed to fetch user data');
         const userData = await userResponse.json();
 
-        const reposResponse = await fetch(`/api/github/repos/${username}`);
+        const reposResponse = await fetch(`/api/github/repos/${username}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!reposResponse.ok) throw new Error('Failed to fetch repos data');
         const reposData = await reposResponse.json();
 
-        const commitsResponse = await fetch(`/api/github/commits/${username}`);
+        const commitsResponse = await fetch(`/api/github/commits/${username}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!commitsResponse.ok) throw new Error('Failed to fetch commits data');
         const commitsData = await commitsResponse.json();
 
