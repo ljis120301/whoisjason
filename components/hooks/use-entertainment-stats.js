@@ -81,7 +81,8 @@ export function useEntertainmentStats() {
             }
           }));
         } else {
-          throw new Error('Failed to fetch Spotify data');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `HTTP ${response.status}: Failed to fetch Spotify data`);
         }
       } catch (error) {
         console.error('Spotify fetch error:', error);
@@ -129,7 +130,8 @@ export function useEntertainmentStats() {
             }
           }));
         } else {
-          throw new Error('Failed to fetch Steam data');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `HTTP ${response.status}: Failed to fetch Steam data`);
         }
       } catch (error) {
         console.error('Steam fetch error:', error);
@@ -178,7 +180,8 @@ export function useEntertainmentStats() {
             }
           }));
         } else {
-          throw new Error('Failed to fetch Discord data');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `HTTP ${response.status}: Failed to fetch Discord data`);
         }
       } catch (error) {
         console.error('Discord fetch error:', error);
@@ -210,8 +213,20 @@ export function useEntertainmentStats() {
     // Set up auto-refresh every 10 seconds for more frequent updates
     const interval = setInterval(fetchAllStats, 10000);
     
-    return () => clearInterval(interval);
-  }, [fetchAllStats]);
+    // Also set up a more frequent retry for failed requests
+    const retryInterval = setInterval(() => {
+      // Check if any service has an error and retry
+      if (stats.spotify.error || stats.steam.error || stats.discord.error) {
+        console.log('Retrying failed services...');
+        fetchAllStats();
+      }
+    }, 5000); // Retry every 5 seconds if there are errors
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(retryInterval);
+    };
+  }, [fetchAllStats, stats.spotify.error, stats.steam.error, stats.discord.error]);
 
   return stats;
 } 

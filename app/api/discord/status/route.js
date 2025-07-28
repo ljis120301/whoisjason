@@ -45,22 +45,26 @@ export async function GET(request) {
       }
     }
 
-    // Get user information
-    const userResponse = await fetch(`https://discord.com/api/v10/users/${userId}`, {
-      headers: {
-        'Authorization': `Bot ${botToken}`,
-        'Content-Type': 'application/json'
-      },
-      next: { revalidate: 300 } // Cache for 5 minutes
-    });
+    // Get user information from Gateway first, fallback to API if needed
+    let userData = { username: 'Jason' }; // Default fallback
+    
+    try {
+      const userResponse = await fetch(`https://discord.com/api/v10/users/${userId}`, {
+        headers: {
+          'Authorization': `Bot ${botToken}`,
+          'Content-Type': 'application/json'
+        },
+        next: { revalidate: 300 } // Cache for 5 minutes
+      });
 
-    if (!userResponse.ok) {
-      const errorText = await userResponse.text();
-      console.error('Failed to fetch Discord user data:', errorText);
-      throw new Error('Failed to fetch Discord user data');
+      if (userResponse.ok) {
+        userData = await userResponse.json();
+      } else {
+        console.warn('Failed to fetch Discord user data, using fallback');
+      }
+    } catch (error) {
+      console.warn('Discord API request failed, using fallback:', error.message);
     }
-
-    const userData = await userResponse.json();
 
     let guildMember = null;
     let presence = null;
@@ -68,6 +72,7 @@ export async function GET(request) {
     // Get real-time presence from Gateway connection
     const gateway = getDiscordGateway();
     const connectionHealth = gateway.getConnectionHealth();
+    const gatewayPresence = gateway.getPresence();
     
     // Check if Discord service is ready
     if (!connectionHealth.isConnected) {
@@ -85,8 +90,6 @@ export async function GET(request) {
         lastUpdated: new Date().toISOString()
       }, { status: 503 }); // Service Unavailable
     }
-    
-    const gatewayPresence = gateway.getPresence();
 
     // Handle the presence data structure correctly
     if (gatewayPresence) {
