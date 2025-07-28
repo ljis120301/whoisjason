@@ -25,9 +25,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# env
+# local env files
+.env*.local
 .env
-.env.local
 
 # vercel
 .vercel
@@ -35,3 +35,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Docker compose with secrets (for personal deployment)
+docker-compose.yaml

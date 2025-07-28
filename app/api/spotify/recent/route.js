@@ -1,21 +1,12 @@
 import { NextResponse } from 'next/server';
 import { isAuthenticated } from "../../../../lib/auth.js";
+import { getSpotifyRealtime } from '../../../../lib/spotify-realtime.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
     const adminPasscode = process.env.ADMIN_PASSCODE;
-
-    if (!clientId || !clientSecret || !refreshToken) {
-      return NextResponse.json(
-        { error: 'Missing Spotify credentials' },
-        { status: 400 }
-      );
-    }
 
     if (!adminPasscode) {
       return NextResponse.json(
@@ -36,67 +27,36 @@ export async function GET(request) {
       );
     }
 
-    // Get access token using refresh token
-    const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`
-      },
-      body: new URLSearchParams({
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken
-      })
-    });
+    // Get real-time track data from Spotify service
+    const spotifyRealtime = getSpotifyRealtime();
+    const trackInfo = spotifyRealtime.getDetailedTrackInfo();
 
-    if (!tokenResponse.ok) {
-      throw new Error('Failed to refresh Spotify token');
+    if (!trackInfo) {
+      return NextResponse.json({
+        currentTrack: null,
+        recentTracks: [],
+        lastUpdated: new Date().toISOString(),
+        message: 'No track data available',
+        realtime_service: {
+          active: spotifyRealtime.isPolling,
+          poll_frequency_seconds: spotifyRealtime.pollFrequency / 1000
+        }
+      });
     }
 
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
-
-    // Get currently playing track
-    const currentResponse = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
+    // Format response based on track type
+    const response = {
+      currentTrack: trackInfo.type === 'currently_playing' ? trackInfo : null,
+      recentTracks: trackInfo.type === 'recently_played' ? [trackInfo] : [],
+      lastUpdated: trackInfo.last_updated || new Date().toISOString(),
+      realtime_service: {
+        active: trackInfo.polling_active,
+        poll_frequency_seconds: trackInfo.poll_frequency_seconds,
+        last_poll: trackInfo.last_updated
       }
-    });
+    };
 
-    let currentTrack = null;
-    if (currentResponse.ok && currentResponse.status !== 204) {
-      const currentData = await currentResponse.json();
-      if (currentData && currentData.item) {
-        currentTrack = {
-          name: currentData.item.name,
-          artist: currentData.item.artists[0]?.name,
-          is_playing: currentData.is_playing
-        };
-      }
-    }
-
-    // Get recently played tracks
-    const recentResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=5', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    });
-
-    let recentTracks = [];
-    if (recentResponse.ok) {
-      const recentData = await recentResponse.json();
-      recentTracks = recentData.items?.map(item => ({
-        name: item.track.name,
-        artist: item.track.artists[0]?.name,
-        played_at: item.played_at
-      })) || [];
-    }
-
-    return NextResponse.json({
-      currentTrack,
-      recentTracks,
-      lastUpdated: new Date().toISOString()
-    });
+    return NextResponse.json(response);
 
   } catch (error) {
     console.error('Spotify API error:', error);

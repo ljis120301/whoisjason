@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isAuthenticated } from "../../../../lib/auth.js";
+import { getTokenManager } from '../../../../lib/token-manager.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,15 +18,18 @@ export async function GET(request) {
       );
     }
 
-    const steamApiKey = process.env.STEAM_API_KEY;
-    const steamId = process.env.STEAM_ID;
+    // Get valid Steam credentials from token manager
+    const tokenManager = getTokenManager();
+    const steamCreds = await tokenManager.getValidSteamCredentials();
 
-    if (!steamApiKey || !steamId) {
+    if (!steamCreds) {
       return NextResponse.json(
-        { error: 'Missing Steam credentials' },
+        { error: 'Failed to get valid Steam credentials. Please check Steam API configuration.' },
         { status: 400 }
       );
     }
+
+    const { apiKey: steamApiKey, steamId } = steamCreds;
 
     // Get recently played games
     const recentGamesResponse = await fetch(
