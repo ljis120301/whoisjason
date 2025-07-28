@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isAuthenticated } from '../../../../../lib/auth.js';
+import { getTokenManager } from '../../../../../lib/token-manager.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +19,8 @@ export async function GET(request, { params }) {
     }
 
     const { username } = params;
-    const token = process.env.GITHUB_TOKEN;
+    const tokenManager = getTokenManager();
+    const token = await tokenManager.getValidGitHubToken();
 
     const response = await fetch(`https://api.github.com/users/${username}`, {
       headers: {

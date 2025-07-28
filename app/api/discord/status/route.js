@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isAuthenticated } from '../../../../lib/auth.js';
+import { getDiscordGateway } from '../../../../lib/discord-gateway.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,11 @@ export async function GET(request) {
     let guildMember = null;
     let presence = null;
 
-    // If guild ID is provided, get guild member info and presence
+    // Get real-time presence from Gateway connection
+    const gateway = getDiscordGateway();
+    presence = gateway.getPresence();
+
+    // If guild ID is provided, get guild member info
     if (guildId) {
       try {
         const memberResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members/${userId}`, {
@@ -60,13 +65,6 @@ export async function GET(request) {
         if (memberResponse.ok) {
           guildMember = await memberResponse.json();
         }
-
-        // Note: Getting presence requires Gateway connection, so we'll mock some data
-        // In a real implementation, you'd need to use Discord Gateway WebSocket
-        presence = {
-          status: 'online', // This would come from Gateway in real implementation
-          activities: [] // This would contain actual activities from Gateway
-        };
 
       } catch (error) {
         console.warn('Could not fetch guild member data:', error);
