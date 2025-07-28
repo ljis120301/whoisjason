@@ -24,6 +24,22 @@ export async function GET(request) {
 
     // Get real-time track data from Spotify service
     const spotifyRealtime = getSpotifyRealtime();
+    
+    // Check if service is ready
+    if (!spotifyRealtime.isPolling) {
+      return NextResponse.json({
+        currentTrack: null,
+        recentTracks: [],
+        lastUpdated: new Date().toISOString(),
+        message: 'Spotify service is initializing, please try again in a few seconds',
+        realtime_service: {
+          active: false,
+          poll_frequency_seconds: 0,
+          status: 'initializing'
+        }
+      }, { status: 503 }); // Service Unavailable
+    }
+    
     const trackInfo = spotifyRealtime.getDetailedTrackInfo();
 
     if (!trackInfo) {

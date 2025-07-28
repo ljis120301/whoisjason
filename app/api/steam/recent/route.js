@@ -28,8 +28,11 @@ export async function GET(request) {
 
     if (!steamCreds) {
       return NextResponse.json(
-        { error: 'Failed to get valid Steam credentials. Please check Steam API configuration.' },
-        { status: 400 }
+        { 
+          error: 'Failed to get valid Steam credentials. Please check Steam API configuration.',
+          message: 'Steam service is initializing, please try again in a few seconds'
+        },
+        { status: 503 } // Service Unavailable
       );
     }
 

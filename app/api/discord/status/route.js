@@ -67,8 +67,26 @@ export async function GET(request) {
 
     // Get real-time presence from Gateway connection
     const gateway = getDiscordGateway();
-    const gatewayPresence = gateway.getPresence();
     const connectionHealth = gateway.getConnectionHealth();
+    
+    // Check if Discord service is ready
+    if (!connectionHealth.isConnected) {
+      return NextResponse.json({
+        user: { username: 'Jason' },
+        presence: { status: 'offline' },
+        guildMember: null,
+        connection: {
+          isConnected: false,
+          lastHeartbeat: null,
+          latency: null,
+          sessionId: null
+        },
+        message: 'Discord service is initializing, please try again in a few seconds',
+        lastUpdated: new Date().toISOString()
+      }, { status: 503 }); // Service Unavailable
+    }
+    
+    const gatewayPresence = gateway.getPresence();
 
     // Handle the presence data structure correctly
     if (gatewayPresence) {
