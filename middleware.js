@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // Allow WebSocket endpoint
+  // Allow realtime endpoint (server-side data)
   if (pathname === '/api/realtime') {
     return NextResponse.next();
   }
@@ -23,8 +23,8 @@ export function middleware(request) {
     return NextResponse.json(
       { 
         error: 'Access Denied',
-        message: 'API endpoints are not accessible from clients. Use WebSocket connection for real-time data.',
-        websocketUrl: '/api/realtime'
+        message: 'API endpoints are not accessible from clients. Use /api/realtime for real-time data.',
+        realtimeUrl: '/api/realtime'
       },
       { status: 403 }
     );
