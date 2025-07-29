@@ -38,7 +38,6 @@ export async function POST(request) {
     });
 
   } catch (error) {
-    console.error('Force poll error:', error);
     return NextResponse.json(
       { error: 'Failed to force Spotify poll', details: error.message },
       { status: 500 }

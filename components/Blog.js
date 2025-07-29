@@ -19,7 +19,6 @@ export default function Blog() {
         });
         setPosts(records.items);
       } catch (error) {
-        console.error('Error fetching blog posts:', error);
       } finally {
         setIsLoading(false);
       }

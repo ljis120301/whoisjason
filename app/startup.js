@@ -6,11 +6,9 @@ if (typeof window === 'undefined' && process.env.NEXT_PHASE !== 'phase-productio
   // Add a longer delay to ensure environment is ready and services are fully initialized
   setTimeout(async () => {
     try {
-      console.log('🚀 Starting WhoisJason service initialization...');
       await autoInitialize();
-      console.log('✅ WhoisJason services initialized successfully');
     } catch (error) {
-      console.error('❌ Failed to initialize WhoisJason services:', error);
+      // Error handling for initialization
     }
   }, 5000); // 5 second delay to ensure everything is ready
 } else {

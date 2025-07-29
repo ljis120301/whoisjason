@@ -51,10 +51,8 @@ export async function GET(request) {
       if (recentGamesResponse.ok) {
         recentGamesData = await recentGamesResponse.json();
       } else {
-        console.warn('Failed to fetch recent games from Steam, using empty data');
       }
     } catch (error) {
-      console.warn('Steam recent games API request failed:', error.message);
     }
     const recentGames = recentGamesData.response?.games?.map(game => ({
       name: game.name,
@@ -78,10 +76,8 @@ export async function GET(request) {
         const ownedGamesData = await ownedGamesResponse.json();
         totalGames = ownedGamesData.response?.game_count || 0;
       } else {
-        console.warn('Failed to fetch owned games from Steam');
       }
     } catch (error) {
-      console.warn('Steam owned games API request failed:', error.message);
     }
 
     // Get player summary for Steam level and status
@@ -106,10 +102,8 @@ export async function GET(request) {
           };
         }
       } else {
-        console.warn('Failed to fetch player summary from Steam');
       }
     } catch (error) {
-      console.warn('Steam player summary API request failed:', error.message);
     }
 
     const rawResponse = {
@@ -130,7 +124,6 @@ export async function GET(request) {
     });
 
   } catch (error) {
-    console.error('Steam API error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch Steam data' },
       { status: 500 }

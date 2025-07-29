@@ -80,7 +80,6 @@ export async function GET(request) {
     });
 
   } catch (error) {
-    console.error('Spotify API error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch Spotify data' },
       { status: 500 }

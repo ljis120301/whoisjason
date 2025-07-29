@@ -47,7 +47,6 @@ export async function GET(request) {
     return NextResponse.json(debugData);
 
   } catch (error) {
-    console.error('Debug API error:', error);
     return NextResponse.json(
       { error: 'Failed to get debug data', details: error.message },
       { status: 500 }

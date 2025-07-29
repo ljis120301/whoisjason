@@ -166,7 +166,7 @@ const TopRepos = ({ stats }) => {
 
 const DeveloperStats = ({ stats }) => {
   // Use GitHub data from the real-time broadcaster
-  const githubData = stats.github;
+  const githubData = stats?.github;
 
   if (!githubData) {
     return (
@@ -177,12 +177,14 @@ const DeveloperStats = ({ stats }) => {
     );
   }
 
-  // Get all language names (not truncated)
-  const allLanguages = githubData.repos?.languages?.map(lang => lang.language).join(', ') || 'Loading languages...';
+  // Extract languages from top repos
+  const topRepos = githubData.repos?.topRepos || [];
+  const languages = [...new Set(topRepos.map(repo => repo.language).filter(Boolean))];
+  const allLanguages = languages.join(', ') || 'No languages found';
 
   return (
     <div className="space-y-0.5 px-[135px]">
-      <div className="text-frappe-text">Commits this year ({new Date().getFullYear()}): {githubData.repos?.commitsThisYear?.toLocaleString() || 'Loading...'} contributions</div>
+      <div className="text-frappe-text">Commits this year: {githubData.user?.commitsThisYear || 'Loading...'}</div>
       <div className="text-frappe-text">Languages: {allLanguages}</div>
     </div>
   );
@@ -233,20 +235,30 @@ const EntertainmentStats = ({ stats }) => {
     }
   };
 
-  const getSteamStatus = (personaState) => {
+  const getSteamStatus = (personaState, effectiveStatus, recentGame) => {
+    // Always show the actual online/offline status first
+    let status;
     switch (personaState) {
-      case 0: return 'Offline';
-      case 1: return 'Online';
-      case 2: return 'Busy';
-      case 3: return 'Away';
-      case 4: return 'Snooze';
-      case 5: return 'Looking to trade';
-      case 6: return 'Looking to play';
-      default: return 'Unknown';
+      case 0: status = 'Offline'; break;
+      case 1: status = 'Online'; break;
+      case 2: status = 'Busy'; break;
+      case 3: status = 'Away'; break;
+      case 4: status = 'Snooze'; break;
+      case 5: status = 'Looking to trade'; break;
+      case 6: status = 'Looking to play'; break;
+      default: status = 'Unknown'; break;
     }
+    
+    // Add recent game info if available and user is offline but has recent activity
+    if (effectiveStatus === 'recently_online' && recentGame && personaState === 0) {
+      return `${status} - Recently played ${recentGame.name} (${recentGame.playtime_2weeks}h)`;
+    }
+    
+    return status;
   };
 
-  const getSteamStatusColor = (personaState) => {
+  const getSteamStatusColor = (personaState, effectiveStatus) => {
+    // Use the actual online/offline status for color, not the enhanced status
     switch (personaState) {
       case 1: return 'text-frappe-green'; // Online
       case 2: return 'text-frappe-red';   // Busy
@@ -254,15 +266,16 @@ const EntertainmentStats = ({ stats }) => {
       case 4: return 'text-frappe-yellow'; // Snooze
       case 5: return 'text-frappe-blue';   // Looking to trade
       case 6: return 'text-frappe-blue';   // Looking to play
-      case 0: return 'text-frappe-red'; // Offline
+      case 0: return 'text-frappe-red'; // Offline (even with recent activity)
       default: return 'text-frappe-red'; // Unknown
     }
   };
 
-  // Check if we have any data
-  const hasData = stats.spotify || stats.steam || stats.discord;
+  // Check if we have any data - show component even with partial data
+  const hasAnyData = stats.spotify || stats.steam || stats.discord || stats.github;
   
-  if (!hasData) {
+  // Show loading state only if we have no data at all
+  if (!hasAnyData) {
     return (
       <div className="space-y-0.5 px-[135px]">
         <div className="text-frappe-subtext0">Connecting to real-time data...</div>
@@ -273,11 +286,11 @@ const EntertainmentStats = ({ stats }) => {
 
   return (
     <div className="space-y-0.5 px-[135px]">
-      {/* Spotify */}
+      {/* Spotify - show immediately if available */}
       {!stats.spotify ? (
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">♪</span>
-          <span className="ml-1">Music: Spotify unavailable</span>
+          <span className="ml-1">Music: Loading...</span>
         </div>
       ) : stats.spotify.currentTrack?.is_playing ? (
         <div className="flex items-center text-frappe-text">
@@ -295,11 +308,11 @@ const EntertainmentStats = ({ stats }) => {
         </div>
       )}
 
-      {/* Discord */}
+      {/* Discord - show immediately if available */}
       {!stats.discord ? (
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">💬</span>
-          <span className="ml-1">Discord: Unavailable</span>
+          <span className="ml-1">Discord: Loading...</span>
         </div>
       ) : (
         <div className="flex items-center text-frappe-text">
@@ -310,17 +323,17 @@ const EntertainmentStats = ({ stats }) => {
         </div>
       )}
 
-      {/* Steam */}
+      {/* Steam - show immediately if available */}
       {!stats.steam ? (
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">🎮</span>
-          <span className="ml-1">Steam: Unavailable</span>
+          <span className="ml-1">Steam: Loading...</span>
         </div>
       ) : (
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0">🎮</span>
-          <span className={`ml-1 ${getSteamStatusColor(stats.steam.playerInfo?.personastate)}`}>
-            Steam: {getSteamStatus(stats.steam.playerInfo?.personastate)}
+          <span className={`ml-1 ${getSteamStatusColor(stats.steam.playerInfo?.personastate, stats.steam.playerInfo?.effectiveStatus)}`}>
+            Steam: {getSteamStatus(stats.steam.playerInfo?.personastate, stats.steam.playerInfo?.effectiveStatus, stats.steam.playerInfo?.recentGame)}
             {stats.steam.playerInfo?.gameextrainfo && (
               <span className="text-frappe-subtext0"> - {stats.steam.playerInfo.gameextrainfo}</span>
             )}
@@ -412,7 +425,7 @@ export function NeofetchCard({ githubUsername }) {
             <div className="text-center text-frappe-blue mb-1">
               ┌─────────────────────Developer Stats─────────────────────┐
             </div>
-            <DeveloperStats stats={realtimeData} />
+            <DeveloperStats stats={realtimeData.data} />
             <div className="text-center text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────────┘
             </div>
@@ -423,7 +436,7 @@ export function NeofetchCard({ githubUsername }) {
             <div className="text-center text-frappe-blue mb-1">
               ┌─────────────────Entertainment/Social─────────────────┐
             </div>
-            <EntertainmentStats stats={realtimeData} />
+            <EntertainmentStats stats={realtimeData.data} />
             <div className="text-center text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────┘
             </div>
@@ -434,9 +447,9 @@ export function NeofetchCard({ githubUsername }) {
             <div className="text-center text-frappe-blue mb-1">
               ┌─────────────────────Top Repos─────────────────────┐
             </div>
-            <TopRepos stats={realtimeData} />
+            <TopRepos stats={realtimeData.data} />
             <div className="text-center text-frappe-blue mt-1">
-              └────────────────────────────────────────────────────┘
+              └─────────────────────────────────────────────────────┘
             </div>
           </div>
 

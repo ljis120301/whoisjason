@@ -66,7 +66,6 @@ export default function Contact() {
       
       e.target.reset();
     } catch (error) {
-      console.error('Error:', error);
       toast({
         title: "Error sending message",
         description: "Please try again later.",
