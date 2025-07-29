@@ -1,4 +1,5 @@
 export const metadata = {
+  metadataBase: new URL('https://whoisjason.me'),
   title: "Jason's Website | Portfolio & Projects",
   description: "Explore Jason's portfolio website featuring software engineering projects, technical blog posts, and professional experience in web development. Specializing in Next.js, React, and full-stack development with expertise in IT services, networking, and cloud solutions.",
   keywords: [

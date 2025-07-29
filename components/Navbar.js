@@ -6,11 +6,11 @@ import { useDebouncedCallback } from 'use-debounce';
 
 const menuItems = [
   { id: 'home', label: 'Home', href: '#hero' },
-  { id: 'about', label: 'About', href: '#About' },
-  { id: 'featured', label: 'Featured', href: '#Featured' },
-  { id: 'projects', label: 'Projects', href: '#section_4' },
-  { id: 'blog', label: 'Blog', href: '#section_5' },
-  { id: 'contact', label: 'Contact', href: '#section_6' }
+  { id: 'about', label: 'About', href: '#about' },
+  { id: 'featured', label: 'Featured', href: '#featured' },
+  { id: 'projects', label: 'Projects', href: '#projects' },
+  { id: 'blog', label: 'Blog', href: '#blog' },
+  { id: 'contact', label: 'Contact', href: '#contact' }
 ];
 
 function NavbarContent() {

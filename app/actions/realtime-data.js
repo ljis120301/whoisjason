@@ -6,32 +6,62 @@ import { getSpotifyRealtime } from '../../lib/spotify-realtime.js';
 
 export async function getRealtimeData() {
   try {
-    // Ensure services are initialized first
-    await autoInitialize();
-    
     const broadcaster = getRealtimeBroadcaster();
     
-    // Start the broadcaster if not already running
-    if (!broadcaster.isBroadcasting) {
-      broadcaster.start();
-    }
-
-    // Get current data directly from the broadcaster
+    // Get current data immediately without waiting for initialization
     let data = broadcaster.getCurrentData();
     
-    // Always fetch fresh Spotify data for real-time updates
-    // For other services, only fetch if no data exists yet
-    if (!data.lastUpdated) {
-      await broadcaster.fetchAllData();
-      data = broadcaster.getCurrentData();
+    // Return cached data immediately if available
+    if (data.lastUpdated) {
+      // Start background initialization and updates
+      setImmediate(async () => {
+        try {
+          await autoInitialize();
+          
+          // Start the broadcaster if not already running
+          if (!broadcaster.isBroadcasting) {
+            broadcaster.start();
+          }
+          
+          // Update Spotify data in background
+          const spotifyRealtime = getSpotifyRealtime();
+          if (spotifyRealtime.currentTrack) {
+            data.spotify = {
+              currentTrack: spotifyRealtime.currentTrack,
+              lastUpdated: spotifyRealtime.lastUpdated
+            };
+          }
+        } catch (error) {
+          // Background errors don't affect the response
+          console.error('Background initialization error:', error);
+        }
+      });
     } else {
-      // Force fresh Spotify data fetch while keeping other services cached
-      const spotifyRealtime = getSpotifyRealtime();
-      if (spotifyRealtime.currentTrack) {
-        data.spotify = {
-          currentTrack: spotifyRealtime.currentTrack,
-          lastUpdated: spotifyRealtime.lastUpdated
-        };
+      // Only wait for initialization if no cached data exists
+      await autoInitialize();
+      
+      // Start the broadcaster if not already running
+      if (!broadcaster.isBroadcasting) {
+        broadcaster.start();
+      }
+
+      // Get current data directly from the broadcaster
+      data = broadcaster.getCurrentData();
+      
+      // Always fetch fresh Spotify data for real-time updates
+      // For other services, only fetch if no data exists yet
+      if (!data.lastUpdated) {
+        await broadcaster.fetchAllData();
+        data = broadcaster.getCurrentData();
+      } else {
+        // Force fresh Spotify data fetch while keeping other services cached
+        const spotifyRealtime = getSpotifyRealtime();
+        if (spotifyRealtime.currentTrack) {
+          data.spotify = {
+            currentTrack: spotifyRealtime.currentTrack,
+            lastUpdated: spotifyRealtime.lastUpdated
+          };
+        }
       }
     }
 

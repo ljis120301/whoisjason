@@ -96,6 +96,7 @@ module.exports = {
         move: "move 5s linear infinite",
         shimmer: "shimmer 2s linear infinite",
         spotlight: "spotlight 2s ease .75s 1 forwards",
+        "blink": "blink 1s step-end infinite",
       },
       keyframes: {
         "loop-scroll": {
@@ -123,6 +124,10 @@ module.exports = {
             opacity: 1,
             transform: "translate(-50%,-40%) scale(1)",
           },
+        },
+        "blink": {
+          "0%, 50%": { opacity: "1" },
+          "51%, 100%": { opacity: "0" },
         },
       },
     },

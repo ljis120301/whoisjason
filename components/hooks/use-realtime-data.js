@@ -11,11 +11,17 @@ export function useRealtimeData() {
     github: null,
     lastUpdated: null
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to not block render
   const [error, setError] = useState(null);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
+      // Only set loading to true after initial render
+      if (hasInitialized) {
+        setLoading(true);
+      }
+      
       // Use server action only - no client-side API fallback
       const result = await getRealtimeData();
       
@@ -29,11 +35,15 @@ export function useRealtimeData() {
       setError(error.message || 'Failed to fetch data');
     } finally {
       setLoading(false);
+      setHasInitialized(true);
     }
-  }, []);
+  }, [hasInitialized]);
 
   useEffect(() => {
-    // Initial fetch
+    // Mark as initialized immediately to allow progressive loading
+    setHasInitialized(true);
+    
+    // Initial fetch - don't block render
     fetchData();
 
     // Set up polling every 30 seconds for real-time updates (especially Spotify)
@@ -46,6 +56,7 @@ export function useRealtimeData() {
     data,
     loading,
     error,
-    refetch: fetchData
+    refetch: fetchData,
+    hasInitialized
   };
 }
