@@ -1,7 +1,7 @@
 "use client";;
 import { cnFilter } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useCallback } from "react";
 import * as THREE from "three";
 
 export const CanvasRevealEffect = ({
@@ -162,20 +162,7 @@ const ShaderMaterial = ({
   const ref = useRef();
   let lastFrameTime = 0;
 
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    const timestamp = clock.getElapsedTime();
-    if (timestamp - lastFrameTime < 1 / maxFps) {
-      return;
-    }
-    lastFrameTime = timestamp;
-
-    const material = ref.current.material;
-    const timeLocation = material.uniforms.u_time;
-    timeLocation.value = timestamp;
-  });
-
-  const getUniforms = () => {
+  const getUniforms = useCallback(() => {
     const preparedUniforms = {};
 
     for (const uniformName in uniforms) {
@@ -217,7 +204,20 @@ const ShaderMaterial = ({
       value: new THREE.Vector2(size.width * 2, size.height * 2),
     }; // Initialize u_resolution
     return preparedUniforms;
-  };
+  }, [uniforms, size.width, size.height]);
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const timestamp = clock.getElapsedTime();
+    if (timestamp - lastFrameTime < 1 / maxFps) {
+      return;
+    }
+    lastFrameTime = timestamp;
+
+    const material = ref.current.material;
+    const timeLocation = material.uniforms.u_time;
+    timeLocation.value = timestamp;
+  });
 
   // Shader material
   const material = useMemo(() => {

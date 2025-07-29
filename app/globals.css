@@ -72,22 +72,150 @@
 
 /* Add any other global styles here */
 
-/* Horizontal scrolling text animation for long titles */
+/* Optimized horizontal scrolling text animation for long titles */
 @keyframes scroll-text {
-  0%, 15% {
-    transform: translateX(0);
+  0% {
+    transform: translate3d(0, 0, 0);
   }
-  85%, 100% {
-    transform: translateX(-50%);
+  100% {
+    transform: translate3d(-66.666667%, 0, 0); /* Move by 2/3 to create seamless loop */
   }
 }
 
 .animate-scroll-text {
-  animation: scroll-text 35s ease-in-out infinite;
-  animation-delay: 2s; /* Wait 2 seconds before starting */
+  animation: scroll-text 20s linear infinite;
+  animation-delay: 2s; /* Reduced delay */
+  display: inline-block;
+  white-space: nowrap;
+  /* Optimize for performance */
+  will-change: transform;
+  transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+  /* Prevent any potential gaps */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Ensure proper positioning */
+  position: relative;
+  /* Add a small pause at the end before restarting */
+  animation-iteration-count: infinite;
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 /* Pause animation on hover */
 .animate-scroll-text:hover {
   animation-play-state: paused;
 }
+
+/* Loading animations for neofetch card */
+@keyframes loading-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes loading-dots {
+  0%, 20% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loading-slide {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Loading state classes */
+.loading-text {
+  background: linear-gradient(90deg, 
+    rgba(198, 208, 245, 0.8) 0%, 
+    rgba(198, 208, 245, 1) 50%, 
+    rgba(198, 208, 245, 0.8) 100%);
+  background-size: 200px 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: loading-shimmer 2s infinite;
+  display: inline-block;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.4s infinite;
+}
+
+.loading-dots::before {
+  content: '';
+  animation: loading-dots 1.4s infinite 0.2s;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.4s infinite 0.4s;
+}
+
+.loading-slide {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-slide::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(165, 173, 206, 0.2) 50%, 
+    transparent 100%);
+  animation: loading-slide 2s infinite;
+}
+
+/* Icon loading animations */
+.loading-icon {
+  animation: loading-pulse 1.5s ease-in-out infinite;
+}
+
+.loading-icon-spin {
+  animation: spin 2s linear infinite;
+}
+
+/* Staggered loading animation for multiple items */
+.loading-stagger-1 { animation-delay: 0.1s; }
+.loading-stagger-2 { animation-delay: 0.2s; }
+.loading-stagger-3 { animation-delay: 0.3s; }
+.loading-stagger-4 { animation-delay: 0.4s; }
+.loading-stagger-5 { animation-delay: 0.5s; }
