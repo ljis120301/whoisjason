@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getGitHubData } from '../../app/actions/github-data.js';
 
 export function useGitHubStats(username) {
-  console.log('useGitHubStats called with username:', username);
   const [stats, setStats] = useState({
     commitsThisYear: 0,
     topRepos: [],
@@ -24,48 +24,27 @@ export function useGitHubStats(username) {
       try {
         setStats(prev => ({ ...prev, loading: true, error: null }));
 
-        const userResponse = await fetch(`/api/github/user/${username}`, {
-          cache: 'default',
-          headers: {
-            'Cache-Control': 'max-age=3600' // Cache for 1 hour
-          }
-        });
-        if (!userResponse.ok) throw new Error('Failed to fetch user data');
-        const userData = await userResponse.json();
-
-        const reposResponse = await fetch(`/api/github/repos/${username}`, {
-          cache: 'default',
-          headers: {
-            'Cache-Control': 'max-age=3600' // Cache for 1 hour
-          }
-        });
-        if (!reposResponse.ok) throw new Error('Failed to fetch repos data');
-        const reposData = await reposResponse.json();
-
-        const commitsResponse = await fetch(`/api/github/commits/${username}`, {
-          cache: 'default',
-          headers: {
-            'Cache-Control': 'max-age=3600' // Cache for 1 hour
-          }
-        });
-        if (!commitsResponse.ok) throw new Error('Failed to fetch commits data');
-        const commitsData = await commitsResponse.json();
-
-        setStats({
-          commitsThisYear: commitsData.commitsThisYear,
-          topRepos: reposData.topRepos,
-          totalRepos: userData.public_repos,
-          followers: userData.followers,
-          following: userData.following,
-          totalStars: reposData.totalStars,
-          languages: reposData.languages,
-          lastCommitDate: commitsData.lastCommitDate,
-          loading: false,
-          error: null
-        });
+        // Use server action instead of client-side API calls
+        const result = await getGitHubData(username);
+        
+        if (result.success && result.data) {
+          setStats({
+            commitsThisYear: result.data.commits.commitsThisYear,
+            topRepos: result.data.repos.topRepos,
+            totalRepos: result.data.user.public_repos,
+            followers: result.data.user.followers,
+            following: result.data.user.following,
+            totalStars: result.data.repos.totalStars,
+            languages: result.data.repos.languages,
+            lastCommitDate: result.data.commits.lastCommitDate,
+            loading: false,
+            error: null
+          });
+        } else {
+          throw new Error(result.error || 'Failed to fetch GitHub data');
+        }
 
       } catch (error) {
-        console.error('GitHub stats fetch error:', error);
         setStats(prev => ({
           ...prev,
           loading: false,
@@ -75,6 +54,11 @@ export function useGitHubStats(username) {
     };
 
     fetchGitHubStats();
+    
+    // Set up polling every 5 minutes (reduced frequency)
+    const interval = setInterval(fetchGitHubStats, 300000);
+
+    return () => clearInterval(interval);
   }, [username]);
 
   return stats;

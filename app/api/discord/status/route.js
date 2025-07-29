@@ -60,10 +60,10 @@ export async function GET(request) {
       if (userResponse.ok) {
         userData = await userResponse.json();
       } else {
-        console.warn('Failed to fetch Discord user data, using fallback');
+        // console.warn('Failed to fetch Discord user data, using fallback');
       }
     } catch (error) {
-      console.warn('Discord API request failed, using fallback:', error.message);
+      // console.warn('Discord API request failed, using fallback:', error.message);
     }
 
     let guildMember = null;
@@ -116,7 +116,7 @@ export async function GET(request) {
         }
       } catch (error) {
         // Guild member fetch is optional, don't fail the whole request
-        console.warn('Failed to fetch guild member data:', error);
+        // console.warn('Failed to fetch guild member data:', error);
       }
     }
 
@@ -145,7 +145,7 @@ export async function GET(request) {
     });
 
   } catch (error) {
-    console.error('Discord API error:', error);
+    // console.error('Discord API error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch Discord data' },
       { status: 500 }

@@ -71,7 +71,6 @@ export async function GET(request) {
     });
 
   } catch (error) {
-    console.error('Debug services error:', error);
     return NextResponse.json(
       { 
         timestamp: new Date().toISOString(),

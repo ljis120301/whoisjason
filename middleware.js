@@ -3,33 +3,57 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // Allow realtime endpoint (server-side data)
-  if (pathname === '/api/realtime') {
-    return NextResponse.next();
-  }
+  // Block all client access to API endpoints containing personal data
+  const protectedEndpoints = [
+    '/api/realtime',
+    '/api/spotify',
+    '/api/discord', 
+    '/api/steam',
+    '/api/github',
+    '/api/system',
+    '/api/debug'
+  ];
 
-  // Allow admin authentication
-  if (pathname === '/api/admin/auth') {
-    return NextResponse.next();
-  }
+  // Allow admin endpoints (these have their own authentication)
+  const adminEndpoints = [
+    '/api/admin/auth',
+    '/api/admin/system-status'
+  ];
 
-  // Allow health check (but with rate limiting)
-  if (pathname === '/api/health') {
-    return NextResponse.next();
-  }
+  // Allow public endpoints (contact, health, etc.)
+  const publicEndpoints = [
+    '/api/contact',
+    '/api/health',
+    '/api/public'
+  ];
 
-  // Block all other API endpoints
-  if (pathname.startsWith('/api/')) {
+  // Check if this is a protected endpoint
+  const isProtectedEndpoint = protectedEndpoints.some(endpoint => 
+    pathname.startsWith(endpoint)
+  );
+
+  // Check if this is an admin endpoint
+  const isAdminEndpoint = adminEndpoints.some(endpoint => 
+    pathname.startsWith(endpoint)
+  );
+
+  // Check if this is a public endpoint
+  const isPublicEndpoint = publicEndpoints.some(endpoint => 
+    pathname.startsWith(endpoint)
+  );
+
+  if (isProtectedEndpoint) {
     return NextResponse.json(
       { 
         error: 'Access Denied',
-        message: 'API endpoints are not accessible from clients. Use /api/realtime for real-time data.',
-        realtimeUrl: '/api/realtime'
+        message: 'API endpoints containing personal data are not accessible from clients. Use server actions for secure data access.',
+        secure: true
       },
       { status: 403 }
     );
   }
 
+  // Allow admin endpoints, public endpoints, and other endpoints
   return NextResponse.next();
 }
 

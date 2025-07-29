@@ -149,7 +149,6 @@ export async function GET(request) {
     });
 
   } catch (error) {
-    console.error('System status error:', error);
     return NextResponse.json(
       { error: 'Failed to get system status' },
       { status: 500 }

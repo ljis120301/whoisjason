@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { getRealtimeData } from '../../app/actions/realtime-data.js';
 
 export function useRealtimeData() {
   const [data, setData] = useState({
@@ -15,23 +16,17 @@ export function useRealtimeData() {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch('/api/realtime', {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache'
-        }
-      });
-
-      if (response.ok) {
-        const newData = await response.json();
-        setData(newData);
+      // Use server action only - no client-side API fallback
+      const result = await getRealtimeData();
+      
+      if (result.success && result.data) {
+        setData(result.data);
         setError(null);
       } else {
-        throw new Error(`HTTP ${response.status}: Failed to fetch real-time data`);
+        setError(result.error || 'Failed to fetch data');
       }
     } catch (error) {
-      console.error('Real-time data fetch error:', error);
-      setError(error.message);
+      setError(error.message || 'Failed to fetch data');
     } finally {
       setLoading(false);
     }
@@ -41,7 +36,7 @@ export function useRealtimeData() {
     // Initial fetch
     fetchData();
 
-    // Set up polling every 30 seconds
+    // Set up polling every 30 seconds for real-time updates (especially Spotify)
     const interval = setInterval(fetchData, 30000);
 
     return () => clearInterval(interval);

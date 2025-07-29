@@ -190,21 +190,19 @@ export async function GET(request) {
       });
       
     } catch (error) {
-      console.error('Token exchange error:', error);
-      
-             return new NextResponse(`
-         <html>
-           <head>
-             <title>Spotify Auth Error</title>
-             <meta charset="UTF-8">
-           </head>
-           <body style="font-family: monospace; max-width: 600px; margin: 50px auto; padding: 20px;">
-             <h1 style="color: #e74c3c;">Token Exchange Failed</h1>
-             <p>Error: <code>${error.message}</code></p>
-             <p><a href="/api/spotify/auth?action=login">Try Again</a></p>
-           </body>
-         </html>
-       `, {
+      return new NextResponse(`
+        <html>
+          <head>
+            <title>Spotify Auth Error</title>
+            <meta charset="UTF-8">
+          </head>
+          <body style="font-family: monospace; max-width: 600px; margin: 50px auto; padding: 20px;">
+            <h1 style="color: #e74c3c;">Token Exchange Failed</h1>
+            <p>Error: <code>${error.message}</code></p>
+            <p><a href="/api/spotify/auth?action=login">Try Again</a></p>
+          </body>
+        </html>
+      `, {
         headers: { 'Content-Type': 'text/html' }
       });
     }
