@@ -54,21 +54,44 @@ export default function Featured() {
               <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Why I Love Tech</AccordionTrigger>
+                  <AccordionTrigger>Why I Love GNU FOSS</AccordionTrigger>
                   <AccordionContent>
-                    Share your personal story and passion for technology here. What excites you about the field? What drives you to keep learning?
+                  <p>“When we speak of free software, we are referring to freedom, not price.”</p>
+                  <p>— Richard Stallman</p>
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
-                  <AccordionTrigger>My Learning Journey</AccordionTrigger>
+                  <AccordionTrigger>Top 5 Linux Distros</AccordionTrigger>
                   <AccordionContent>
-                    Describe your approach to learning, favorite resources, and how you stay current with technology trends.
+                    <ul>
+                      <li>1. Debian</li>
+                      <li>2. Gentoo</li>
+                      <li>3. Fedora</li>
+                      <li>4. Arch Linux</li>
+                      <li>5. Alpine</li>
+                    </ul>
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3">
-                  <AccordionTrigger>Fun Facts</AccordionTrigger>
+                  <AccordionTrigger>Is this?</AccordionTrigger>
                   <AccordionContent>
-                    Share interesting personal details that make you unique and memorable to potential employers or clients.
+                    <pre className="text-xs font-mono whitespace-pre">
+{`⠀⠀⠀⣴⣴⡤
+⠀⣠⠀⢿⠇⡇⠀⠀⠀⠀⠀⠀⠀⢰⢷⡗
+⠀⢶⢽⠿⣗⠀⠀⠀⠀⠀⠀⠀⠀⣼⡧⠂⠀⠀⣼⣷⡆
+⠀⠀⣾⢶⠐⣱⠀⠀⠀⠀⠀⣤⣜⣻⣧⣲⣦⠤⣧⣿⠶
+⠀⢀⣿⣿⣇⠀⠀⠀⠀⠀⠀⠛⠿⣿⣿⣷⣤⣄⡹⣿⣷
+⠀⢸⣿⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿
+⠀⠿⠃⠈⠿⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⠿⠿⠿
+
+⠀⢀⢀⡀⠀⢀⣤⠀⠀⠀⠀⠀⠀⠀⡀⡀
+⠀⣿⡟⡇⠀⠭⡋⠅⠀⠀⠀⠀⠀⢰⣟⢿
+⠀⣹⡌⠀⠀⣨⣾⣷⣄⠀⠀⠀⠀⢈⠔⠌
+⠰⣷⣿⡀⢐⢿⣿⣿⢻⠀⠀⠀⢠⣿⡿⡤⣴⠄⢀⣀⡀
+⠘⣿⣿⠂⠈⢸⣿⣿⣸⠀⠀⠀⢘⣿⣿⣀⡠⣠⣺⣿⣷
+⠀⣿⣿⡆⠀⢸⣿⣿⣾⡇⠀⣿⣿⣿⣿⣿⣗⣻⡻⠿⠁
+⠀⣿⣿⡇⠀⢸⣿⣿⡇⠀⠀⠉⠉⠉⠉⠉⠉⠁`}
+                    </pre>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -88,20 +111,44 @@ export default function Featured() {
               <GoogleCard2 />
               <Accordion type="single" collapsible className="absolute w-[300px]">
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>My other hobbies</AccordionTrigger>
+                  <AccordionTrigger>Top 8 Linux Commands</AccordionTrigger>
                     <AccordionContent>
-                    <ul className="list-disc list-inside">
-                      <li className="text-sm">
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">My casa</a>
+                    <ul className="list-none space-y-1">
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-orange-300 mr-2"></span>
+                        ls
                       </li>
-                      <li className="text-sm">
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">I love to play the bass guitar</a>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>
+                        cd
                       </li>
-                      <li className="text-sm">
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">I love to play the drums</a>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-green-300 mr-2"></span>
+                        pwd
                       </li>
-                      <li className="text-sm">
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">I love to play the piano</a>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                        mkdir
+                      </li>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-blue-300 mr-2"></span>
+                        rm
+                      </li>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                        cp
+                      </li>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-amber-200 mr-2"></span>
+                        mv
+                      </li>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-amber-700 mr-2"></span>
+                        cat
+                      </li>
+                      <li className="text-sm flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-gray-400 mr-2"></span>
+                        echo
                       </li>
                     </ul>
                     </AccordionContent>

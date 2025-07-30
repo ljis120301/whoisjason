@@ -162,7 +162,7 @@ const TopRepos = React.memo(({ stats }) => {
   return (
     <div className="space-y-0.5 px-[135px]">
       {topRepos.map((repo, index) => (
-        <div key={repo.name} className="text-frappe-text whitespace-nowrap">
+        <div key={repo.name} className="text-frappe-text truncate">
           {repo.name} - {repo.description || 'No description'}
         </div>
       ))}
