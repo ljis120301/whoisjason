@@ -7,6 +7,12 @@ const nextConfig = {
   
   // Enable source maps for better debugging
   productionBrowserSourceMaps: true,
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'pagead2.googlesyndication.com' },
+      { protocol: 'https', hostname: 'googleads.g.doubleclick.net' },
+    ],
+  },
 };
 
 export default nextConfig;
