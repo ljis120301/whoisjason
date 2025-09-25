@@ -30,8 +30,8 @@ export default function Blog() {
   return (
     <section className="relative py-16" id="blog">
       {/* Grid background with overlay */}
-      <div className="absolute inset-0 dark:bg-frappe-mantle bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-frappe-base bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+      <div className="absolute inset-0 dark:bg-frappe-mantle bg-latte-base dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
+        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-frappe-base bg-latte-overlay2 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -50,13 +50,13 @@ export default function Blog() {
                 width={100} 
                 height={75} 
               />
-              <h2 className="text-white text-3xl font-bold">Latest Posts</h2>
+              <h2 className="text-frappe-text dark:text-white text-3xl font-bold">Latest Posts</h2>
             </div>
           </motion.div>
 
           {isLoading ? (
             <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-frappe-text dark:border-white"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -66,11 +66,11 @@ export default function Blog() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   whileHover={{ scale: 1.02 }}
-                  className="bg-frappe-surface0 rounded-lg overflow-hidden shadow-lg"
+                  className="bg-latte-base dark:bg-frappe-surface0 rounded-lg overflow-hidden shadow-lg border border-latte-overlay1 dark:border-frappe-surface1"
                 >
                   <Link href={`https://bee.whoisjason.me/blogposts/${post.id}`}>
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-white mb-2">{post.title}</h3>
+                      <h3 className="text-xl font-bold text-latte-text dark:text-white mb-2">{post.title}</h3>
                       <p className="text-frappe-subtext0 mb-4 line-clamp-2">{post.description}</p>
                       <div className="flex justify-between items-center">
                         <span className="text-frappe-blue text-sm">

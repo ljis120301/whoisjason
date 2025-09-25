@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import Script from 'next/script';
 import { ADSENSE_CLIENT } from '@/lib/adsense';
 import ConsentBanner from '@/components/ConsentBanner';
+import { Toaster } from '@/components/ui/toaster';
 import "./globals.css";
 
 // Import startup initialization - this runs when the app starts
@@ -35,16 +36,12 @@ export default function RootLayout({ children }) {
             });
           `}
         </Script>
-        <Script
-          id="adsense-script"
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-        />
+        {/* Intentionally omit AdSense script here; it is conditionally initialized client-side by AdSlot only on non-onion hosts */}
       </head>
       <body className={`${oxProto.variable} antialiased font-mono`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <ConsentBanner />
+          <Toaster />
           {children}
         </ThemeProvider>
       </body>

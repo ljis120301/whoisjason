@@ -68,13 +68,13 @@ export default function ConsentBanner() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-[100]">
-      <div className="mx-auto max-w-4xl m-4 rounded-lg bg-white shadow-lg border p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-        <p className="text-sm text-gray-700 flex-1">
+      <div className="mx-auto max-w-4xl m-4 rounded-lg bg-latte-base dark:bg-frappe-surface0 shadow-lg border border-latte-overlay1 dark:border-frappe-surface1 p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+        <p className="text-sm text-latte-text dark:text-frappe-text flex-1">
           We use cookies to analyze traffic and serve ads. See our <a href="/privacy-policy" className="underline">Privacy Policy</a> and <a href="/terms" className="underline">Terms</a>.
         </p>
         <div className="flex gap-2 ml-auto">
-          <button onClick={rejectAll} className="px-3 py-2 text-sm rounded border border-gray-300 hover:bg-gray-50">Reject all</button>
-          <button onClick={acceptAll} className="px-3 py-2 text-sm rounded bg-black text-white hover:opacity-90">Accept all</button>
+          <button onClick={rejectAll} className="px-3 py-2 text-sm rounded border border-latte-overlay1 dark:border-frappe-surface2 hover:bg-latte-surface0 dark:hover:bg-frappe-surface1">Reject all</button>
+          <button onClick={acceptAll} className="px-3 py-2 text-sm rounded bg-frappe-blue text-white hover:bg-frappe-sapphire">Accept all</button>
         </div>
       </div>
     </div>
