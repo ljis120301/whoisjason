@@ -2,6 +2,7 @@
 import { cnFilter } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import React, { useMemo, useRef, useCallback } from "react";
+import { toast } from "@/components/hooks/use-toast";
 import * as THREE from "three";
 
 export const CanvasRevealEffect = ({
@@ -12,8 +13,25 @@ export const CanvasRevealEffect = ({
   dotSize,
   showGradient = true
 }) => {
+  const isWebGLSupported = (() => {
+    if (typeof window === 'undefined') return true; // SSR skip
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      return !!gl;
+    } catch (_) {
+      return false;
+    }
+  })();
+
+  if (!isWebGLSupported) {
+    // Graceful fallback: no canvas, no crash
+    return (
+      <div className={cnFilter("h-full relative bg-latte-base dark:bg-transparent w-full", containerClassName)} />
+    );
+  }
   return (
-    (<div className={cnFilter("h-full relative bg-white w-full", containerClassName)}>
+    (<div className={cnFilter("h-full relative bg-latte-base dark:bg-transparent w-full", containerClassName)}>
       <div className="h-full w-full">
         <DotMatrix
           colors={colors ?? [[0, 255, 255]]}
@@ -30,7 +48,7 @@ export const CanvasRevealEffect = ({
           center={["x", "y"]} />
       </div>
       {showGradient && (
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 to-[84%]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-frappe-crust/90 dark:from-frappe-crust/90 to-[84%]" />
       )}
     </div>)
   );
@@ -255,9 +273,22 @@ const ShaderMaterial = ({
 };
 
 const Shader = ({ source, uniforms, maxFps = 60 }) => {
+  const handleError = useCallback((e) => {
+    // Show a one-time toast to inform about degraded visuals
+    toast({
+      title: "Graphics disabled",
+      description: "Your browser blocked WebGL. Visual effects were turned off to keep the site usable.",
+      variant: "default"
+    });
+  }, []);
+
   return (
-    (<Canvas className="absolute inset-0  h-full w-full">
+    <Canvas className="absolute inset-0  h-full w-full" onCreated={({ gl }) => {
+      if (!gl || gl.isContextLost && gl.isContextLost()) {
+        handleError();
+      }
+    }} onError={handleError}>
       <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
-    </Canvas>)
+    </Canvas>
   );
 };

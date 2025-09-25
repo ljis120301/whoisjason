@@ -1,11 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ADSENSE_CLIENT } from '@/lib/adsense';
 
 export default function AdSlot({ slotId, format = 'auto', className = '', style }) {
+  const isOnionHost = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return /\.onion$/i.test(window.location.hostname);
+  }, []);
+
   useEffect(() => {
     if (!slotId) return;
+    if (isOnionHost) return; // never initialize ads on onion
+    if (typeof window === 'undefined') return;
+    if (typeof window.adsbygoogle === 'undefined') return; // script blocked or missing
     try {
       // Initialize ads queue if needed and request an ad
       // eslint-disable-next-line no-undef
@@ -13,10 +21,10 @@ export default function AdSlot({ slotId, format = 'auto', className = '', style 
     } catch (_) {
       // no-op
     }
-  }, [slotId]);
+  }, [slotId, isOnionHost]);
 
   // Do not render if no slot provided
-  if (!slotId) return null;
+  if (!slotId || isOnionHost) return null;
 
   const mergedStyle = style || { display: 'block', minHeight: '280px', width: '100%' };
 

@@ -44,7 +44,7 @@ export const StickyScroll = ({
   return (
     <div className="relative h-[30rem]">
       {/* Fixed background */}
-      <div className="absolute inset-0 dark:bg-frappe-mantle bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
+      <div className="absolute inset-0 dark:bg-frappe-mantle bg-latte-base dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
         <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-frappe-base bg-latte-overlay2 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       </div>
       
@@ -62,8 +62,8 @@ export const StickyScroll = ({
                   animate={{ opacity: activeSection === index ? 1 : 0.3 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h2 className="text-2xl font-bold text-slate-100">{item.title}</h2>
-                  <p className="text-kg text-slate-300 max-w-sm mt-10">{item.description}</p>
+                  <h2 className="text-2xl font-bold text-latte-text dark:text-frappe-text">{item.title}</h2>
+                  <p className="text-kg text-latte-subtext0 dark:text-frappe-subtext0 max-w-sm mt-10">{item.description}</p>
                 </motion.div>
               ))}
               <div className="h-40" />
