@@ -2,7 +2,6 @@
 
 import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
 import React, { useState } from "react";
-import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { cnMerge } from "@/lib/utils";
 
 export const CardSpotlight = ({
@@ -40,26 +39,23 @@ export const CardSpotlight = ({
       <motion.div
         className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
         style={{
-          backgroundColor: 'var(--latte-blue)',
+          background: 'radial-gradient(circle var(--spotlight-radius, 200px) at var(--spotlight-x, 0px) var(--spotlight-y, 0px), rgba(30,102,245,0.35), transparent 70%)',
+          WebkitMaskImage: useMotionTemplate`
+            radial-gradient(
+              ${radius}px circle at ${mouseX}px ${mouseY}px,
+              black 0%,
+              transparent 70%
+            )
+          `,
           maskImage: useMotionTemplate`
             radial-gradient(
               ${radius}px circle at ${mouseX}px ${mouseY}px,
-              white,
-              transparent 80%
+              black 0%,
+              transparent 70%
             )
           `,
-        }}>
-        {isHovering && (
-          <CanvasRevealEffect
-            animationSpeed={5}
-            containerClassName="bg-transparent absolute inset-0 pointer-events-none"
-            colors={[
-              [30, 102, 245], // latte-blue
-              [136, 57, 239], // latte-mauve
-            ]}
-            dotSize={3} />
-        )}
-      </motion.div>
+        }}
+      />
       {children}
     </div>)
   );

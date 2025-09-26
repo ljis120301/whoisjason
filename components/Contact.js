@@ -4,15 +4,27 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FaTwitter, FaInstagram, FaPinterest, FaYoutube, FaDiscord, FaEnvelope } from 'react-icons/fa';
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useToast } from "@/components/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { GlassPanel } from "@/components/ui/glass";
+import { LiquidAurora } from "@/components/ui/liquid-aurora";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { toast } = useToast();
+  const [servicesState, setServicesState] = useState({
+    website: false,
+    branding: false,
+    ecommerce: false,
+    seo: false,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -78,7 +90,8 @@ export default function Contact() {
   };
 
   return (
-    <section className="py-16 bg-background" id="section_6">
+    <section className="relative py-16 bg-background" id="section_6">
+      <LiquidAurora />
       <Toaster />
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
@@ -88,7 +101,7 @@ export default function Contact() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="space-y-6">
+            <GlassPanel className="space-y-6 p-6 bg-card text-card-foreground border border-input">
               <div>
                 <h3 className="text-xl font-semibold mb-3">Projects</h3>
                 <ul className="space-y-2">
@@ -113,9 +126,9 @@ export default function Contact() {
                 <h3 className="text-xl font-semibold mb-3">Start a project</h3>
                 <p className="text-muted-foreground">I&apos;m available for freelance projects</p>
               </div>
-            </div>
+            </GlassPanel>
 
-            <div className="space-y-6">
+            <GlassPanel className="space-y-6 p-6 bg-card text-card-foreground border border-input">
               <div>
                 <h3 className="text-xl font-semibold mb-3">About</h3>
                 <p className="text-muted-foreground">I&apos;m free most days of the week feel free to contact me</p>
@@ -140,36 +153,43 @@ export default function Contact() {
                   </a>
                 </p>
               </div>
-            </div>
+            </GlassPanel>
 
-            <div>
+            <GlassPanel className="p-6 bg-card text-card-foreground border border-input">
               <form className="space-y-4" onSubmit={handleSubmit}>
-                <div>
-                  <input type="text" name="name" id="name" className="w-full bg-input text-foreground rounded-md px-3 py-2 border border-input" placeholder="Name" required />
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input type="text" name="name" id="name" placeholder="Name" required />
                 </div>
-                <div>
-                  <input type="email" name="email" id="email" className="w-full bg-input text-foreground rounded-md px-3 py-2 border border-input" placeholder="Email address" required />
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input type="email" name="email" id="email" placeholder="Email address" required />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="website" className="form-checkbox" />
-                    <span className="text-muted-foreground">Websites</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="branding" className="form-checkbox" />
-                    <span className="text-muted-foreground">Branding</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="ecommerce" className="form-checkbox" />
-                    <span className="text-muted-foreground">Ecommerce</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="seo" className="form-checkbox" />
-                    <span className="text-muted-foreground">SEO</span>
-                  </label>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="website" checked={servicesState.website} onCheckedChange={(v) => setServicesState(s => ({ ...s, website: !!v }))} />
+                    <Label htmlFor="website" className="text-muted-foreground">Websites</Label>
+                    {servicesState.website && <input type="hidden" name="website" value="on" />}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="branding" checked={servicesState.branding} onCheckedChange={(v) => setServicesState(s => ({ ...s, branding: !!v }))} />
+                    <Label htmlFor="branding" className="text-muted-foreground">Branding</Label>
+                    {servicesState.branding && <input type="hidden" name="branding" value="on" />}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="ecommerce" checked={servicesState.ecommerce} onCheckedChange={(v) => setServicesState(s => ({ ...s, ecommerce: !!v }))} />
+                    <Label htmlFor="ecommerce" className="text-muted-foreground">Ecommerce</Label>
+                    {servicesState.ecommerce && <input type="hidden" name="ecommerce" value="on" />}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="seo" checked={servicesState.seo} onCheckedChange={(v) => setServicesState(s => ({ ...s, seo: !!v }))} />
+                    <Label htmlFor="seo" className="text-muted-foreground">SEO</Label>
+                    {servicesState.seo && <input type="hidden" name="seo" value="on" />}
+                  </div>
                 </div>
-                <div>
-                  <textarea id="message" name="message" rows="4" className="w-full bg-input text-foreground rounded-md px-3 py-2 border border-input" placeholder="Tell me about the project"></textarea>
+                <div className="space-y-2">
+                  <Label htmlFor="message">Project details</Label>
+                  <Textarea id="message" name="message" rows="4" placeholder="Tell me about the project" />
                 </div>
                 <div>
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
@@ -184,7 +204,7 @@ export default function Contact() {
                   </Button>
                 </div>
               </form>
-            </div>
+            </GlassPanel>
           </div>
         </div>
       </div>

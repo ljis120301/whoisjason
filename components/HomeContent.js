@@ -8,7 +8,6 @@ import Projects from "@/components/Projects";
 import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import ThemeToggle from "@/components/ThemeToggle";
 import DynamicSEO from "@/components/dynamicSEO";
 import AdSlot from "@/components/ads/AdSlot";
 import { AD_SLOTS } from "@/lib/adsense";
@@ -37,19 +36,16 @@ export default function HomeContent() {
     } catch (_) {}
   }, [isOnionHost]);
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden relative">
       <DynamicSEO />
-      <div className="fixed top-6 inset-x-0 max-w-3xl mx-auto z-50 flex justify-between items-center">
-        <Navbar />
-        <ThemeToggle />
-      </div>
+      <Navbar />
       
-      <main className="w-full ">
+      <main className="w-full relative z-10 min-h-[100vh]">
         <section id="hero" className="h-screen w-full flex items-center justify-center">
           <Hero />
         </section>
         {!isOnionHost && <AdSlot slotId={adSlots.afterHero} />}
-        <section id="about" className="relative z-10 bg-latte-base dark:bg-transparent">
+        <section id="about" className="relative z-10">
           <About />
         </section>
         {!isOnionHost && <AdSlot slotId={adSlots.afterAbout} />}

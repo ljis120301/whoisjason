@@ -9,8 +9,13 @@
     "baseColor": "slate",
     "cssVariables": true
   },
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils"
+  },
+  "registries": {
+    "@cult-ui": "https://cult-ui.com/r/{name}.json",
+    "@magicui": "https://magicui.design/r/{name}.json"
   }
 }

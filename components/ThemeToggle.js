@@ -14,8 +14,6 @@ const ThemeToggle = React.memo(() => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   }, [theme, setTheme]);
 
-  if (!mounted) return null;
-
   return (
     <button
       aria-label="Toggle Dark Mode"
@@ -23,10 +21,14 @@ const ThemeToggle = React.memo(() => {
       className="flex items-center justify-center transition-colors duration-300 rounded-lg w-12 h-12 bg-latte-base dark:bg-frappe-base hover:bg-latte-mantle dark:hover:bg-frappe-mantle"
       onClick={toggleTheme}
     >
-      {theme === 'dark' ? (
-        <FiSun className="w-5 h-5 text-frappe-text" />
+      {mounted ? (
+        theme === 'dark' ? (
+          <FiSun className="w-5 h-5 text-frappe-text" />
+        ) : (
+          <FiMoon className="w-5 h-5 text-latte-text" />
+        )
       ) : (
-        <FiMoon className="w-5 h-5 text-latte-text" />
+        <FiSun className="w-5 h-5 text-foreground" />
       )}
     </button>
   );

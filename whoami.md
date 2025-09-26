@@ -21,6 +21,8 @@ Who is jason?
 
 - I have written special python code which helps automate my security system within my home
 
+- I am very familiar with the Platypus Billing system and Microsoft SQL and how it interacts to client end applications 
+
 ## Linux 
 - I am deeply passionate about open source and Linux. 
 - I use Gentoo Linux on a ThinkPad T420, which I installed everything from source with a custom kernel
@@ -30,7 +32,7 @@ Who is jason?
 - I run a monero node
 - I deploy all of my next JS websites within self-contained docker containers which allows easy deployment and automated re-deploy through custom BASH scripts
 - I have various other UNIX devices I interact with for fun like my Raspberry Pi which runs FreeBSD, or my Macbook which I use daily for coding. I love UNIX no matter the flavor
-- 
+- I specialize in docker and containerization
 ## IT general 
 - I have studied for my Network Plus exam and CCNA, 
 - I have underlying fundamental knoledge of Networking, 
@@ -39,7 +41,7 @@ Who is jason?
 - I have gone out to remote sites to re-tip ethernet cables and or replace equipment. 
 - I currently work for a small ISP which allows me many opportunities to have hands on qith equipment outside of my typical price range 
 - I run multiple Recursive DNS servers from within our ISP which serves customer facing connections
-
+- I have many 
 
 ## Personally 
 Who am I personally? I am a cronically online self proclaimed "femcel" but not in the traditional definition. I am just a nerdy incel who is also gay and maybe a little trans on the trans-fem side. I reject all "manhood" that has been placed upon me as I don't see that it fits who I am as a person. I have a loving boyfriend who I have been seeing for a while now. I live a simple life with a cat and my apartment. I cook often and love to expiriment with cooking new meals. In my free time I usually watch shows like South Park, Rick and Morty, and other more raunchy humor shows. I hate censorship love offensive humor. I passionatly hate corporate lingo or corporate way of thinking. Morally I allign myself strongly with the FOSS foundation. While I am gay I do not allow my identity to define me, I can take a joke, While also holding liberal viewpoints. My moral compass is that "If it does not hurt others, it is okay" in the sense that anybody should be allowed to do whatever they want to, as long as it is not hurting another person. 

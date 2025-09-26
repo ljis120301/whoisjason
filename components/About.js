@@ -1,79 +1,47 @@
 "use client";
 import React from "react";
-import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
-import Image from "next/image";
-
-const content = [
-  {
-    title: "Who I Am",
-    description:
-      "I'm a technology enthusiast with a deep passion for Linux and open-source. From compiling Gentoo from source to running FreeBSD on a Raspberry Pi, I have a passion for the UNIX philosophy, I also hate having free time.",
-    content: (
-      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
-        <Image
-          src="/pi.png"
-          width={300}
-          height={300}
-          className="rounded-full"
-          alt="Profile picture"
-        />
-      </div>
-    ),
-  },
-  {
-    title: "What I Do",
-    description:
-      "I currently work for Sun Valley Broadband, a small ISP which allows me various opportunities to work with a wide range of technologies. I have experience with DNS, DHCP, BGP, STP, TCP/IP and various other networking technologies. I have been able to flex my skills by writing custom python script and docker containers to help us manage our customer database easily.",
-    content: (
-      <div className="h-full w-full flex items-center justify-center text-white">
-        <Image
-          src="/SVB.png"
-          width={400}
-          height={400}
-          className="rounded-lg object-contain "
-          alt="Tech stack visualization"
-        />
-      </div>
-    ),
-  },
-  {
-    title: "Personal Life",
-    description:
-      "I am a 23 year old loser who loves spending a whole weekend seting up a new OS. I have a cat named Tom. I love to cook new and interesting meals. I morally allign myself with the FOSS foundation. I care deeply for open source and what that mentality represents in the tech community.",
-    content: (
-      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
-        <Image
-          src="/pi-server.jpeg"
-          width={400}
-          height={200}
-          className="object-contain rounded-lg"
-          alt="Coding process visualization"
-        />
-      </div>
-    ),
-  },
-  {
-    title: "My Goals",
-    description:
-      "My current goal in life is to become a Network Engineer, I would love to work for Sun Valley Broadband as long as I can. I am passionate about networking and love that I am allowed the opportunity to help out within my community to provide IT services. It brings me joy to know that I allow the world to remain connected to each over. I feel power and a sense of pride over providing Internet to the people.",
-    content: (
-      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
-        <Image
-          src="/fiber.jpg"
-          width={400}
-          height={300}
-          className="object-contain rounded-lg"
-          alt="Future goals visualization"
-        />
-      </div>
-    ),
-  },
-];
+import { TerminalWindow, TerminalBlock, TerminalList } from "@/components/ui/terminal-window";
+import { LiquidGrid } from "@/components/ui/glass";
+import { NeofetchCard } from "@/components/blocks/neofetch-card";
 
 export default function About() {
   return (
-    <div className="" id="About">
-      <StickyScroll content={content} />
+    <div id="About" className="relative px-4 sm:px-6 lg:px-8 py-12">
+      <LiquidGrid />
+      <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <TerminalWindow title="whoami" className="min-h-[420px]" variant="glass">
+          <TerminalBlock>
+            <div className="space-y-3">
+              <p>
+                Linux-first developer focused on JavaScript/TypeScript, networking, and
+                pragmatic automation. I care about UNIX philosophy, clean tooling, and
+                boring, reliable systems.
+              </p>
+              <TerminalList
+                items={[
+                  "ISP + networking background (DNS, DHCP, BGP, STP, TCP/IP)",
+                  "Builds with Next.js, Node.js, Docker, Linux",
+                  "Automates ops with scripts and containers",
+                  "FOSS-aligned; Catppuccin Frappe enjoyer",
+                ]}
+              />
+              <div className="mt-4">
+                <div className="text-frappe-subtext0">$ ip -br addr | grep -E "eth|wlan"</div>
+                <pre className="mt-1 text-xs text-frappe-text whitespace-pre-wrap">
+{`eth0    UP      10.0.0.2/24    fe80::1
+wlan0   DOWN    --                --`}
+                </pre>
+              </div>
+            </div>
+          </TerminalBlock>
+          </TerminalWindow>
+        </div>
+
+        <div className="lg:col-span-2">
+          <NeofetchCard />
+        </div>
+      </div>
     </div>
   );
 }

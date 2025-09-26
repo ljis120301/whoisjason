@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState, useCallback, useEffect, useMemo, Suspense } from 'react';
-import { Menu, MenuItem } from './ui/navbar-menu';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import ThemeToggle from '@/components/ThemeToggle';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, NavigationMenuIndicator } from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { HyperText } from '@/components/ui/hyper-text';
 
-const menuItems = [
+const links = [
   { id: 'home', label: 'Home', href: '#hero' },
   { id: 'about', label: 'About', href: '#about' },
   { id: 'featured', label: 'Featured', href: '#featured' },
@@ -13,68 +17,80 @@ const menuItems = [
   { id: 'contact', label: 'Contact', href: '#contact' }
 ];
 
-function NavbarContent() {
+export default function Navbar() {
   const [active, setActive] = useState(null);
+  const [hovered, setHovered] = useState(null);
 
-  // Debounced scroll handler
   const handleScroll = useDebouncedCallback(() => {
-    const sections = menuItems.map(item => ({
-      id: item.id,
-      element: document.querySelector(item.href)
-    }));
-
-    const viewportHeight = window.innerHeight;
-    const currentSection = sections.find(section => {
-      if (!section.element) return false;
-      const rect = section.element.getBoundingClientRect();
-      return rect.top <= viewportHeight / 2 && rect.bottom >= viewportHeight / 2;
+    const sections = links.map(item => ({ id: item.id, el: document.querySelector(item.href) }));
+    const vh = window.innerHeight;
+    const current = sections.find(s => {
+      if (!s.el) return false;
+      const r = s.el.getBoundingClientRect();
+      return r.top <= vh * 0.35 && r.bottom >= vh * 0.35;
     });
-
-    setActive(currentSection ? menuItems.find(item => item.id === currentSection.id)?.label : null);
+    setActive(current ? current.id : null);
   }, 100);
 
   useEffect(() => {
-    handleScroll(); // Initial check
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  const handleClick = useCallback((e, href) => {
+  const onClick = useCallback((e, href) => {
     e.preventDefault();
     const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
 
-  // Memoize menu items to prevent unnecessary re-renders
-  const menuItemsComponent = useMemo(() => 
-    menuItems.map(({ id, label, href }) => (
-      <MenuItem
-        key={id}
-        setActive={setActive}
-        active={active}
-        item={label}
-        onClick={(e) => handleClick(e, href)}
-        initial={false}
-      />
-    )), [active, handleClick]);
+  const items = useMemo(() => links, []);
 
   return (
-    <Menu setActive={setActive}>
-      {menuItemsComponent}
-    </Menu>
-  );
-}
-
-// Wrap the navbar in Suspense to handle any loading states
-export default function Navbar() {
-  return (
-    <Suspense fallback={<div className="h-16" />}>
-      <NavbarContent />
-    </Suspense>
+    <div className="sticky top-6 inset-x-0 z-50 px-4">
+      <div className="max-w-6xl mx-auto rounded-md border border-input bg-background/70 backdrop-blur px-3 py-2">
+        <div className="flex items-center justify-between">
+          <nav className="flex items-center gap-1">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {items.map(({ id, label, href }) => {
+                  const showPill = hovered ? hovered === id : active === id;
+                  return (
+                    <NavigationMenuItem key={id}>
+                      <NavigationMenuLink
+                        href={href}
+                        onClick={(e) => onClick(e, href)}
+                        onMouseEnter={() => setHovered(id)}
+                        onMouseLeave={() => setHovered(null)}
+                        className={cn(
+                          "group relative px-3 py-1.5 text-xs rounded-md transition-colors",
+                          "hover:bg-accent/40 hover:text-foreground hover:underline underline-offset-4",
+                          (hovered ? hovered === id : active === id) && "text-foreground"
+                        )}
+                      >
+                        {showPill && (
+                          <motion.span
+                            layoutId="nav-pill"
+                            className="absolute inset-0 -z-10 rounded-md bg-accent/40"
+                            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                          />
+                        )}
+                        <span className="relative inline-block">
+                          <HyperText className="text-xs">{label}</HyperText>
+                        </span>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  );
+                })}
+              </NavigationMenuList>
+              <NavigationMenuIndicator />
+            </NavigationMenu>
+          </nav>
+          <div className="w-12 h-12 flex items-center justify-center">
+            <ThemeToggle />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

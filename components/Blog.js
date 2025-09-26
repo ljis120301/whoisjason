@@ -4,8 +4,11 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { GlassPanel } from "@/components/ui/glass";
+import { LiquidAurora } from "@/components/ui/liquid-aurora";
 import { pb } from '@/lib/pocketbase';
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
@@ -29,10 +32,7 @@ export default function Blog() {
 
   return (
     <section className="relative py-16" id="blog">
-      {/* Grid background with overlay */}
-      <div className="absolute inset-0 dark:bg-frappe-mantle bg-latte-base dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-frappe-base bg-latte-overlay2 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-      </div>
+      <LiquidAurora />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto">
@@ -63,24 +63,29 @@ export default function Blog() {
               {posts.map((post) => (
                 <motion.div
                   key={post.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-latte-base dark:bg-frappe-surface0 rounded-lg overflow-hidden shadow-lg border border-latte-overlay1 dark:border-frappe-surface1"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -2 }}
                 >
                   <Link href={`https://bee.whoisjason.me/blogposts/${post.id}`}>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-latte-text dark:text-white mb-2">{post.title}</h3>
-                      <p className="text-frappe-subtext0 mb-4 line-clamp-2">{post.description}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-frappe-blue text-sm">
+                    <Card className="border border-input bg-card text-card-foreground">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base font-semibold text-foreground">
+                          {post.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-0 text-sm text-muted-foreground">
+                        <p className="line-clamp-2">{post.description}</p>
+                      </CardContent>
+                      <CardFooter className="pt-3 flex items-center justify-between text-xs">
+                        <span className="text-frappe-blue">
                           {new Date(post.created).toLocaleDateString()}
                         </span>
-                        <Button variant="link" className="text-frappe-peach hover:text-frappe-peach/80">
+                        <Button variant="link" className="px-0 h-auto text-frappe-peach hover:text-frappe-peach/80">
                           Read more →
                         </Button>
-                      </div>
-                    </div>
+                      </CardFooter>
+                    </Card>
                   </Link>
                 </motion.div>
               ))}
