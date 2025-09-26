@@ -1,8 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { Separator } from "@/components/ui/separator";
+import { GlassPanel } from "@/components/ui/glass";
+import { LiquidAurora } from "@/components/ui/liquid-aurora";
 import { NeofetchCard } from "@/components/blocks/neofetch-card";
 import { CardDemo } from "@/components/blocks/cards-demo-1";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { FaGlobe, FaServer, FaNetworkWired, FaLinux, FaMicrosoft, FaPython, FaCode, FaDesktop, FaMusic, FaRoute, FaFilm, FaBlog, FaRobot, FaCog, FaStickyNote } from 'react-icons/fa';
 
 const projects = {
@@ -41,9 +45,7 @@ const SectionHeader = ({ title, icon }) => (
 export default function Projects() {
   return (
     <section className="relative py-24" id="projects">
-      <div className="absolute inset-0 dark:bg-frappe-mantle bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.2]">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-frappe-base bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-      </div>
+      <LiquidAurora />
 
       <div className="px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl mx-auto">
         <div className="flex flex-col items-center text-center mb-16">
@@ -67,32 +69,35 @@ export default function Projects() {
         <div className="space-y-20">
           {Object.entries(projects).map(([key, sectionProjects], index) => (
             <React.Fragment key={key}>
-              {index === 1 && (
-                <div className="my-20">
-                  <NeofetchCard />
-                </div>
-              )}
-              <div>
+              
+              <GlassPanel className="p-6">
                 <SectionHeader 
                   title={key === 'web' ? 'Web Development' : key === 'sysadmin' ? 'System Administration & Linux' : 'Networking & IT'} 
                   icon={key === 'web' ? <FaGlobe /> : key === 'sysadmin' ? <FaServer /> : <FaNetworkWired />}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {sectionProjects.map((p, i) => (
-                    <CardDemo key={i} href={p.href}>
-                      <CardDemo.Header>
-                        <div className="flex justify-between items-start">
-                          <CardDemo.Title>{p.title}</CardDemo.Title>
-                          {React.cloneElement(p.icon, { className: "text-3xl text-frappe-blue" })}
-                        </div>
-                      </CardDemo.Header>
-                      <CardDemo.Content>
-                        <p className="mt-2">{p.description}</p>
-                      </CardDemo.Content>
-                    </CardDemo>
+                    <a key={i} href={p.href ?? '#'} className="group block">
+                      <Card className="border border-input bg-card text-card-foreground transition-transform group-hover:-translate-y-0.5">
+                        <CardHeader className="pb-2 flex flex-row items-start justify-between">
+                          <CardTitle className="text-base font-semibold">
+                            {p.title}
+                          </CardTitle>
+                          {React.cloneElement(p.icon, { className: "text-2xl text-frappe-blue" })}
+                        </CardHeader>
+                        <CardContent className="pt-0 text-sm text-muted-foreground">
+                          <p>{p.description}</p>
+                          {p.href && (
+                            <div className="mt-3">
+                              <Badge variant="secondary" className="text-[10px] tracking-wide">VISIT</Badge>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </a>
                   ))}
                 </div>
-              </div>
+              </GlassPanel>
             </React.Fragment>
           ))}
         </div>

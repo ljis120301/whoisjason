@@ -1,33 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.js";
+@import "tailwindcss";
+
+
+@custom-variant dark (&:is(.dark *));
+@reference "tailwindcss";
 
 @layer base {
   :root {
     --background: 239 241 245; /* Latte base in RGB */
     --foreground: 76 79 105;   /* Latte text in RGB */
-    
+
     --card: 204 208 218;
     --card-foreground: 76 79 105;
-    
+
     --popover: 204 208 218;
     --popover-foreground: 76 79 105;
-    
+
     --primary: 30 102 245;
     --primary-foreground: 239 241 245;
-    
+
     --secondary: 204 208 218;
     --secondary-foreground: 76 79 105;
-    
+
     --muted: 188 192 204;
     --muted-foreground: 92 95 119;
-    
+
     --accent: 188 192 204;
     --accent-foreground: 76 79 105;
-    
+
     --destructive: 210 15 57;
     --destructive-foreground: 239 241 245;
-    
+
     --border: 188 192 204;
     --input: 188 192 204;
     --ring: 30 102 245;
@@ -36,28 +39,28 @@
   .dark {
     --background: 48 52 70;    /* Frappe base in RGB */
     --foreground: 198 208 245; /* Frappe text in RGB */
-    
+
     --card: 65 69 89;
     --card-foreground: 198 208 245;
-    
+
     --popover: 65 69 89;
     --popover-foreground: 198 208 245;
-    
+
     --primary: 140 170 238;
     --primary-foreground: 48 52 70;
-    
+
     --secondary: 65 69 89;
     --secondary-foreground: 198 208 245;
-    
+
     --muted: 81 87 109;
     --muted-foreground: 165 173 206;
-    
+
     --accent: 81 87 109;
     --accent-foreground: 198 208 245;
-    
+
     --destructive: 231 130 132;
     --destructive-foreground: 48 52 70;
-    
+
     --border: 81 87 109;
     --input: 81 87 109;
     --ring: 140 170 238;
@@ -66,8 +69,33 @@
 
 @layer base {
   body {
-    @apply bg-white dark:bg-frappe-base text-latte-text dark:text-frappe-text;
+    @apply bg-white dark:bg-frappe-base text-latte-text dark:text-frappe-text text-[13px] md:text-[14px] leading-relaxed;
   }
+}
+/* Glassmorphism utility */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  backdrop-filter: blur(12px) saturate(120%);
+}
+
+/* Subtle focus ring tweak to match Linux/terminal vibe */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(140, 170, 238, 0.45);
+}
+
+/* Liquid aurora background animation */
+@keyframes blob {
+  0% { transform: translate3d(0,0,0) scale(1); }
+  33% { transform: translate3d(10%, -5%, 0) scale(1.1); }
+  66% { transform: translate3d(-5%, 10%, 0) scale(0.95); }
+  100% { transform: translate3d(0,0,0) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 22s ease-in-out infinite;
 }
 
 /* Add any other global styles here */
@@ -219,3 +247,42 @@
 .loading-stagger-3 { animation-delay: 0.3s; }
 .loading-stagger-4 { animation-delay: 0.4s; }
 .loading-stagger-5 { animation-delay: 0.5s; }
+
+@theme inline {
+  /* Map semantic color tokens to CSS variables for Tailwind v4 utilities */
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-card: rgb(var(--card));
+  --color-card-foreground: rgb(var(--card-foreground));
+  --color-popover: rgb(var(--popover));
+  --color-popover-foreground: rgb(var(--popover-foreground));
+  --color-primary: rgb(var(--primary));
+  --color-primary-foreground: rgb(var(--primary-foreground));
+  --color-secondary: rgb(var(--secondary));
+  --color-secondary-foreground: rgb(var(--secondary-foreground));
+  --color-muted: rgb(var(--muted));
+  --color-muted-foreground: rgb(var(--muted-foreground));
+  --color-accent: rgb(var(--accent));
+  --color-accent-foreground: rgb(var(--accent-foreground));
+  --color-destructive: rgb(var(--destructive));
+  --color-destructive-foreground: rgb(var(--destructive-foreground));
+  --color-border: rgb(var(--border));
+  --color-input: rgb(var(--input));
+  --color-ring: rgb(var(--ring));
+
+  /* Ripple animation token used by local ripple components */
+  --animate-rippling: rippling var(--duration) ease-out;
+  @keyframes rippling {
+    0% { opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
