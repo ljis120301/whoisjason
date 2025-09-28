@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import { Separator } from "@/components/ui/separator";
 import { GlassPanel } from "@/components/ui/glass";
-import { LiquidAurora } from "@/components/ui/liquid-aurora";
 import { NeofetchCard } from "@/components/blocks/neofetch-card";
 import { CardDemo } from "@/components/blocks/cards-demo-1";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -45,7 +44,6 @@ const SectionHeader = ({ title, icon }) => (
 export default function Projects() {
   return (
     <section className="relative py-24" id="projects">
-      <LiquidAurora />
 
       <div className="px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl mx-auto">
         <div className="flex flex-col items-center text-center mb-16">
