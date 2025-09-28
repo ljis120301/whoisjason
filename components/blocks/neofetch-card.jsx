@@ -6,7 +6,7 @@ import { useRealtimeData } from '../hooks/use-realtime-data.js';
 // Remove the old GitHub stats hook since data comes from server now
 
 const GentooAscii = React.memo(() => (
-  <pre className="text-sm font-mono leading-tight whitespace-pre text-frappe-mauve dark:text-frappe-mauve">
+  <pre className="text-sm font-mono leading-tight whitespace-pre text-latte-mauve dark:text-frappe-mauve">
 {`            -/oyddmdhs+:.                
       -odNMMMMMMMMNNmhy+-\`             
     -yNMMMMMMMMMMMNNNmmdhy+-           
@@ -54,13 +54,13 @@ const PowerLevel10K = React.memo(() => {
     : '00:00';
 
   return (
-    <div className="mt-6 space-y-2 font-mono text-sm text-foreground dark:text-frappe-text">
+    <div className="mt-6 space-y-2 font-mono text-sm text-latte-text dark:text-frappe-text">
       {/* First line of prompt */}
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {/* OS segment with Gentoo logo - natural size */}
           <div className="flex items-center">
-            <span className="bg-latte-surface1 text-latte-text px-2 py-0.5 rounded-l-full rounded-r-sm flex items-center h-5 dark:bg-frappe-overlay2 dark:text-frappe-base">
+            <span className="bg-latte-overlay1 text-latte-base px-2 py-0.5 rounded-l-full rounded-r-sm flex items-center h-5 dark:bg-frappe-overlay2 dark:text-frappe-base">
               <svg className="w-4 h-4" viewBox="0 0 400 400" fill="currentColor">
                 <path d="M13.83,315.949c0.043,-16.447 14.024,-39.408 33.889,-60.268c13.276,-13.941 26.759,-26.178 56.15,-51.238c-20.33,-11.156 -51.95,-24.615 -67.815,-42.242c-5.87,-6.522 -16.511,-21.298 -14.447,-41.039c4.206,-40.236 53.869,-101.298 124.46,-114.207c23.488,-4.296 50.455,-1.195 72.65,8.783c69.629,31.304 154.782,109.073 165.259,147.046c3.688,13.366 2.979,34.671 -3.379,46.545c-7.879,14.716 -35.156,44.606 -72.475,75.449c-58.556,48.394 -140.612,100.359 -201.881,109.103c-19.798,2.826 -40.024,-0.121 -54.218,-8.13c-22.209,-12.532 -29.581,-29.262 -32.172,-34.277c-6.891,-13.334 -6.036,-30.228 -6.021,-35.525ZM178.63,131.173c0.756,-9.325 37.321,-0.042 35.011,7.343c-2.437,7.791 -35.879,3.354 -35.011,-7.343Z"/>
               </svg>
@@ -70,16 +70,16 @@ const PowerLevel10K = React.memo(() => {
           
           {/* Directory segment */}
           <div className="flex items-center -ml-1">
-            <span className="bg-blue-600 text-white px-2 py-0.5 rounded-l-sm rounded-r-sm flex items-center h-5 dark:bg-frappe-blue dark:text-white">
+            <span className="bg-latte-blue text-latte-base px-2 py-0.5 rounded-l-sm rounded-r-sm flex items-center h-5 dark:bg-frappe-blue dark:text-white">
               <span className="mr-1"></span>
               <span>~/whoisjason</span>
             </span>
-            <span className="text-frappe-blue"></span>
+            <span className="text-latte-blue dark:text-frappe-blue"></span>
           </div>
           
           {/* Git branch segment */}
           <div className="flex items-center -ml-1">
-            <span className="bg-green-500 text-white px-2 py-0.5 rounded-l-sm rounded-r-full flex items-center h-5 dark:bg-frappe-green dark:text-frappe-base">
+            <span className="bg-latte-green text-latte-base px-2 py-0.5 rounded-l-sm rounded-r-full flex items-center h-5 dark:bg-frappe-green dark:text-frappe-base">
               <span className="mr-1"></span>
               <span>on   main</span>
             </span>
@@ -89,7 +89,7 @@ const PowerLevel10K = React.memo(() => {
         <div className="flex items-center">
           {/* Status segment */}
           <div className="flex items-center">
-            <span className="bg-green-500 text-white px-2 py-0.5 rounded-l-full rounded-r-sm flex items-center h-5 dark:bg-frappe-green dark:text-frappe-base">
+            <span className="bg-latte-green text-latte-base px-2 py-0.5 rounded-l-full rounded-r-sm flex items-center h-5 dark:bg-frappe-green dark:text-frappe-base">
               <span className="mr-1">✓</span>
               <span></span>
             </span>
@@ -98,7 +98,7 @@ const PowerLevel10K = React.memo(() => {
           
           {/* Execution time segment */}
           <div className="flex items-center -ml-1">
-            <span className="bg-yellow-400 text-black px-2 py-0.5 rounded-l-sm rounded-r-sm flex items-center h-5 dark:bg-frappe-yellow dark:text-frappe-base">
+            <span className="bg-latte-yellow text-latte-base px-2 py-0.5 rounded-l-sm rounded-r-sm flex items-center h-5 dark:bg-frappe-yellow dark:text-frappe-base">
               <span className="mr-1">⏱</span>
               <span>2s</span>
             </span>
@@ -107,7 +107,7 @@ const PowerLevel10K = React.memo(() => {
           
           {/* Time segment */}
           <div className="flex items-center -ml-1">
-            <span className="bg-latte-overlay2 text-latte-text px-2 py-0.5 rounded-l-sm rounded-r-full flex items-center h-5 dark:bg-frappe-overlay2 dark:text-white">
+            <span className="bg-latte-overlay1 text-latte-base px-2 py-0.5 rounded-l-sm rounded-r-full flex items-center h-5 dark:bg-frappe-overlay2 dark:text-white">
               <span className="mr-1">⏰</span>
               <span>{timeString}</span>
             </span>
@@ -117,7 +117,7 @@ const PowerLevel10K = React.memo(() => {
       
       {/* Second line of prompt */}
       <div className="flex items-center">
-        <span className="text-frappe-green text-lg">❯</span>
+        <span className="text-latte-green dark:text-frappe-green text-lg">❯</span>
         <span className="ml-1 animate-blink">_</span>
       </div>
     </div>
@@ -160,9 +160,9 @@ const TopRepos = React.memo(({ stats }) => {
   const topRepos = githubData.repos?.topRepos?.slice(0, 5) || [];
 
   return (
-    <div className="space-y-0.5 px-[135px] text-foreground dark:text-frappe-text">
+    <div className="space-y-0.5 px-[135px] text-latte-text dark:text-frappe-text">
       {topRepos.map((repo, index) => (
-        <div key={repo.name} className="truncate text-foreground dark:text-frappe-text">
+        <div key={repo.name} className="truncate text-latte-text dark:text-frappe-text">
           {repo.name} - {repo.description || 'No description'}
         </div>
       ))}
@@ -194,9 +194,9 @@ const DeveloperStats = React.memo(({ stats }) => {
   const allLanguages = languages.join(', ') || 'No languages found';
 
   return (
-    <div className="space-y-0.5 px-[135px] text-foreground dark:text-frappe-text">
-      <div className="text-foreground dark:text-frappe-text">Commits this year: {githubData.user?.commitsThisYear || 'Loading...'}</div>
-      <div className="text-foreground dark:text-frappe-text">Languages: {allLanguages}</div>
+    <div className="space-y-0.5 px-[135px] text-latte-text dark:text-frappe-text">
+      <div className="text-latte-text dark:text-frappe-text">Commits this year: {githubData.user?.commitsThisYear || 'Loading...'}</div>
+      <div className="text-latte-text dark:text-frappe-text">Languages: {allLanguages}</div>
     </div>
   );
 });
@@ -304,8 +304,8 @@ const EntertainmentStats = React.memo(({ stats }) => {
       case 2: return 'text-frappe-red';   // Busy
       case 3: return 'text-frappe-yellow'; // Away
       case 4: return 'text-frappe-yellow'; // Snooze
-      case 5: return 'text-frappe-blue';   // Looking to trade
-      case 6: return 'text-frappe-blue';   // Looking to play
+      case 5: return 'text-latte-blue dark:text-frappe-blue';   // Looking to trade
+      case 6: return 'text-latte-blue dark:text-frappe-blue';   // Looking to play
       case 0: return 'text-frappe-red'; // Offline (even with recent activity)
       default: return 'text-frappe-red'; // Unknown
     }
@@ -317,7 +317,7 @@ const EntertainmentStats = React.memo(({ stats }) => {
   // Show loading state only if we have no data at all
   if (!hasAnyData) {
     return (
-      <div className="space-y-0.5 px-[135px] text-foreground dark:text-frappe-text">
+      <div className="space-y-0.5 px-[135px] text-latte-text dark:text-frappe-text">
         <div className="flex items-center text-frappe-text">
           <span className="w-4 text-center flex-shrink-0 loading-icon">♪</span>
           <span className="ml-1 text-frappe-subtext0 loading-text loading-stagger-1">Music: Loading...</span>
@@ -451,7 +451,7 @@ const EntertainmentStats = React.memo(({ stats }) => {
               <span className="w-4 text-center flex-shrink-0 mt-1">📅</span>
               <span className="ml-1 flex flex-col">
                 <span>
-                  Recently played: <span className="text-frappe-blue">{stats.steam.playerInfo.recentGame.name}</span>
+                  Recently played: <span className="text-latte-blue dark:text-frappe-blue">{stats.steam.playerInfo.recentGame.name}</span>
                 </span>
                 <span className="text-frappe-subtext0 mt-1">
                   {stats.steam.playerInfo.recentGame.playtime_2weeks} hours in the last 2 weeks
@@ -544,20 +544,20 @@ export function NeofetchCard({ githubUsername }) {
   const dateTime = useMemo(() => getDateTime(), [getDateTime]);
 
   return (
-    <div className="p-6 rounded-lg w-full font-mono text-sm min-h-[500px] flex flex-col bg-card text-foreground dark:bg-frappe-mantle dark:text-frappe-text">
+    <div className="p-6 rounded-lg w-full font-mono text-sm min-h-[500px] flex flex-col bg-latte-base dark:bg-frappe-mantle text-latte-text dark:text-frappe-text border border-latte-overlay0 dark:border-frappe-overlay0">
       <div className="flex justify-between mb-4 flex-shrink-0">
         <div className="flex space-x-2">
           <div className="w-3 h-3 rounded-full bg-frappe-red"></div>
           <div className="w-3 h-3 rounded-full bg-frappe-yellow"></div>
           <div className="w-3 h-3 rounded-full bg-frappe-green"></div>
         </div>
-        <p className="text-xs text-frappe-subtext0">zsh</p>
+        <p className="text-xs text-latte-subtext0 dark:text-frappe-subtext0">zsh</p>
       </div>
       
       <div className="mb-4 flex-shrink-0">
-        <p className="text-green-600 dark:text-frappe-green">
-          <span className="text-blue-600 dark:text-frappe-mauve">~</span>
-          <span className="text-muted-foreground dark:text-frappe-overlay2">❯</span> 
+        <p className="text-latte-green dark:text-frappe-green">
+          <span className="text-latte-blue dark:text-frappe-mauve">~</span>
+          <span className="text-latte-overlay2 dark:text-frappe-overlay2">❯</span> 
           &nbsp;neofetch --whoami
         </p>
       </div>
@@ -570,40 +570,40 @@ export function NeofetchCard({ githubUsername }) {
         <div className="space-y-4 font-mono text-xs flex-1">
           {/* Developer Stats Section - Previously Hardware */}
           <div className="flex-shrink-0">
-            <div className="text-center text-frappe-blue mb-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mb-1">
               ┌─────────────────────Developer Stats─────────────────────┐
             </div>
             <DeveloperStats stats={memoizedStats} />
-            <div className="text-center text-frappe-blue mt-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────────┘
             </div>
           </div>
 
           {/* Entertainment/Social Section */}
           <div className="flex-shrink-0">
-            <div className="text-center text-frappe-blue mb-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mb-1">
               ┌─────────────────Entertainment/Social─────────────────┐
             </div>
             <EntertainmentStats stats={memoizedStats} />
-            <div className="text-center text-frappe-blue mt-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────┘
             </div>
           </div>
 
           {/* Top Repos Section */}
           <div className="flex-shrink-0">
-            <div className="text-center text-frappe-blue mb-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mb-1">
               ┌─────────────────────Top Repos─────────────────────┐
             </div>
             <TopRepos stats={memoizedStats} />
-            <div className="text-center text-frappe-blue mt-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────┘
             </div>
           </div>
 
           {/* Uptime Section */}
           <div className="flex-shrink-0">
-            <div className="text-center text-frappe-blue mb-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mb-1">
               ┌───────────────────────────────────Uptime / Age / DT─┐
             </div>
             <div className="space-y-0.5 px-4 text-center min-h-[40px] flex flex-col justify-center">
@@ -611,7 +611,7 @@ export function NeofetchCard({ githubUsername }) {
               <div className="text-frappe-text">Uptime: {uptime}</div>
               <div className="text-frappe-text">DateTime: {dateTime}</div>
             </div>
-            <div className="text-center text-frappe-blue mt-1">
+            <div className="text-center text-latte-blue dark:text-frappe-blue mt-1">
               └─────────────────────────────────────────────────────┘
             </div>
           </div>

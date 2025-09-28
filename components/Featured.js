@@ -5,14 +5,12 @@ import GoogleCard1 from "@/components/blocks/google-card-1";
 import GoogleCard2 from "@/components/blocks/google-ai-card";
 import { TerminalWindow, TerminalBlock } from "@/components/ui/terminal-window";
 import { LiquidGrid } from "@/components/ui/glass";
-import { LiquidAurora } from "@/components/ui/liquid-aurora";
 import { CardSpotlight } from "@/components/ui/card-spotlight";
 import { Badge } from "@/components/ui/badge";
 
 export default function Featured() {
   return (
     <section id="featured" className="relative py-16">
-      <LiquidAurora />
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-6xl mx-auto space-y-8">
           <TerminalWindow title="certs & tooling" variant="solid">

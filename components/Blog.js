@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { GlassPanel } from "@/components/ui/glass";
-import { LiquidAurora } from "@/components/ui/liquid-aurora";
 import { pb } from '@/lib/pocketbase';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
@@ -32,7 +31,6 @@ export default function Blog() {
 
   return (
     <section className="relative py-16" id="blog">
-      <LiquidAurora />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto">

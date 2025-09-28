@@ -13,6 +13,7 @@ import AdSlot from "@/components/ads/AdSlot";
 import { AD_SLOTS } from "@/lib/adsense";
 import { useEffect, useMemo } from "react";
 import { toast } from "@/components/hooks/use-toast";
+import { LiquidAurora } from "@/components/ui/liquid-aurora";
 
 export default function HomeContent() {
   const adSlots = AD_SLOTS;
@@ -37,6 +38,7 @@ export default function HomeContent() {
   }, [isOnionHost]);
   return (
     <div className="overflow-x-hidden relative">
+      <LiquidAurora />
       <DynamicSEO />
       <Navbar />
       

@@ -91,7 +91,6 @@ export default function Contact() {
 
   return (
     <section className="relative py-16 bg-background" id="section_6">
-      <LiquidAurora />
       <Toaster />
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">

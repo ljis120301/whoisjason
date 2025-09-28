@@ -1,5 +1,6 @@
 'use client';
 import XmrAddress from '@/components/ui/XmrAddress.jsx';
+import { HyperText } from '@/components/ui/hyper-text';
 
 export default function Footer() {
   const XMR_ADDRESS = '48xWV6Ej4qRPZdKVEX7xQgLyWvxrSmCVXZS5pLXGpuPbMH6GhtiBjXBcHqHLxMMmEW474dkWTdLEsR6nARhhgKGRBou6nSk';
@@ -12,12 +13,12 @@ export default function Footer() {
           </div>
           <div className="flex flex-row space-x-8 sm:space-x-16 md:space-x-24 text-xs sm:text-sm md:text-base">
             <ul className="text-muted-foreground">
-              <li className="hover:underline cursor-pointer"><a href="#hero">Home</a></li>
-              <li className="hover:underline cursor-pointer"><a href="#featured">Featured</a></li>
-              <li className="hover:underline cursor-pointer"><a href="#projects">Projects</a></li>
+              <li className="cursor-pointer"><a href="#hero"><HyperText>Home</HyperText></a></li>
+              <li className="cursor-pointer"><a href="#featured"><HyperText>Featured</HyperText></a></li>
+              <li className="cursor-pointer"><a href="#projects"><HyperText>Projects</HyperText></a></li>
             </ul>
             <ul className="text-muted-foreground">
-              <li className="hover:underline cursor-pointer"><a href="https://github.com/whoisjasong" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              <li className="cursor-pointer"><a href="https://github.com/whoisjasong" target="_blank" rel="noopener noreferrer"><HyperText>GitHub</HyperText></a></li>
             </ul>
           </div>
         </div>
@@ -30,7 +31,7 @@ export default function Footer() {
       </div>
       <div className="px-6 md:px-12 pb-4 text-muted-foreground text-xs flex items-center justify-between">
         <span>© {new Date().getFullYear()} whoisjason.me</span>
-        <a className="hover:underline" href="#hero">Back to top</a>
+        <a href="#hero"><HyperText>Back to top</HyperText></a>
       </div>
     </footer>
   );
