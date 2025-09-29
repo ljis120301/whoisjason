@@ -42,6 +42,9 @@ export default function HomeContent() {
       <DynamicSEO />
       <Navbar />
       
+      {/* Sticky footer positioned behind main content */}
+      <Footer />
+      
       <main className="w-full relative z-10 min-h-[100vh]">
         <section id="hero" className="h-screen w-full flex items-center justify-center">
           <Hero />
@@ -73,8 +76,6 @@ export default function HomeContent() {
         </section>
         {!isOnionHost && <AdSlot slotId={adSlots.beforeFooter} />}
       </main>
-      
-      <Footer />
     </div>
   );
 }
