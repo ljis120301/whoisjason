@@ -43,10 +43,10 @@ export default function Blog() {
             <div className="flex justify-center items-center gap-4">
               <Image 
                 src="/white-desk-work-study-aesthetics.jpg" 
-                className="rounded-full" 
+                className="rounded-full w-24 h-24 object-cover" 
                 alt="Blog" 
                 width={100} 
-                height={75} 
+                height={100} 
               />
               <h2 className="text-frappe-text dark:text-white text-3xl font-bold">Latest Posts</h2>
             </div>
@@ -66,16 +66,16 @@ export default function Blog() {
                   whileHover={{ y: -2 }}
                 >
                   <Link href={`https://bee.whoisjason.me/blogposts/${post.id}`}>
-                    <Card className="border border-input bg-card text-card-foreground">
+                    <Card className="border border-input bg-card text-card-foreground h-full flex flex-col">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base font-semibold text-foreground">
                           {post.title}
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="pt-0 text-sm text-muted-foreground">
+                      <CardContent className="pt-0 text-sm text-muted-foreground flex-1">
                         <p className="line-clamp-2">{post.description}</p>
                       </CardContent>
-                      <CardFooter className="pt-3 flex items-center justify-between text-xs">
+                      <CardFooter className="pt-3 flex items-center justify-between text-xs mt-auto">
                         <span className="text-frappe-blue">
                           {new Date(post.created).toLocaleDateString()}
                         </span>
