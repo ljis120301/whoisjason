@@ -53,46 +53,14 @@ const BoxesCore = ({ className, ...rest }) => {
 
   return (
     <div
-      style={{
-        transform: `translate(-20%, -20%) skewX(-48deg) skewY(14deg) scale(1) rotate(0deg) translateZ(0)`,
-      }}
       className={cnFilter(
-        "absolute flex inset-0 w-[200%] h-[200%] z-0 transition-colors duration-300 ",
+        "absolute inset-0 w-full h-full z-0 transition-colors duration-300",
         "bg-latte-base dark:bg-frappe-base",
         className
       )}
       {...rest}
     >
-      {rows.map((_, i) => (
-        <motion.div 
-          key={`row-${i}`} 
-          className="w-16 h-8 border-l border-latte-overlay0 dark:border-frappe-overlay0 relative"
-        >
-          {cols.map((_, j) => (
-            <motion.div
-              key={`col-${j}`}
-              className="w-16 h-8 border-r border-t border-latte-overlay0 dark:border-frappe-overlay0 relative"
-              whileHover={{
-                backgroundColor: getRandomColor(),
-                transition: { duration: 0 },
-              }}
-            >
-              {(j & 1) === 0 && (i & 1) === 0 && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="absolute h-6 w-10 -top-[14px] -left-[22px] text-latte-overlay0 dark:text-frappe-overlay0 stroke-[1px] pointer-events-none"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
-                </svg>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
-      ))}
+      {/* Simplified background - just the Catppuccin base color */}
     </div>
   );
 };

@@ -20,17 +20,3 @@ const startupConfig = {
 };
 
 export default startupConfig; 
-
-// Non-blocking hint: if Tor Browser on clearnet, recommend .onion in console
-if (typeof window !== 'undefined') {
-  try {
-    const host = window.location.hostname;
-    const isOnion = /\.onion$/i.test(host);
-    const ua = navigator.userAgent || '';
-    const isTorBrowser = /TorBrowser/i.test(ua) || (/Firefox/i.test(ua) && /Tor/i.test(ua));
-    if (!isOnion && isTorBrowser) {
-      // Avoid intrusive UI; policy: console info only here
-      console.info('Available over Tor: http://opurtrkxaxldq3ayee7r22j6znxhzf7pysvunracvszqq4jhwf5qfaqd.onion/');
-    }
-  } catch (_) {}
-}

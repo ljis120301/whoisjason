@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
-  const { pathname, host, protocol } = request.nextUrl;
-
-  // On clearnet, advertise Onion-Location for Tor users and privacy tools
-  const ONION_HOST = 'opurtrkxaxldq3ayee7r22j6znxhzf7pysvunracvszqq4jhwf5qfaqd.onion';
-  const isOnion = host.endsWith('.onion');
+  const { pathname } = request.nextUrl;
 
   // Block all client access to API endpoints containing personal data
   const protectedEndpoints = [
@@ -58,18 +54,7 @@ export function middleware(request) {
   }
 
   // Allow admin endpoints, public endpoints, and other endpoints
-  const res = NextResponse.next();
-
-  // Set Onion-Location only when not already on onion and only for GET navigations
-  try {
-    if (!isOnion && request.method === 'GET') {
-      const onionUrl = `http://${ONION_HOST}${pathname}`;
-      res.headers.set('Onion-Location', onionUrl);
-      res.headers.set('Vary', 'Sec-Fetch-Dest');
-    }
-  } catch (_) {}
-
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {
