@@ -5,7 +5,7 @@ import { HyperText } from '@/components/ui/hyper-text';
 export default function Footer() {
   const XMR_ADDRESS = '48xWV6Ej4qRPZdKVEX7xQgLyWvxrSmCVXZS5pLXGpuPbMH6GhtiBjXBcHqHLxMMmEW474dkWTdLEsR6nARhhgKGRBou6nSk';
   return (
-    <footer className="sticky z-0 bottom-0 left-0 w-full bg-background text-foreground">
+    <footer className="relative z-0 w-full bg-white dark:bg-frappe-surface0 text-foreground">
       <div className="relative overflow-hidden w-full h-64 sm:h-72 md:h-80 px-6 md:px-12 py-8">
         <div className="relative z-10 flex w-full items-start justify-between">
           <div className="flex-1 min-w-0 pr-6">

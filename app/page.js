@@ -37,9 +37,8 @@ export default function Home() {
             'Web Development'
           ],
           sameAs: [
-            // Add your social media URLs here if applicable
-            // 'https://github.com/yourusername',
-            // 'https://linkedin.com/in/yourprofile',
+            // Add social media URLs here
+            'https://github.com/ljis120301',
           ]
         })
       }} />

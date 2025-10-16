@@ -487,17 +487,7 @@ export function NeofetchCard({ githubUsername }) {
   const [mounted, setMounted] = useState(false);
 
   // Memoize the stats data to prevent unnecessary re-renders
-  const memoizedStats = useMemo(() => realtimeData.data, [
-    realtimeData.data,
-    realtimeData.data.spotify?.currentTrack?.name,
-    realtimeData.data.spotify?.currentTrack?.artist,
-    realtimeData.data.spotify?.currentTrack?.is_playing,
-    realtimeData.data.discord?.presence?.status,
-    realtimeData.data.steam?.playerInfo?.personastate,
-    realtimeData.data.steam?.playerInfo?.gameextrainfo,
-    realtimeData.data.github?.user?.commitsThisYear,
-    realtimeData.data.github?.repos?.topRepos?.length
-  ]);
+  const memoizedStats = useMemo(() => realtimeData.data, [realtimeData.data]);
 
   // Update current time every second
   useEffect(() => {

@@ -1,42 +1,37 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { ADSENSE_CLIENT } from '@/lib/adsense';
+import { useEffect } from 'react';
+import { ADMAVEN_CLIENT } from '@/lib/admaven';
 
 export default function AdSlot({ slotId, format = 'auto', className = '', style }) {
-  const isOnionHost = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    return /\.onion$/i.test(window.location.hostname);
-  }, []);
-
   useEffect(() => {
     if (!slotId) return;
-    if (isOnionHost) return; // never initialize ads on onion
     if (typeof window === 'undefined') return;
-    if (typeof window.adsbygoogle === 'undefined') return; // script blocked or missing
+    if (typeof window.admaven === 'undefined') return; // script blocked or missing
     try {
-      // Initialize ads queue if needed and request an ad
-      // eslint-disable-next-line no-undef
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      // Initialize Admaven ads
+      if (window.admaven && window.admaven.load) {
+        window.admaven.load();
+      }
     } catch (_) {
       // no-op
     }
-  }, [slotId, isOnionHost]);
+  }, [slotId]);
 
   // Do not render if no slot provided
-  if (!slotId || isOnionHost) return null;
+  if (!slotId) return null;
 
   const mergedStyle = style || { display: 'block', minHeight: '280px', width: '100%' };
 
   return (
     <div className={`my-8 flex justify-center ${className}`}>
-      <ins
-        className="adsbygoogle"
+      <div
+        className="admaven-ad"
         style={mergedStyle}
-        data-ad-client={ADSENSE_CLIENT}
-        data-ad-slot={slotId}
-        data-ad-format={format}
-        data-full-width-responsive="true"
+        data-admaven-client={ADMAVEN_CLIENT}
+        data-admaven-slot={slotId}
+        data-admaven-format={format}
+        data-admaven-responsive="true"
       />
     </div>
   );

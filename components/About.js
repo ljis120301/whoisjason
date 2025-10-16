@@ -3,29 +3,21 @@ import React from "react";
 import { TerminalWindow, TerminalBlock, TerminalList } from "@/components/ui/terminal-window";
 import { NeofetchCard } from "@/components/blocks/neofetch-card";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function About() {
   return (
     <div id="About" className="relative px-4 sm:px-6 lg:px-8 py-12 pb-6">
       <div className="relative max-w-6xl mx-auto gap-8">
         <div>
-          <TerminalWindow title="whoami" className="min-h-[420px] " variant="glass">
-          <TerminalBlock>
-            <div className="space-y-3">
-              <p>
-                I am a Linux nerd, I use Gentoo on my Thinkpad. I also have a deep passion for networking and currently work for 
-                <br/>
-                <span className="font-bold">Sun Valley Broadband</span>
-                , an internet service provider. 
-              </p>
-              <div className="mt-4">
-                <div className="text-frappe-subtext0">$ </div>
-                <pre className="mt-1 text-xs text-frappe-text whitespace-pre-wrap">
-{`output`}
-                </pre>
-              </div>
-            </div>
-          </TerminalBlock>
+          <Card>
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>I am a web developer who uses Next JS. I currently work for Sun Valley Broadband. I have a deep passion for networking and web development.</p>
+            </CardContent>
+          </Card>
           
           {/* System Information Table */}
           <div className="mt-6">
@@ -61,7 +53,7 @@ export default function About() {
               </TableBody>
             </Table>
           </div>
-          </TerminalWindow>
+   
         </div>
 
         <div className="lg:col-span-2 pt-6">

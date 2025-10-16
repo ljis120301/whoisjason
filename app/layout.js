@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import localFont from "next/font/local";
 import Script from 'next/script';
-import { ADSENSE_CLIENT } from '@/lib/adsense';
+import { ADMAVEN_CLIENT } from '@/lib/admaven';
 import ConsentBanner from '@/components/ConsentBanner';
 import { Toaster } from '@/components/ui/toaster';
 import "./globals.css";
@@ -20,9 +20,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="google-adsense-account" content={ADSENSE_CLIENT} />
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossOrigin="anonymous" />
+        <meta name='admaven-placement' content='Bqja6rHaE' />
+        <meta name="admaven-account" content={ADMAVEN_CLIENT} />
+        <link rel="preconnect" href="https://admaven.com" crossOrigin="anonymous" />
         {/* Consent Mode default (required to run before GA/ads) */}
         <Script id="consent-default" strategy="beforeInteractive">
           {`
@@ -36,7 +36,11 @@ export default function RootLayout({ children }) {
             });
           `}
         </Script>
-        {/* Intentionally omit AdSense script here; it is conditionally initialized client-side by AdSlot only on non-onion hosts */}
+        {/* Admaven script */}
+        <Script
+          src="https://admaven.com/ads.js"
+          strategy="afterInteractive"
+        />
       </head>
       <body className={`${oxProto.variable} antialiased font-mono`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>

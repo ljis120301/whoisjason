@@ -85,6 +85,6 @@ export const metadata = {
     canonical: '/',
   },
   other: {
-    'google-adsense-account': 'ca-pub-6933652811243478',
+    'admaven-placement': 'Bqja6rHaE',
   },
 };

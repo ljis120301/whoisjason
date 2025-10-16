@@ -17,24 +17,23 @@ export default function Featured() {
     <section id="featured" className="relative py-16">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-6xl mx-auto space-y-8">
-          <TerminalWindow title="certs & tooling" variant="solid">
             <div className="grid grid-cols-2 md:grid-cols-2 gap-6 p-6">
               <GoogleCard1 />
               <GoogleCard2 />
             </div>
             <div className="mt-6">
-              <TerminalBlock prompt="jason" path="~/tooling">
+              <CardContent>
                 <div>
                   <div>node --version && npm --version</div>
                   <div className="text-frappe-subtext0">v20.x • 10.x</div>
                 </div>
                 <div className="mt-2">
-                  <div>lsb_release -a</div>
-                  <div className="text-frappe-subtext0">Gentoo / Debian / Fedora friendly</div>
+                    <div>lsb_release -a</div>
+                    <div className="text-frappe-subtext0">Gentoo / Debian / Fedora friendly</div>
                 </div>
-              </TerminalBlock>
+              </CardContent>
             </div>
-          </TerminalWindow>
+          
         </div>
       </div>
     </section>

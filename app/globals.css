@@ -7,7 +7,7 @@
 
 @layer base {
   :root {
-    --background: 239 241 245; /* Latte base in RGB */
+    --background: 230 233 239; /* Latte mantle in RGB */
     --foreground: 76 79 105;   /* Latte text in RGB */
 
     --card: 204 208 218;
@@ -34,10 +34,13 @@
     --border: 188 192 204;
     --input: 188 192 204;
     --ring: 30 102 245;
+
+    /* Footer background for gradient curtain effect */
+    --footer-bg: 255 255 255;
   }
 
   .dark {
-    --background: 48 52 70;    /* Frappe base in RGB */
+    --background: 81 87 109;   /* Frappe surface1 in RGB */
     --foreground: 198 208 245; /* Frappe text in RGB */
 
     --card: 65 69 89;
@@ -64,12 +67,15 @@
     --border: 81 87 109;
     --input: 81 87 109;
     --ring: 140 170 238;
+
+    /* Footer background for gradient curtain effect */
+    --footer-bg: 48 52 70;
   }
 }
 
 @layer base {
   body {
-    @apply bg-white dark:bg-frappe-base text-latte-text dark:text-frappe-text text-[13px] md:text-[14px] leading-relaxed;
+    @apply text-latte-text dark:text-frappe-text text-[13px] md:text-[14px] leading-relaxed;
   }
 }
 /* Glassmorphism utility */
@@ -282,7 +288,10 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply bg-background;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground bg-background;
   }
 }
