@@ -1,7 +1,6 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
 
-
 @custom-variant dark (&:is(.dark *));
 @reference "tailwindcss";
 
@@ -282,7 +281,16 @@
     0% { opacity: 1; }
     100% { transform: scale(2); opacity: 0; }
   }
-}
+  --animate-shiny-text: shiny-text 8s infinite
+;
+  @keyframes shiny-text {
+  0%, 90%, 100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+    }
+  30%, 60% {
+    background-position: calc(100% + var(--shiny-width)) 0;
+    }
+  }}
 
 @layer base {
   * {
@@ -293,5 +301,14 @@
   }
   body {
     @apply text-foreground bg-background;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
