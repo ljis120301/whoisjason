@@ -24,12 +24,7 @@ export default function Featured() {
             <div className="mt-6">
               <CardContent>
                 <div>
-                  <div>node --version && npm --version</div>
-                  <div className="text-frappe-subtext0">v20.x • 10.x</div>
-                </div>
-                <div className="mt-2">
-                    <div>lsb_release -a</div>
-                    <div className="text-frappe-subtext0">Gentoo / Debian / Fedora friendly</div>
+                  <div>sudo apt install work-experience</div>
                 </div>
               </CardContent>
             </div>

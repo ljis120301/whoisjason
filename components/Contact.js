@@ -1,29 +1,45 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Separator } from "@/components/ui/separator";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FaTwitter, FaInstagram, FaPinterest, FaYoutube, FaDiscord, FaEnvelope } from 'react-icons/fa';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FaDiscord, FaEnvelope } from 'react-icons/fa';
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useToast } from "@/components/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { GlassPanel } from "@/components/ui/glass";
-import { LiquidAurora } from "@/components/ui/liquid-aurora";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const formSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+});
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { toast } = useToast();
-  const [servicesState, setServicesState] = useState({
-    website: false,
-    branding: false,
-    ecommerce: false,
-    seo: false,
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
   });
 
   useEffect(() => {
@@ -34,14 +50,8 @@ export default function Contact() {
     return null;
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (values) => {
     setIsSubmitting(true);
-
-    const formData = new FormData(e.target);
-    const services = ['website', 'branding', 'ecommerce', 'seo']
-      .filter(service => formData.get(service))
-      .join(', ');
 
     const message = {
       content: "New Contact Form Submission",
@@ -49,10 +59,9 @@ export default function Contact() {
         title: "New Contact Request",
         color: 0x58B9FF, // Light blue color
         fields: [
-          { name: "Name", value: formData.get('name') || "Not provided", inline: true },
-          { name: "Email", value: formData.get('email') || "Not provided", inline: true },
-          { name: "Services", value: services || "None selected", inline: false },
-          { name: "Message", value: formData.get('message') || "No message provided" }
+          { name: "Name", value: values.name || "Not provided", inline: true },
+          { name: "Email", value: values.email || "Not provided", inline: true },
+          { name: "Message", value: values.message || "No message provided" }
         ],
         timestamp: new Date().toISOString()
       }]
@@ -76,7 +85,7 @@ export default function Contact() {
         duration: 5000,
       });
       
-      e.target.reset();
+      form.reset();
     } catch (error) {
       toast({
         title: "Error sending message",
@@ -90,121 +99,129 @@ export default function Contact() {
   };
 
   return (
-    <section className="relative py-16 bg-background" id="section_6">
+    <section className="relative py-16 bg-[#303446] text-[#c6d0f5]" id="section_6">
       <Toaster />
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center items-center mb-12">
-            <Image src="/aerial-view-man-using-computer-laptop-wooden-table.jpg" className="rounded-full" alt="Jason at his desk with a laptop" width={100} height={100} />
-            <h2 className="text-foreground text-3xl font-bold ml-4">Say Hi</h2>
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="flex justify-center mb-6">
+              <Avatar className="h-16 w-16 border-2 border-[#8caaee]">
+                <AvatarImage src="/aerial-view-man-using-computer-laptop-wooden-table.jpg" alt="Jason at his desk" />
+                <AvatarFallback className="bg-[#8caaee] text-[#303446] font-semibold">JS</AvatarFallback>
+              </Avatar>
+            </div>
+            <h1 className="text-3xl font-bold text-[#c6d0f5] mb-3">Get In Touch</h1>
+            <p className="text-[#a5adce] mb-8">
+              Ready to work together? Send me a message and I&apos;ll get back to you soon.
+            </p>
+            
+            {/* Quick Contact Links */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+              <a 
+                href="mailto:jason@whoisjason.me" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#8caaee] text-[#303446] rounded-md font-medium hover:bg-[#7ba0e6] transition-colors"
+              >
+                <FaEnvelope className="h-4 w-4" />
+                jason at whoisjason.me
+              </a>
+              <a 
+                href="https://discord.com/users/238064010044506123" 
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#414559] text-[#c6d0f5] rounded-md font-medium hover:bg-[#51576d] transition-colors"
+              >
+                <FaDiscord className="h-4 w-4" />
+                Discord
+              </a>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <GlassPanel className="space-y-6 p-6 bg-card text-card-foreground border border-input">
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Projects</h3>
-                <ul className="space-y-2">
-                  <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Websites</a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Branding</a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Ecommerce</a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">SEO</a></li>
-                </ul>
-              </div>
-              <Separator className="my-6" />
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Stay connected</h3>
-                <ul className="flex space-x-4">
-                  <li><a href="https://twitter.com/ljis120301" className="text-muted-foreground hover:text-foreground transition-colors"><FaTwitter size={24} /></a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><FaInstagram size={24} /></a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><FaPinterest size={24} /></a></li>
-                  <li><a href="https://www.youtube.com/ljis120301" className="text-muted-foreground hover:text-foreground transition-colors"><FaYoutube size={24} /></a></li>
-                </ul>
-              </div>
-              <Separator className="my-6" />
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Start a project</h3>
-                <p className="text-muted-foreground">I&apos;m available for freelance projects</p>
-              </div>
-            </GlassPanel>
+          {/* Contact Form */}
+          <Card className="bg-[#292c3c] border-[#414559]">
+            <CardHeader>
+              <CardTitle className="text-[#c6d0f5] text-xl">Send a Message</CardTitle>
+              <CardDescription className="text-[#a5adce]">
+                Fill out the form below and I&apos;ll get back to you as soon as possible.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#c6d0f5]">Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Your name"
+                              {...field}
+                              className="bg-[#414559] border-[#414559] text-[#c6d0f5] placeholder:text-[#a5adce] focus:border-[#8caaee] focus:ring-[#8caaee]/20"
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[#e78284]" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#c6d0f5]">Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="your@email.com"
+                              {...field}
+                              className="bg-[#414559] border-[#414559] text-[#c6d0f5] placeholder:text-[#a5adce] focus:border-[#8caaee] focus:ring-[#8caaee]/20"
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[#e78284]" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-            <GlassPanel className="space-y-6 p-6 bg-card text-card-foreground border border-input">
-              <div>
-                <h3 className="text-xl font-semibold mb-3">About</h3>
-                <p className="text-muted-foreground">I&apos;m free most days of the week feel free to contact me</p>
-              </div>
-              <Separator className="my-6" />
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Email</h3>
-                <p>
-                  <a href="mailto:ljis120301@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors flex items-center">
-                    <FaEnvelope size={24} className="mr-2" />
-                    ljis120301 at gmail.com
-                  </a>
-                </p>
-              </div>
-              <Separator className="my-6" />
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Discord</h3>
-                <p>
-                  <a href="https://discord.com/users/238064010044506123" className="text-muted-foreground hover:text-foreground transition-colors flex items-center">
-                    <FaDiscord size={24} className="mr-2" />
-                    Add me on Discord!
-                  </a>
-                </p>
-              </div>
-            </GlassPanel>
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[#c6d0f5]">Message</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Tell me about your project..."
+                            {...field}
+                            className="resize-none bg-[#414559] border-[#414559] text-[#c6d0f5] placeholder:text-[#a5adce] focus:border-[#8caaee] focus:ring-[#8caaee]/20 min-h-[120px]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[#e78284]" />
+                      </FormItem>
+                    )}
+                  />
 
-            <GlassPanel className="p-6 bg-card text-card-foreground border border-input">
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input type="text" name="name" id="name" placeholder="Name" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email address</Label>
-                  <Input type="email" name="email" id="email" placeholder="Email address" required />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="website" checked={servicesState.website} onCheckedChange={(v) => setServicesState(s => ({ ...s, website: !!v }))} />
-                    <Label htmlFor="website" className="text-muted-foreground">Websites</Label>
-                    {servicesState.website && <input type="hidden" name="website" value="on" />}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="branding" checked={servicesState.branding} onCheckedChange={(v) => setServicesState(s => ({ ...s, branding: !!v }))} />
-                    <Label htmlFor="branding" className="text-muted-foreground">Branding</Label>
-                    {servicesState.branding && <input type="hidden" name="branding" value="on" />}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="ecommerce" checked={servicesState.ecommerce} onCheckedChange={(v) => setServicesState(s => ({ ...s, ecommerce: !!v }))} />
-                    <Label htmlFor="ecommerce" className="text-muted-foreground">Ecommerce</Label>
-                    {servicesState.ecommerce && <input type="hidden" name="ecommerce" value="on" />}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="seo" checked={servicesState.seo} onCheckedChange={(v) => setServicesState(s => ({ ...s, seo: !!v }))} />
-                    <Label htmlFor="seo" className="text-muted-foreground">SEO</Label>
-                    {servicesState.seo && <input type="hidden" name="seo" value="on" />}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Project details</Label>
-                  <Textarea id="message" name="message" rows="4" placeholder="Tell me about the project" />
-                </div>
-                <div>
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-[#8caaee] hover:bg-[#7ba0e6] text-[#303446] font-medium" 
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? (
                       <>
                         <LoadingSpinner className="mr-2 h-4 w-4" />
                         Sending...
                       </>
                     ) : (
-                      'Send'
+                      'Send Message'
                     )}
                   </Button>
-                </div>
-              </form>
-            </GlassPanel>
-          </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
