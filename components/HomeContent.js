@@ -18,7 +18,7 @@ export default function HomeContent() {
       <DynamicSEO />
       <Navbar />
 
-      <main className="w-full relative z-10 min-h-[100vh]">
+      <main className="w-full relative z-10 min-h-screen">
         <section id="hero" className="h-screen w-full flex items-center justify-center">
           <Hero />
         </section>

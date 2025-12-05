@@ -9,7 +9,7 @@ export const GoogleCardSkeletonContainer = ({
   return (
     <div
       className={cn("rounded-xl z-40", className, showGradient &&
-        "bg-latte-surface0 dark:bg-[rgba(40,40,40,0.70)] [mask-image:radial-gradient(50%_50%_at_50%_50%,white_0%,transparent_100%)]")}>
+        "bg-latte-surface0 dark:bg-[rgba(40,40,40,0.70)] mask-[radial-gradient(ellipse_50%_50%_at_50%_50%,white_0%,transparent_100%)]")}>
       {children}
     </div>
   );
