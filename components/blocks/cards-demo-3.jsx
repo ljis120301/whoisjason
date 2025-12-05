@@ -8,7 +8,7 @@ export default function CardDemo() {
   return (
     <div className="h-full"> {/* Keep full height */}
       <Card className="flex flex-col h-full overflow-hidden"> {/* Use full height and flex column */}
-        <div className="flex-grow flex items-end pb-8"> {/* Push skeleton to bottom, add padding */}
+        <div className="grow flex items-end pb-8"> {/* Push skeleton to bottom, add padding */}
           <CardSkeletonContainer className="w-full">
             <Skeleton />
           </CardSkeletonContainer>
@@ -68,7 +68,7 @@ const Skeleton = () => {
   }, []);
   return (
     <div className="h-40 overflow-hidden relative flex items-center justify-center"> {/* Increased height */}
-      <div className="flex flex-row flex-shrink-0 justify-center items-center gap-2">
+      <div className="flex flex-row shrink-0 justify-center items-center gap-2">
         <Container className="h-8 w-8 circle-1">
           <ClaudeLogo className="h-4 w-4 " />
         </Container>
@@ -86,7 +86,7 @@ const Skeleton = () => {
         </Container>
       </div>
       <div
-        className="h-40 w-px absolute top-20 m-auto z-40 bg-gradient-to-b from-transparent via-cyan-500 to-transparent animate-move">
+        className="h-40 w-px absolute top-20 m-auto z-40 bg-linear-to-b from-transparent via-cyan-500 to-transparent animate-move">
         <div className="w-10 h-32 top-1/2 -translate-y-1/2 absolute -left-10">
           <Sparkles />
         </div>
@@ -179,7 +179,7 @@ export const CardSkeletonContainer = ({
   return (
     (<div
       className={cn("rounded-xl z-40", className, showGradient &&
-        "bg-neutral-300 dark:bg-[rgba(40,40,40,0.70)] [mask-image:radial-gradient(50%_50%_at_50%_50%,white_0%,transparent_100%)]")}>
+        "bg-neutral-300 dark:bg-[rgba(40,40,40,0.70)] mask-[radial-gradient(ellipse_50%_50%_at_50%_50%,white_0%,transparent_100%)]")}>
       {children}
     </div>)
   );

@@ -13,7 +13,7 @@ export function GlassPanel({ children, className }) {
         className
       )}
     >
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 rounded-xl bg-linear-to-b from-white/10 to-transparent pointer-events-none" />
       <div className="relative z-10">{children}</div>
     </div>
   );
@@ -22,8 +22,8 @@ export function GlassPanel({ children, className }) {
 export function LiquidGrid({ className }) {
   return (
     <div className={cn("absolute inset-0 -z-10 overflow-hidden", className)}>
-      <div className="absolute inset-0 bg-grid-white/[0.04] dark:bg-grid-white/[0.06]" />
-      <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+      <div className="absolute inset-0 bg-grid-white/4 dark:bg-grid-white/6" />
+      <div className="absolute inset-0 mask-[radial-gradient(ellipse_farthest-corner_at_50%_50%,black,transparent_70%)]" />
     </div>
   );
 }
