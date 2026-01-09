@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/form";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+  name: z.string().min(2, { message: "Come on say more than just that" }),
+  email: z.string().email({ message: "Put in a real email address dumbass" }),
+  message: z.string().min(10, { message: "WRITE MORE WORDS YOU NUMBNUT" }),
 });
 
 export default function Contact() {
@@ -77,14 +77,14 @@ export default function Contact() {
       });
 
       if (!response.ok) throw new Error('Failed to send message');
-      
+
       toast({
         title: "Message sent successfully!",
         description: "Thank you for reaching out. I'll get back to you soon.",
         variant: "default",
         duration: 5000,
       });
-      
+
       form.reset();
     } catch (error) {
       toast({
@@ -113,13 +113,13 @@ export default function Contact() {
             </div>
             <h1 className="text-3xl font-bold text-[#c6d0f5] mb-3">Get In Touch</h1>
             <p className="text-[#a5adce] mb-8">
-              Ready to work together? Send me a message and I&apos;ll get back to you soon.
+              Have something cool to tell me? Send me a message about it and ill get a Discord notification.
             </p>
-            
+
             {/* Quick Contact Links */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
-              <a 
-                href="mailto:jason@whoisjason.me" 
+              <a
+                href="mailto:jason@whoisjason.me"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 px-4 py-2 bg-[#8caaee] text-[#303446] rounded-md font-medium hover:bg-[#7ba0e6] transition-colors"
@@ -127,8 +127,8 @@ export default function Contact() {
                 <FaEnvelope className="h-4 w-4" />
                 jason at whoisjason.me
               </a>
-              <a 
-                href="https://discord.com/users/238064010044506123" 
+              <a
+                href="https://discord.com/users/238064010044506123"
                 className="flex items-center justify-center gap-2 px-4 py-2 bg-[#414559] text-[#c6d0f5] rounded-md font-medium hover:bg-[#51576d] transition-colors"
               >
                 <FaDiscord className="h-4 w-4" />
@@ -204,9 +204,9 @@ export default function Contact() {
                     )}
                   />
 
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-[#8caaee] hover:bg-[#7ba0e6] text-[#303446] font-medium" 
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#8caaee] hover:bg-[#7ba0e6] text-[#303446] font-medium"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

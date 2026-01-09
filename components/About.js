@@ -15,7 +15,7 @@ export default function About() {
               <CardTitle>About</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>I am a web developer who uses Next JS. I currently work for Sun Valley Broadband. I have a deep passion for networking and web development.</p>
+              <p>I am a web developer who uses Next JS. I currently work for Sun Valley Broadband. I have a deep passion for networking and web development. Always working on new stuff working with AI models to vibe code websites faster</p>
             </CardContent>
           </Card>
         </div>

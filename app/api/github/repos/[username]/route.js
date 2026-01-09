@@ -4,9 +4,9 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
   return NextResponse.json(
-    { 
+    {
       error: 'Access Denied',
-      message: 'GitHub API endpoints are not accessible from clients. Use server actions for secure data access.',
+      message: 'Get lost nerd stop tryng to hack my github',
       secure: true
     },
     { status: 403 }
