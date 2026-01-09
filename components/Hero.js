@@ -17,8 +17,8 @@ export default function Hero() {
             <p className="mt-3 text-sm text-muted-foreground">
               Minimal, reliable web apps. UNIX discipline. Full‑stack JavaScript.
             </p>
-            <div className="mt-6 flex items-center justify-center gap-3">
-              <Button asChild>
+            <div className="mt-6 flex items-center justify-center gap-3 ">
+              <Button asChild className="hover:bg-transparent hover:text-foreground border border-transparent hover:border-border transition-colors">
                 <a href="#featured">Featured</a>
               </Button>
               <Button variant="outline" asChild>
