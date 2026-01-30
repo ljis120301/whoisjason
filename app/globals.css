@@ -6,32 +6,32 @@
 
 @layer base {
   :root {
-    --background: 230 233 239; /* Latte mantle in RGB */
+    --background: 239 241 245; /* Latte base in RGB */
     --foreground: 76 79 105;   /* Latte text in RGB */
 
-    --card: 204 208 218;
+    --card: 255 255 255;
     --card-foreground: 76 79 105;
 
-    --popover: 204 208 218;
+    --popover: 255 255 255;
     --popover-foreground: 76 79 105;
 
-    --primary: 30 102 245;
+    --primary: 30 102 245; /* Latte Blue */
     --primary-foreground: 239 241 245;
 
-    --secondary: 204 208 218;
+    --secondary: 230 233 239; /* Latte Mantle */
     --secondary-foreground: 76 79 105;
 
-    --muted: 188 192 204;
-    --muted-foreground: 92 95 119;
+    --muted: 204 208 218; /* Latte Surface0 */
+    --muted-foreground: 108 111 133; /* Latte Subtext0 */
 
-    --accent: 188 192 204;
+    --accent: 230 233 239;
     --accent-foreground: 76 79 105;
 
     --destructive: 210 15 57;
     --destructive-foreground: 239 241 245;
 
-    --border: 188 192 204;
-    --input: 188 192 204;
+    --border: 204 208 218;
+    --input: 204 208 218;
     --ring: 30 102 245;
 
     /* Footer background for gradient curtain effect */
@@ -39,32 +39,32 @@
   }
 
   .dark {
-    --background: 81 87 109;   /* Frappe surface1 in RGB */
+    --background: 48 52 70;   /* Frappe base in RGB */
     --foreground: 198 208 245; /* Frappe text in RGB */
 
-    --card: 65 69 89;
+    --card: 41 44 60; /* Frappe mantle */
     --card-foreground: 198 208 245;
 
-    --popover: 65 69 89;
+    --popover: 41 44 60;
     --popover-foreground: 198 208 245;
 
-    --primary: 140 170 238;
+    --primary: 140 170 238; /* Frappe Blue */
     --primary-foreground: 48 52 70;
 
-    --secondary: 65 69 89;
+    --secondary: 65 69 89; /* Frappe Surface1 */
     --secondary-foreground: 198 208 245;
 
-    --muted: 81 87 109;
-    --muted-foreground: 165 173 206;
+    --muted: 65 69 89;
+    --muted-foreground: 165 173 206; /* Frappe Subtext0 */
 
-    --accent: 81 87 109;
+    --accent: 65 69 89;
     --accent-foreground: 198 208 245;
 
     --destructive: 231 130 132;
     --destructive-foreground: 48 52 70;
 
-    --border: 81 87 109;
-    --input: 81 87 109;
+    --border: 65 69 89;
+    --input: 65 69 89;
     --ring: 140 170 238;
 
     /* Footer background for gradient curtain effect */
@@ -74,33 +74,23 @@
 
 @layer base {
   body {
-    @apply text-latte-text dark:text-frappe-text text-[13px] md:text-[14px] leading-relaxed;
+    @apply text-foreground bg-background text-[14px] leading-relaxed antialiased;
   }
 }
-/* Glassmorphism utility */
+/* Glassmorphism utility - Modern Professional */
 .glass-effect {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px rgba(0,0,0,.15);
-  backdrop-filter: blur(12px) saturate(120%);
+  @apply bg-background/70 backdrop-blur-md border border-border/50;
 }
 
-/* Subtle focus ring tweak to match Linux/terminal vibe */
+/* Subtle focus ring tweak for accessibility and modern feel */
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(140, 170, 238, 0.45);
+  @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
 }
 
-/* Liquid aurora background animation */
-@keyframes blob {
-  0% { transform: translate3d(0,0,0) scale(1); }
-  33% { transform: translate3d(10%, -5%, 0) scale(1.1); }
-  66% { transform: translate3d(-5%, 10%, 0) scale(0.95); }
-  100% { transform: translate3d(0,0,0) scale(1); }
-}
-
-.animate-blob {
-  animation: blob 22s ease-in-out infinite;
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
 /* Add any other global styles here */
@@ -160,35 +150,6 @@
   }
 }
 
-@keyframes loading-dots {
-  0%, 20% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-2px);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-}
-
-@keyframes loading-slide {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-}
-
 /* Loading state classes */
 .loading-text {
   background: linear-gradient(90deg, 
@@ -203,47 +164,10 @@
   display: inline-block;
 }
 
-.loading-dots::after {
-  content: '';
-  animation: loading-dots 1.4s infinite;
-}
-
-.loading-dots::before {
-  content: '';
-  animation: loading-dots 1.4s infinite 0.2s;
-}
-
-.loading-dots::after {
-  content: '';
-  animation: loading-dots 1.4s infinite 0.4s;
-}
-
-.loading-slide {
-  position: relative;
-  overflow: hidden;
-}
-
-.loading-slide::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(165, 173, 206, 0.2) 50%, 
-    transparent 100%);
-  animation: loading-slide 2s infinite;
-}
 
 /* Icon loading animations */
 .loading-icon {
   animation: loading-pulse 1.5s ease-in-out infinite;
-}
-
-.loading-icon-spin {
-  animation: spin 2s linear infinite;
 }
 
 /* Staggered loading animation for multiple items */
@@ -301,14 +225,5 @@
   }
   body {
     @apply text-foreground bg-background;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

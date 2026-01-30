@@ -11,10 +11,25 @@ import Footer from "@/components/Footer";
 import DynamicSEO from "@/components/dynamicSEO";
 import AdSlot from "@/components/ads/AdSlot";
 import { AD_SLOTS } from "@/lib/admaven";
+import { motion } from "framer-motion";
+
+const Section = ({ children, id, className }) => (
+  <motion.section
+    id={id}
+    className={className}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.6, ease: "easeOut" }}
+  >
+    {children}
+  </motion.section>
+);
+
 export default function HomeContent() {
   const adSlots = AD_SLOTS;
   return (
-    <div className="overflow-x-hidden relative min-h-screen bg-latte-mantle dark:bg-frappe-base">
+    <div className="overflow-x-hidden relative min-h-screen bg-background selection:bg-primary/20">
       <DynamicSEO />
       <Navbar />
 
@@ -23,34 +38,35 @@ export default function HomeContent() {
           <Hero />
         </section>
         <AdSlot slotId={adSlots.afterHero} />
-        <section id="about" className="relative z-10">
+
+        <Section id="about" className="relative z-10 scroll-mt-24">
           <About />
-        </section>
+        </Section>
         <AdSlot slotId={adSlots.afterAbout} />
         
-        <section id="featured" className="">
+        <Section id="featured" className="scroll-mt-24">
           <div className="">
             <Featured />
           </div>
-        </section>
+        </Section>
         <AdSlot slotId={adSlots.betweenFeaturedProjects} />
 
-        <section id="projects" className="">
+        <Section id="projects" className="scroll-mt-24">
           <Projects />
-        </section>
+        </Section>
         <AdSlot slotId={adSlots.betweenProjectsBlog} />
         
-        <section id="blog" className=" px-4 sm:px-6 lg:px-8 ">
+        <Section id="blog" className="px-4 sm:px-6 lg:px-8 scroll-mt-24">
           <Blog />
-        </section>
+        </Section>
         <AdSlot slotId={adSlots.beforeContact} />
-        <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8">
+
+        <Section id="contact" className="py-16 px-4 sm:px-6 lg:px-8 scroll-mt-24">
           <Contact />
-        </section>
+        </Section>
         <AdSlot slotId={adSlots.beforeFooter} />
       </main>
       
-      {/* Footer fixed at bottom, revealed by curtain effect */}
       <Footer />
     </div>
   );

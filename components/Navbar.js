@@ -3,10 +3,9 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import ThemeToggle from '@/components/ThemeToggle';
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, NavigationMenuIndicator } from '@/components/ui/navigation-menu';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { HyperText } from '@/components/ui/hyper-text';
 
 const links = [
   { id: 'home', label: 'Home', href: '#hero' },
@@ -47,14 +46,14 @@ export default function Navbar() {
   const items = useMemo(() => links, []);
 
   return (
-    <div className="sticky top-6 inset-x-0 z-50 px-4">
-      <div className="max-w-6xl mx-auto rounded-md border border-input bg-background/70 backdrop-blur px-3 py-2">
-        <div className="flex items-center justify-between">
+    <div className="fixed top-4 inset-x-0 z-50 px-4 flex justify-center pointer-events-none">
+      <div className="pointer-events-auto rounded-full border border-border/40 bg-background/80 backdrop-blur-md shadow-sm px-4 py-2 transition-all duration-300 hover:shadow-md hover:border-border/60">
+        <div className="flex items-center gap-4">
           <nav className="flex items-center gap-1">
             <NavigationMenu>
-              <NavigationMenuList>
+              <NavigationMenuList className="flex gap-1">
                 {items.map(({ id, label, href }) => {
-                  const showPill = hovered ? hovered === id : active === id;
+                  const isActive = active === id;
                   return (
                     <NavigationMenuItem key={id}>
                       <NavigationMenuLink
@@ -63,30 +62,34 @@ export default function Navbar() {
                         onMouseEnter={() => setHovered(id)}
                         onMouseLeave={() => setHovered(null)}
                         className={cn(
-                          "group relative px-3 py-1.5 text-xs rounded-md transition-colors",
-                          "hover:bg-accent/40 hover:text-foreground hover:underline underline-offset-4",
-                          (hovered ? hovered === id : active === id) && "text-foreground"
+                          "relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200",
+                          isActive ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
                         )}
                       >
-                        {showPill && (
-                          <motion.span
+                        {isActive && (
+                          <motion.div
                             layoutId="nav-pill"
-                            className="absolute inset-0 -z-10 rounded-md bg-accent/40"
+                            className="absolute inset-0 bg-primary rounded-full -z-10"
                             transition={{ type: "spring", stiffness: 350, damping: 30 }}
                           />
                         )}
-                        <span className="relative inline-block">
-                          <HyperText className="text-xs">{label}</HyperText>
-                        </span>
+                        {hovered === id && !isActive && (
+                          <motion.div
+                            layoutId="nav-hover"
+                            className="absolute inset-0 bg-secondary rounded-full -z-10"
+                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                          />
+                        )}
+                        <span className="relative z-10">{label}</span>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   );
                 })}
               </NavigationMenuList>
-              <NavigationMenuIndicator />
             </NavigationMenu>
           </nav>
-          <div className="w-12 h-12 flex items-center justify-center">
+          <div className="h-6 w-px bg-border/50" />
+          <div className="flex items-center justify-center pl-1">
             <ThemeToggle />
           </div>
         </div>

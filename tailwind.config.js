@@ -68,6 +68,7 @@ const config = {
           mantle: "#292C3C",
           crust: "#232634",
         },
+        // We will keep latte for consistency but focus on dark mode primarily
         latte: {
           rosewater: "#DC8A78",
           flamingo: "#DD7878",
@@ -104,7 +105,7 @@ const config = {
         move: "move 5s linear infinite",
         shimmer: "shimmer 2s linear infinite",
         spotlight: "spotlight 2s ease .75s 1 forwards",
-        blink: "blink 1s step-end infinite",
+        // Removed blink for a cleaner look
       },
       keyframes: {
         "accordion-down": {
@@ -136,10 +137,6 @@ const config = {
             opacity: 1,
             transform: "translate(-50%,-40%) scale(1)",
           },
-        },
-        blink: {
-          "0%, 50%": { opacity: "1" },
-          "51%, 100%": { opacity: "0" },
         },
       },
     },
