@@ -48,6 +48,12 @@ export default function RootLayout({ children }) {
           <Toaster />
           {children}
         </ThemeProvider>
+        {/* Rybbit Analytics (privacy-focused, no cookies) */}
+        <Script
+          src="https://tracking.whoisjason.me/api/script.js"
+          data-site-id="2a043f39c00b"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
