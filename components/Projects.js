@@ -1,24 +1,31 @@
 import React from 'react';
-import Image from 'next/image';
 import { Separator } from "@/components/ui/separator";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { FaGlobe, FaServer, FaNetworkWired, FaLinux, FaMicrosoft, FaPython, FaCode, FaDesktop, FaMusic, FaRoute, FaFilm, FaBlog, FaRobot, FaCog, FaStickyNote, FaDatabase, FaExternalLinkAlt } from 'react-icons/fa';
-import { cn } from "@/lib/utils";
+import { FaGlobe, FaServer, FaNetworkWired, FaLinux, FaMicrosoft, FaPython, FaCode, FaDesktop, FaMusic, FaRoute, FaFilm, FaBlog, FaRobot, FaCog, FaStickyNote, FaDatabase, FaExternalLinkAlt, FaDocker, FaCamera } from 'react-icons/fa';
+
+const PangolinIcon = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 238.34 252.73" className={className} fill="currentColor">
+    <g transform="translate(-13.119542,-5.9258171)">
+      <path d="m 213.66176,90.072122 c 4.95655,0 8.97383,4.018046 8.97383,8.973827 0,4.956581 -4.01728,8.974621 -8.97383,8.974621 -4.95657,0 -8.97462,-4.01804 -8.97462,-8.974621 0,-4.955781 4.01805,-8.973827 8.97462,-8.973827 z m 35.2316,37.450998 c -0.90048,29.80928 -23.66033,69.21262 -54.51292,79.34466 -36.04206,11.836 -63.40991,-5.92226 -72.08409,-26.74061 -6.75754,-16.21966 -1.65117,-35.62363 10.96266,-43.83669 10.6506,-6.93533 30.48543,-8.76736 47.15454,2.19144 -5.85627,-15.34246 -21.62491,-25.4256 -35.59101,-28.49424 -13.96613,-3.06867 -28.38324,0.43858 -38.74504,5.69946 13.29071,-14.68572 44.40801,-28.946049 78.24077,-10.95958 22.67676,12.05491 32.43775,28.93208 42.0489,51.72763 C 251.59637,117.87858 234.026,71.411066 203.39074,43.794029 172.15544,15.636686 129.95516,4.340214 97.668803,6.103155 108.32483,12.678273 120.84625,22.06586 132.41209,33.053363 81.298533,26.697169 39.174705,38.314245 13.119542,73.749217 27.67508,70.878527 46.868833,69.073666 65.974711,70.016861 28.737658,96.252107 7.1124298,140.38147 18.105298,186.43137 c 6.718497,-11.74129 16.767711,-25.84558 28.726275,-38.62863 -3.677175,34.36994 1.42836,80.83745 45.62293,110.85478 -2.25587,-9.42394 -4.08014,-20.88443 -4.91466,-33.0154 20.673197,16.1282 50.685067,29.42205 87.917917,20.24096 65.77679,-16.21975 83.34719,-79.78335 73.4356,-118.35996" />
+    </g>
+  </svg>
+);
 
 const projects = {
   web: [
+    // portolio
     { title: "Portfolio", description: "My main portfolio website showcasing my work and experience.", icon: <FaGlobe />, href: "https://whoisjason.me" },
+    // blog
     { title: "Blog", description: "Personal blog where I write about technology, projects, and thoughts.", icon: <FaBlog />, href: "https://bee.whoisjason.me" },
-    { title: "Notes App", description: "Google Docs-like notes app with cloud sync, self-hosted docker option, 2FA support, and React Query caching.", icon: <FaStickyNote />, href: "https://notes.whoisjason.me" },
-    { title: "MP3 Track Extractor", description: "AI-powered tool using local models to separate audio tracks from songs for music producers.", icon: <FaMusic />, href: "https://mp3.whoisjason.me" },
+    // BGP 
     { title: "BGP Route Checker", description: "Custom-built tool to check BGP routes and network information for network diagnostics.", icon: <FaRoute />, href: "https://bgp.whoisjason.me" },
-    { title: "Emby Media Server", description: "Self-hosted media server for streaming movies, TV shows, and personal media collection.", icon: <FaFilm />, href: "https://emby.whoisjason.me" },
+
+    // gram whoisjason
     { title: "Business Website Template", description: "Custom business website template showcasing modern web design capabilities.", icon: <FaCog />, href: "https://gram.whoisjason.me" },
-    { title: "Monero P2Pool Observer", description: "Next.js-based p2pool mini observer for monitoring Monero mining pool statistics.", icon: <FaCode />, href: "https://xmr.whoisjason.me" },
-    { title: "OpenWebUI Portal", description: "Self-hosted AI interface portal for interacting with various AI models and services.", icon: <FaRobot />, href: "https://ai.whoisjason.me" },
+
     { title: "Internal CRM", description: "I have created internal Customer Resource Management systems to hold customer information. As well as allow least privlidge management of the system to be deligated by a system administrator. I was able to craft a Full-Stack NextJS web application using Prisma DB. As well as bundling into a self contained docker image for the company. I was able to manage the deployment and operation of the entirre project.", icon: <FaDatabase />, href: "https://crm.whoisjason.me" },
   ],
   sysadmin: [
@@ -26,12 +33,14 @@ const projects = {
     { title: "Virtual Active Directory", description: "A fully virtualized Microsoft AD server with Group Policy and a Domain Server on KVM/QEMU.", icon: <FaMicrosoft /> },
     { title: "Linux Expertise", description: "Daily driver Gentoo on a ThinkPad T420, extensive experience with Arch Linux, and comfortable in any UNIX shell.", icon: <FaLinux /> },
     { title: "PC Building & Hardware", description: "10+ years building custom PCs and servers, including water-cooled and production environment builds.", icon: <FaDesktop /> },
+    { title: "Docker Swarm Load Balancing", description: "I have  plenty of expirence with Docker. I have built up Docker Swarm setup with custom private repos and secret management. High-Availability and Load Balancing from the start. ", icon: <FaDocker /> }
   ],
   it: [
     { title: "Network Infrastructure", description: "Hands-on experience with Cisco and MikroTik equipment, including configuration and remote site maintenance.", icon: <FaNetworkWired /> },
-    { title: "Business Automation", description: "Developed custom Python scripts and Docker containers to manage customer databases and manipulate data.", icon: <FaPython /> },
+    { title: "Business Automation", description: "Developed custom Python scripts and Docker containers to manage customer databases and manipulate data. This has given me hands on expirence with Microsoft SQL, Postgress, and MySQL", icon: <FaPython /> },
     { title: "ISP Operations", description: "Run recursive DNS servers for customer connections and assist with network operations at a small ISP.", icon: <FaServer /> },
-    { title: "Home Security Automation", description: "Wrote specialized Python code to automate and manage my home security system.", icon: <FaCode /> },
+    { title: "IP Camera Setup / Installation", description: "I have worked with small buisnesses accross my city to assist them in deploying Security IP Cameras.", icon: <FaCamera /> },
+    { title: "Reverse Proxy", description: "I have setup and manage Pangolin Self Hosted Reverse Proxy for hosting my sites and keeping control over my data", icon: <PangolinIcon /> },
   ]
 };
 

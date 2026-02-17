@@ -15,7 +15,7 @@ export default function Hero() {
             </h1>
 
             <p className="mt-3 text-sm text-muted-foreground">
-              Minimal, reliable web apps. UNIX discipline. Full‑stack JavaScript.
+              Fullstack typescript dev in the modern vibe coding age, with an underlying fundamental understanding of networking.
             </p>
             <div className="mt-6 flex items-center justify-center gap-3 ">
               <Button asChild className="hover:bg-transparent hover:text-foreground border border-transparent hover:border-border transition-colors">
